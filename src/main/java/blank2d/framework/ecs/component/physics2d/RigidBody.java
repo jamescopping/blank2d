@@ -52,10 +52,10 @@ public class RigidBody extends Component {
             Vector2D contactPoint = new Vector2D();
             Vector2D contactNormal = new Vector2D();
             Node<Float> contactTime = new Node<>();
-            List<Rect> rectList = getSystem(ColliderSystem.class).getRectList();
+            List<Collider> rectList = getSystem(ColliderSystem.class).getColliderList();
 
             for (Integer targetIndex : getSystem(ColliderSystem.class).sortRectListDistFromRB(this)) {
-                Rect target = rectList.get(targetIndex);
+                Rect target = rectList.get(targetIndex).getBox();
                 if(getCollider().getBox().equals(target)) continue;
                 if (detectCollision(target, contactPoint, contactNormal, contactTime)) {
                     Vector2D resolveVector = new Vector2D(Math.abs(linearVelocity.x), Math.abs(linearVelocity.y));

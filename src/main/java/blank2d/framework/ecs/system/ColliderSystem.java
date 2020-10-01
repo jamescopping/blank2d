@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ColliderSystem extends IteratingSystem {
     public boolean colliderDebug = false;
-    private final List<Rect> rectList = new ArrayList<>();
+    private final List<Collider> colliderList = new ArrayList<>();
 
     /**
      * Creates a new instance
@@ -63,7 +63,11 @@ public class ColliderSystem extends IteratingSystem {
         return (collidedEntities.size() > 0);
     }
 
-
+    /**
+     * Returns a list of indices of the
+     * @param rb Rigid body that we want to test the distances from
+     * @return list of indices that point to the ColliderSystem's entityList
+     */
     public List<Integer> sortRectListDistFromRB(RigidBody rb){
         List<Pair<Integer, Float>> listRectIndexDist = new ArrayList<>();
 
@@ -71,8 +75,8 @@ public class ColliderSystem extends IteratingSystem {
         Vector2D contactNormal = new Vector2D();
         Node<Float> contactTime = new Node<>();
 
-        for (int i = 0; i < getRectList().size(); i++) {
-            Rect target = getRectList().get(i);
+        for (int i = 0; i < getColliderList().size(); i++) {
+            Rect target = getColliderList().get(i).getBox();
             if(rb.getCollider().getBox().equals(target)) continue;
             if(rb.detectCollision(target, contactPoint, contactNormal, contactTime)) {
                 listRectIndexDist.add(new Pair<>(i, contactTime.getData()));
@@ -97,7 +101,7 @@ public class ColliderSystem extends IteratingSystem {
         }
     }
 
-    public List<Rect> getRectList() {
-        return rectList;
+    public List<Collider> getColliderList() {
+        return colliderList;
     }
 }
