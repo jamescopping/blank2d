@@ -21,6 +21,13 @@
         </plugins>
     </build>
 
+    <developers>
+        <developer>
+            <name>James Copping</name>
+            <email>james.copping97@gmail.com</email>
+        </developer>
+    </developers>
+
     <distributionManagement>
         <repository>
             <id>github</id>
