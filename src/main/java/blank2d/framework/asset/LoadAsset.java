@@ -12,7 +12,7 @@ public final class LoadAsset {
             URL path = AssetPath.getURL(assetDirectory, Resource.get(resourceID));
             return ImageIO.read(path);
         } catch (Exception e) {
-            System.err.println(e + "\n[" + Resource.get(resourceID) + "] Resource cannot be found!\n");
+            System.err.println("[" + Resource.get(resourceID) + "] Resource cannot be found! at path: (" + AssetPath.getResourceDirectory() + assetDirectory + "/)");
             return null;
         }
     }
