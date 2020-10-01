@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="blank2d:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/blank2d_jar</output-path>
+    <root id="archive" name="blank2d.jar">
+      <element id="module-output" name="blank2d" />
+    </root>
+  </artifact>
+</component>
