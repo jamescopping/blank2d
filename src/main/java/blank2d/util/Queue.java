@@ -10,7 +10,7 @@ public class Queue<T> implements Iterable<Node<T>> {
     @Override
     public String toString() {
         return "Queue{" +
-                "head=" + head +
+                "head=" + head.toString() +
                 ", size=" + size +
                 '}';
     }

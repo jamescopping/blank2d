@@ -37,9 +37,7 @@ public class Node<T> {
     @Override
     public String toString() {
         return "Node{" +
-                "data=" + data +
-                ", child=" + child +
-                ", parent=" + parent +
+                "data=" + data.toString() +
                 '}';
     }
 }
