@@ -19,7 +19,7 @@ package blank2d.framework.ecs.signal;
  *            the type of object that is added as parameter to a dispatched
  *            event
  */
-public interface SignalListener<T> {
+public interface ISignalListener<T> {
 
     /**
      * Invoked when an event dispatched.

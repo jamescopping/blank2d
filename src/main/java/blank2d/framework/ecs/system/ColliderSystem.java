@@ -41,6 +41,7 @@ public class ColliderSystem extends IteratingSystem {
 
     }
 
+
     /**
      * Returns a list of indices of the
      * @param rb Rigid body that we want to test the distances from
@@ -71,6 +72,16 @@ public class ColliderSystem extends IteratingSystem {
         return indexList;
     }
 
+    //tells the system that a collider has entered collision with
+    public void triggerEntered(Collider trigger, Collider otherCollider){
+        trigger.getTriggerSignal().entered(otherCollider);
+
+    }
+
+    public void triggerExited(Collider trigger, Collider otherCollider){
+        trigger.getTriggerSignal().entered(otherCollider);
+    }
+
 
     public void render(){
         if(colliderDebug) {
@@ -83,4 +94,6 @@ public class ColliderSystem extends IteratingSystem {
     public List<Collider> getColliderList() {
         return colliderList;
     }
+
+
 }

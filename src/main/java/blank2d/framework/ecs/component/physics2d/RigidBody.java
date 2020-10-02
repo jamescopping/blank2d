@@ -50,18 +50,36 @@ public class RigidBody extends Component {
         linearVelocity.add(acceleration);
 
         if (linearVelocity.getMagnitude() > 0.0f) {
+            //reference variables used as callbacks on the detectCollision function
+            //used to resolve the collision between another rigidbody
             Vector2D contactPoint = new Vector2D();
             Vector2D contactNormal = new Vector2D();
             Node<Float> contactTime = new Node<>();
-            List<Collider> rectList = getSystem(ColliderSystem.class).getColliderList();
 
-            for (Integer targetIndex : getSystem(ColliderSystem.class).sortRectListDistFromRB(this)) {
-                Rect target = rectList.get(targetIndex).getBox();
+            ColliderSystem colliderSystem = getSystem(ColliderSystem.class);
+            List<Collider> colliderList = colliderSystem.getColliderList();
+
+            //loop through all the other colliders in order of distance from this collider (ascending order)
+            for (Integer targetIndex : colliderSystem.sortRectListDistFromRB(this)) {
+                Collider collider = colliderList.get(targetIndex);
+                Rect target = collider.getBox();
+                //check for collision between the target rect and the this collider's rect
                 if (detectCollision(target, contactPoint, contactNormal, contactTime)) {
-                    Vector2D resolveVector = new Vector2D(Math.abs(linearVelocity.x), Math.abs(linearVelocity.y));
-                    resolveVector = Vector2D.multiply(resolveVector, 1.0f - contactTime.getData());
-                    resolveVector = Vector2D.multiply(resolveVector, contactNormal);
-                    linearVelocity.add(resolveVector);
+
+                    if(collider.isTrigger()){
+                        colliderSystem.triggerEntered(collider, getCollider());
+                    }
+
+
+                    //if the target collider rect has a rigidbody instance associated with that entity the resolve the collision
+                    if(collider.getEntity().hasComponent(RigidBody.class)) {
+                        //finding the finding the correct velocity vector to add to the current linear velocity
+                        //inorder that the this collider is no longer colliding with the target in the space
+                        Vector2D resolveVector = new Vector2D(Math.abs(linearVelocity.x), Math.abs(linearVelocity.y));
+                        resolveVector = Vector2D.multiply(resolveVector, 1.0f - contactTime.getData());
+                        resolveVector = Vector2D.multiply(resolveVector, contactNormal);
+                        linearVelocity.add(resolveVector);
+                    }
                 }
             }
             collider.getBox().getTransform().move(linearVelocity);

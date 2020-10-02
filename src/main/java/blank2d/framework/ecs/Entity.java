@@ -37,6 +37,9 @@ public final class Entity {
     /** Indicates if this entity has been activated. */
     private boolean activated;
 
+    /** Indicates if this entity has been activated. */
+    private boolean toBeDestroyed;
+
     /** A reference to the engine this entity has been added to. */
     private Engine engine;
 
@@ -199,6 +202,14 @@ public final class Entity {
         component.setEntity(this);
         if (isActivated() && !component.isActivated()) component.activateInternal();
     }
+
+    /**
+     * removes this entity from the engine.
+     */
+    public void destroy(){
+        getEngine().removeEntity(this);
+    }
+
 
     /**
      * Returns the activation state of this entity.
