@@ -268,15 +268,17 @@ public class Screen {
         }
     }
 
-    public boolean setPixel(int x, int y, int rgb){
-        if(outOfBounds(x, y)) return false;
-        pixels[x + y * width] = rgb;
-        return true;
+    public int index(int x, int y){
+        return x + y * width;
     }
-    public boolean setPixelDebug(int x, int y, int rgb){
-        if(outOfBounds(x, y)) return false;
-        debugLayerPixels[x + y * width] = rgb;
-        return true;
+
+    public void setPixel(int x, int y, int rgb){
+        if(outOfBounds(x, y)) return;
+        pixels[index(x, y)] = rgb;
+    }
+    public void setPixelDebug(int x, int y, int rgb){
+        if(outOfBounds(x, y)) return;
+        debugLayerPixels[index(x, y)] = rgb;
     }
 
     public int getWidth() {
