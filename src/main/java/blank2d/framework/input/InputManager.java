@@ -9,24 +9,22 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class InputManager extends MouseAdapter implements KeyListener {
 
-    private static final InputManager instance = new InputManager();
-    public static InputManager getInstance() {
-        return instance;
-    }
-    protected InputManager() { }
+    private final int numKeys = 256;
 
-    public static int PRESSED = 1;
-    public static int RELEASED = -1;
-    public static int UNCHANGED = 0;
+    private final List<Boolean> keyNewState = new ArrayList<>(numKeys);
+    private final List<Boolean> keyOldState = new ArrayList<>(numKeys);
+    public final List<ButtonState> keyboardState = new ArrayList<>(numKeys);
 
-    private final int numberOfKeys = 256;
-    private final int[] keys = new int[numberOfKeys];
+    private final int numOfMouseButtons = (MouseInfo.getNumberOfButtons() == -1)? 3:MouseInfo.getNumberOfButtons();
 
-    private boolean[] keyStateUp = new boolean[numberOfKeys]; //true if not pressed
-    private final boolean[] keyStateDown = new boolean[numberOfKeys]; //true if pressed
+    private final List<Boolean> mouseNewState = new ArrayList<>(numOfMouseButtons);
+    private final List<Boolean> mouseOldState = new ArrayList<>(numOfMouseButtons);
+    public List<ButtonState> mouseState = new ArrayList<>(numOfMouseButtons);
 
     //variable that indicates when any key(s) are being pressed.
     private boolean keyPressed = false;
@@ -40,58 +38,93 @@ public final class InputManager extends MouseAdapter implements KeyListener {
     //last mouse position from the mouseMoved event
     private final Vector2D mousePosition = new Vector2D();
 
-    private final int numOfMouseButtons = MouseInfo.getNumberOfButtons();
-
-    private final int[] buttons = new int[(numOfMouseButtons == -1)? 3:numOfMouseButtons];
-
-    private boolean[] buttonStateUp = new boolean[buttons.length]; //true if not pressed
-    private final boolean[] buttonStateDown = new boolean[buttons.length]; //true if pressed
-
     //variable that indicates when any button(s) are being pressed.
     private boolean buttonPressed = false;
 
     //variable that indicates that some button was released this frame.
     private boolean buttonReleased = false; //cleared every frame.
 
-    public void update() {
-        //clear out the key up states
-        keyStateUp = new boolean[keyStateUp.length];
-        buttonStateUp = new boolean[buttonStateUp.length];
-        keyReleased = false;
-        buttonReleased = false;
+    private static final InputManager instance = new InputManager();
+    public static InputManager getInstance() {
+        return instance;
+    }
 
-        for (int i = 0; i < keys.length; i++) {
-            if(keys[i] == RELEASED) keys[i] = UNCHANGED;
+    protected InputManager() {
+        for (int i = 0; i < numKeys; i++) {
+            keyNewState.add(false);
+            keyOldState.add(false);
+            keyboardState.add(new ButtonState());
         }
 
+        for (int i = 0; i < numOfMouseButtons; i++) {
+            mouseNewState.add(false);
+            mouseOldState.add(false);
+            mouseState.add(new ButtonState());
+        }
+    }
+
+
+
+
+    private void scanHardwareChanges(List<ButtonState> keys, List<Boolean> oldStates, List<Boolean> newStates, int keyCount){
+
+        for (int i = 0; i < keyCount; i++) {
+            ButtonState key = keys.get(i);
+            Boolean oldState = oldStates.get(i);
+            boolean newState = newStates.get(i);
+
+            key.setPressed(false);
+            key.setReleased(false);
+
+            if (newState != oldState) {
+                if (newState) {
+                    key.setPressed(!key.isHeld());
+                    key.setHeld(true);
+                } else {
+                    key.setReleased(true);
+                    key.setHeld(false);
+                }
+            }
+
+            oldStates.set(i, newState);
+        }
+    }
+
+
+    public void update() {
+        //clear out the key up states
+        keyReleased = false;
+        keyPressed = false;
+        buttonReleased = false;
+        buttonPressed = false;
+
+
+        scanHardwareChanges(keyboardState, keyOldState, keyNewState, numKeys);
+        scanHardwareChanges(mouseState, mouseOldState, mouseNewState, numOfMouseButtons);
+
         clearKeyQueue();
+    }
+
+
+    private void updateKeyState(int key, boolean state){
+        keyNewState.set(key, state);
     }
 
     public void keyPressed(KeyEvent e) {
         //System.out.println("InputManager: A key has been pressed code=" + e.getKeyCode());
         int keyCode = e.getKeyCode();
-        if( keyCode >= 0 && keyCode < numberOfKeys ) {
-            if(!keyStateDown[keyCode]) {
-                keys[keyCode] = PRESSED;
-                keyStateDown[keyCode] = true;
-                keyStateUp[keyCode] = false;
-                keyPressed = true;
-                keyReleased = false;
-            } else {
-                keys[keyCode] = UNCHANGED;
-            }
+        if( keyCode >= 0 && keyCode < numKeys) {
+            updateKeyState(keyCode, true);
+            keyPressed = true;
         }
     }
 
     public void keyReleased(KeyEvent e) {
         //System.out.println("InputManager: A key has been released code=" + e.getKeyCode());
         int keyCode = e.getKeyCode();
-        if( keyCode >= 0 && keyCode < numberOfKeys ) {
-            keys[keyCode] = RELEASED;
-            keyStateUp[keyCode] = true;
+        if( keyCode >= 0 && keyCode < numKeys) {
+            updateKeyState(keyCode, false);
             keyReleased = true;
-            keyStateDown[keyCode] = false;
-            keyPressed = false;
         }
     }
 
@@ -113,31 +146,12 @@ public final class InputManager extends MouseAdapter implements KeyListener {
         keyQueue.clear();
     }
 
-    public boolean isKeyDown(int key ) {
-        return keyStateDown[key];
-    }
-    public boolean isKeyUp( int key ) {
-        return keyStateUp[key];
-    }
-
-    public boolean wasKeyReleased(int key){
-        return (keys[key] == RELEASED);
-    }
-    public boolean wasKeyPressed(int key){
-        return (keys[key] == PRESSED);
-    }
-
+    public ButtonState getKey(int key){ return keyboardState.get(key); }
     public boolean isAnyKeyDown() {
         return keyPressed;
     }
     public boolean isAnyKeyUp() {
         return keyReleased;
-    }
-
-    public void outKeyChanges(){
-        for (int i = 0; i < keys.length; i++) {
-            if(keys[i] != UNCHANGED) System.out.println(i + ": " + keys[i]);
-        }
     }
 
 
@@ -160,15 +174,8 @@ public final class InputManager extends MouseAdapter implements KeyListener {
     public void mousePressed(MouseEvent e) {
         int buttonNumber = e.getButton();
         if( buttonNumber >= 0 && buttonNumber < MouseInfo.getNumberOfButtons()) {
-             if(!buttonStateDown[buttonNumber]) {
-                 buttons[buttonNumber] = PRESSED;
-            } else if(buttons[buttonNumber] != UNCHANGED){
-                 buttons[buttonNumber] = UNCHANGED;
-            }
-            buttonStateUp[buttonNumber] = false;
-            buttonStateDown[buttonNumber] = true;
+            updateMouseState(buttonNumber, true);
             buttonPressed = true;
-            buttonReleased = false;
         }
     }
 
@@ -176,40 +183,19 @@ public final class InputManager extends MouseAdapter implements KeyListener {
     public void mouseReleased(MouseEvent e) {
         int buttonNumber = e.getButton();
         if( buttonNumber >= 0 && buttonNumber < MouseInfo.getNumberOfButtons()) {
-            if(!buttonStateUp[buttonNumber]) {
-                buttons[buttonNumber] = PRESSED;
-            } else if(buttons[buttonNumber] != UNCHANGED){
-                buttons[buttonNumber] = UNCHANGED;
-            }
-            buttons[buttonNumber] = 0;
-            buttonStateUp[buttonNumber] = true;
-            buttonStateDown[buttonNumber] = false;
-            buttonPressed = false;
+            updateMouseState(buttonNumber, false);
             buttonReleased = true;
         }
     }
 
-    public boolean isButtonPressed(int button ) {
-        return buttonStateDown[button];
+    private void updateMouseState(int button, boolean state){
+        mouseNewState.set(button, state);
     }
 
-    public boolean isButtonReleased( int button ) {
-        return buttonStateUp[button];
-    }
-
-    public boolean wasButtonReleased(int button){
-        return (buttons[button] == RELEASED);
-    }
-
-    public boolean wasButtonPressed(int button){
-        return (buttons[button]  == RELEASED);
-    }
-
-
+    public ButtonState getMouseButton(int button){ return mouseState.get(button); }
     public boolean isAnyButtonPressed() {
         return buttonPressed;
     }
-
     public boolean isAnyButtonReleased() {
         return buttonReleased;
     }
