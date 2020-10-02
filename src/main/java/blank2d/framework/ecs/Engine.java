@@ -1,4 +1,19 @@
+/*
+  Copyright (c) 2016 Roman Divotkey, Univ. of Applied Sciences Upper Austria.
+  All rights reserved.
+
+  This file is subject to the terms and conditions defined in file
+  'LICENSE', which is part of this source code package.
+
+  THIS CODE IS PROVIDED AS EDUCATIONAL MATERIAL AND NOT INTENDED TO ADDRESS
+  ALL REAL WORLD PROBLEMS AND ISSUES IN DETAIL.
+
+  Code has been modified for this project
+ */
 package blank2d.framework.ecs;
+
+import blank2d.framework.ecs.signal.entity.EntityRemovedListener;
+import blank2d.framework.ecs.signal.entity.EntitySignal;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -77,8 +92,15 @@ public final class Engine {
     /** Registered entity listeners listening only for certain entity families. */
     private final Map<EntityFamily, List<IEntityListener>> filteredListeners = new HashMap<>();
 
+    private final EntitySignal entitySignal = new EntitySignal();
+
     /** Indicates if an update cycle is currently in progress. */
     private boolean updating;
+
+
+    public Engine(){
+        entitySignal.addSignalListener(new EntityRemovedListener());
+    }
 
     /**
      * Adds the specified entity listener to this engine.
@@ -172,6 +194,7 @@ public final class Engine {
      * @param entity the entity to be removed
      */
     public void removeEntity(Entity entity){
+        entitySignal.destroy(entity);
         if(updating){
             commandList.add(() -> removeEntityInternal(entity));
         } else {
@@ -247,7 +270,9 @@ public final class Engine {
      */
     private void removeAllInternal() {
         while (!entityList.isEmpty()) {
-            removeEntityInternal(entityList.get(0));
+            Entity entity = entityList.get(0);
+            entitySignal.destroy(entity);
+            removeEntityInternal(entity);
         }
     }
 
@@ -537,6 +562,7 @@ public final class Engine {
             }
         }
         entityList.clear();
+        entitySignal.clear();
         views.clear();
         tags.clear();
         layers.clear();

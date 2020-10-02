@@ -1,3 +1,15 @@
+/*
+  Copyright (c) 2016 Roman Divotkey, Univ. of Applied Sciences Upper Austria.
+  All rights reserved.
+
+  This file is subject to the terms and conditions defined in file
+  'LICENSE', which is part of this source code package.
+
+  THIS CODE IS PROVIDED AS EDUCATIONAL MATERIAL AND NOT INTENDED TO ADDRESS
+  ALL REAL WORLD PROBLEMS AND ISSUES IN DETAIL.
+
+  Code has been modified for this project
+ */
 package blank2d.framework.ecs;
 
 import java.util.*;
@@ -24,6 +36,9 @@ public final class Entity {
 
     /** Indicates if this entity has been activated. */
     private boolean activated;
+
+    /** Indicates if this entity has been activated. */
+    private boolean toBeDestroyed;
 
     /** A reference to the engine this entity has been added to. */
     private Engine engine;
@@ -187,6 +202,14 @@ public final class Entity {
         component.setEntity(this);
         if (isActivated() && !component.isActivated()) component.activateInternal();
     }
+
+    /**
+     * removes this entity from the engine.
+     */
+    public void destroy(){
+        getEngine().removeEntity(this);
+    }
+
 
     /**
      * Returns the activation state of this entity.

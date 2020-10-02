@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ColliderSystem extends IteratingSystem {
     public boolean colliderDebug = false;
-    private final List<Rect> rectList = new ArrayList<>();
+    private final List<Collider> colliderList = new ArrayList<>();
 
     /**
      * Creates a new instance
@@ -41,51 +41,56 @@ public class ColliderSystem extends IteratingSystem {
 
     }
 
-    public boolean isColliding(Entity entity){
-        Layer layer = entity.getLayer();
-        ArrayList<Entity> collidedEntities = new ArrayList<>();
-        ArrayList<Entity> entityCollidersOfLayer = new ArrayList<>();
-        for (Entity entity1 :getEntityList()){
-            if (entity1.getLayer() == layer) entityCollidersOfLayer.add(entity1);
-        }
-
-        for (Entity cEntity: entityCollidersOfLayer){
-            if(!entity.equals(cEntity)) {
-                Collider collider = entity.getComponent(Collider.class);
-                collider.setColliding(false);
-                if(collider.isColliding(cEntity.getComponent(Collider.class))) collidedEntities.add(cEntity);
-            }
-        }
-        if(collidedEntities.size() > 0) collidedEntities.add(entity);
-        for (Entity e: collidedEntities) {
-            e.getComponent(Collider.class).setColliding(true);
-        }
-        return (collidedEntities.size() > 0);
-    }
-
-
-    public List<Integer> sortRectListDistFromRB(RigidBody rb){
-        List<Pair<Integer, Float>> listRectIndexDist = new ArrayList<>();
+    /**
+     * Returns a list of collider in the order they need to be resolved
+     * @param rb Rigid body that we want to test the distances from
+     * @return list of indices that point to the ColliderSystem's entityList
+     */
+    public List<Collider> getOrderedListOfColliders(RigidBody rb){
+        List<Pair<Collider, Float>> unorderedColliderList = new ArrayList<>();
 
         Vector2D contactPoint = new Vector2D();
         Vector2D contactNormal = new Vector2D();
         Node<Float> contactTime = new Node<>();
 
-        for (int i = 0; i < getRectList().size(); i++) {
-            Rect target = getRectList().get(i);
-            if(rb.getCollider().getBox().equals(target)) continue;
-            if(rb.detectCollision(target, contactPoint, contactNormal, contactTime)) {
-                listRectIndexDist.add(new Pair<>(i, contactTime.getData()));
+        for (int i = 0; i < getColliderList().size(); i++) {
+            Collider collider = colliderList.get(i);
+            Collider rbCollider = rb.getCollider();
+            //don't check against self
+            if(rbCollider.equals(collider)) continue;
+            if(rb.detectCollision(collider.getBox(), contactPoint, contactNormal, contactTime)) {
+                unorderedColliderList.add(new Pair<>(collider, contactTime.getData()));
+                if(collider.isTrigger() && !collider.isCurrentlyCollidingWith(rbCollider)) triggerEntered(collider, rbCollider);
+            }else if (collider.isTrigger() && collider.isCurrentlyCollidingWith(rbCollider)) {
+                triggerExited(collider, rbCollider);
             }
         }
-
-        listRectIndexDist.sort(Comparator.comparing(Pair::getValue));
-        List<Integer> indexList = new ArrayList<>(listRectIndexDist.size());
-        for (Pair<Integer, Float> pair: listRectIndexDist) {
-            indexList.add(pair.getKey());
+        //sort the list of pairs base on the value, which is the contactTime
+        unorderedColliderList.sort(Comparator.comparing(Pair::getValue));
+        List<Collider> orderedColliderList = new ArrayList<>(unorderedColliderList.size());
+        for (Pair<Collider, Float> pair: unorderedColliderList) {
+            orderedColliderList.add(pair.getKey());
         }
+        return orderedColliderList;
+    }
 
-        return indexList;
+    //tells the system that a collider has entered collision with
+    public void triggerEntered(Collider trigger, Collider otherCollider){
+        trigger.getTriggerSignal().entered(otherCollider);
+        trigger.colliderEntered(otherCollider);
+        if(otherCollider.isTrigger()){
+            otherCollider.getTriggerSignal().entered(trigger);
+            otherCollider.colliderEntered(trigger);
+        }
+    }
+
+    public void triggerExited(Collider trigger, Collider otherCollider){
+        trigger.getTriggerSignal().exited(otherCollider);
+        trigger.colliderExited(otherCollider);
+        if(otherCollider.isTrigger()) {
+            otherCollider.getTriggerSignal().exited(trigger);
+            otherCollider.colliderExited(trigger);
+        }
     }
 
 
@@ -97,7 +102,9 @@ public class ColliderSystem extends IteratingSystem {
         }
     }
 
-    public List<Rect> getRectList() {
-        return rectList;
+    public List<Collider> getColliderList() {
+        return colliderList;
     }
+
+
 }

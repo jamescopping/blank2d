@@ -1,4 +1,18 @@
+/*
+  Copyright (c) 2016 Roman Divotkey, Univ. of Applied Sciences Upper Austria.
+  All rights reserved.
+
+  This file is subject to the terms and conditions defined in file
+  'LICENSE', which is part of this source code package.
+
+  THIS CODE IS PROVIDED AS EDUCATIONAL MATERIAL AND NOT INTENDED TO ADDRESS
+  ALL REAL WORLD PROBLEMS AND ISSUES IN DETAIL.
+
+  Code has been modified for this project
+ */
 package blank2d.framework.ecs;
+
+import java.util.Objects;
 
 /**
  * The base class for all components.
@@ -149,5 +163,19 @@ public abstract class Component {
         }
         deactivate();
         activated = false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Component component = (Component) o;
+        return isActivated() == component.isActivated() &&
+                Objects.equals(getEntity(), component.getEntity());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getEntity(), isActivated());
     }
 }
