@@ -9,7 +9,6 @@ public class Vector2D {
     public static Vector2D left = new Vector2D(-1,0);
     public static Vector2D right = new Vector2D(1,0);
 
-
     public float x = 0.0f, y = 0.0f;
     public Vector2D(float x, float y) {
         setXY(x, y);
@@ -135,6 +134,16 @@ public class Vector2D {
         Vector2D dirVector = new Vector2D((float)Math.cos(angleRad), (float)Math.sin(angleRad));
         dirVector.setY(dirVector.getY()*-1);
         return dirVector;
+    }
+
+    /**
+     * gets the distance between the two vectors as if they were points on a 2d plane
+     * @return abs distance as a float
+     */
+    public static float distance(Vector2D vectorA, Vector2D vectorB){
+        float dx = vectorA.x - vectorB.x;
+        float dy = vectorA.y-vectorB.y;
+        return (float) Math.sqrt((dx*dx) + (dy*dy));
     }
 
     public static float dot(Vector2D vectorA, Vector2D vectorB){

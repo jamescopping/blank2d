@@ -11,7 +11,10 @@ import blank2d.util.Time;
 import blank2d.util.math.Ray;
 import blank2d.util.math.Rect;
 import blank2d.util.math.Vector2D;
+import javafx.util.Pair;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class RigidBody extends Component {
@@ -57,22 +60,13 @@ public class RigidBody extends Component {
             Node<Float> contactTime = new Node<>();
 
             ColliderSystem colliderSystem = getSystem(ColliderSystem.class);
-            List<Collider> colliderList = colliderSystem.getColliderList();
 
             //loop through all the other colliders in order of distance from this collider (ascending order)
-            for (Integer targetIndex : colliderSystem.sortRectListDistFromRB(this)) {
-                Collider collider = colliderList.get(targetIndex);
-                Rect target = collider.getBox();
+            for (Collider collider : colliderSystem.getOrderedListOfColliders(this)) {
                 //check for collision between the target rect and the this collider's rect
-                if (detectCollision(target, contactPoint, contactNormal, contactTime)) {
-
-                    if(collider.isTrigger()){
-                        colliderSystem.triggerEntered(collider, getCollider());
-                    }
-
-
-                    //if the target collider rect has a rigidbody instance associated with that entity the resolve the collision
-                    if(collider.getEntity().hasComponent(RigidBody.class)) {
+                if (collider.getEntity().hasComponent(RigidBody.class)) {
+                    if (detectCollision(collider.getBox(), contactPoint, contactNormal, contactTime) && contactTime.getData() >= 0.0f) {
+                        //if the target collider rect has a rigidbody instance associated with that entity the resolve the collision
                         //finding the finding the correct velocity vector to add to the current linear velocity
                         //inorder that the this collider is no longer colliding with the target in the space
                         Vector2D resolveVector = new Vector2D(Math.abs(linearVelocity.x), Math.abs(linearVelocity.y));
@@ -82,7 +76,7 @@ public class RigidBody extends Component {
                     }
                 }
             }
-            collider.getBox().getTransform().move(linearVelocity);
+            this.collider.getBox().getTransform().move(linearVelocity);
         }
     }
 
@@ -92,7 +86,7 @@ public class RigidBody extends Component {
         Rect expandedTarget = new Rect(target.getPosition(), Vector2D.add(target.getSize(), in.getSize()));
         Ray ray = new Ray(in.getPosition(), linearVelocity);
         if(ray.rayCastTargetRect(expandedTarget, contactPoint, contactNormal, contactTime)){
-            return (contactTime.getData() >= 0.0f && contactTime.getData() < 1.0f);
+            return contactTime.getData() < 1.0f;
         }
         return false;
     }

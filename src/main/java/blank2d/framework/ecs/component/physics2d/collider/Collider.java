@@ -6,12 +6,15 @@ import blank2d.framework.ecs.signal.collider.TriggerEnterListener;
 import blank2d.framework.ecs.signal.collider.TriggerExitListener;
 import blank2d.util.math.Rect;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public abstract class Collider extends Component {
 
     protected boolean trigger = false;
     protected final ColliderTriggerSignal triggerSignal = new ColliderTriggerSignal();
+    protected final List<Collider> currentlyColliding = new ArrayList<>();
 
     protected Rect box;
 
@@ -34,6 +37,26 @@ public abstract class Collider extends Component {
 
     public ColliderTriggerSignal getTriggerSignal() {
         return triggerSignal;
+    }
+
+    public boolean isCurrentlyCollidingWith(Collider collider){
+        return currentlyColliding.contains(collider);
+    }
+
+    public void colliderExited(Collider collider){
+        currentlyColliding.remove(collider);
+    }
+
+    public void colliderEntered(Collider collider){
+        if(!isCurrentlyCollidingWith(collider)) currentlyColliding.add(collider);
+    }
+
+    public boolean isCurrentlyCollidingWithAnything(){
+        return currentlyColliding.size() > 0;
+    }
+
+    public List<Collider> getCurrentlyColliding() {
+        return currentlyColliding;
     }
 
     @Override

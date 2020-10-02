@@ -41,45 +41,56 @@ public class ColliderSystem extends IteratingSystem {
 
     }
 
-
     /**
-     * Returns a list of indices of the
+     * Returns a list of collider in the order they need to be resolved
      * @param rb Rigid body that we want to test the distances from
      * @return list of indices that point to the ColliderSystem's entityList
      */
-    public List<Integer> sortRectListDistFromRB(RigidBody rb){
-        List<Pair<Integer, Float>> listRectIndexDist = new ArrayList<>();
+    public List<Collider> getOrderedListOfColliders(RigidBody rb){
+        List<Pair<Collider, Float>> unorderedColliderList = new ArrayList<>();
 
         Vector2D contactPoint = new Vector2D();
         Vector2D contactNormal = new Vector2D();
         Node<Float> contactTime = new Node<>();
 
         for (int i = 0; i < getColliderList().size(); i++) {
-            Collider collider = getColliderList().get(i);
-            if(rb.getCollider().equals(collider)) continue;
-            Rect target = collider.getBox();
-            if(rb.detectCollision(target, contactPoint, contactNormal, contactTime)) {
-                listRectIndexDist.add(new Pair<>(i, contactTime.getData()));
+            Collider collider = colliderList.get(i);
+            Collider rbCollider = rb.getCollider();
+            //don't check against self
+            if(rbCollider.equals(collider)) continue;
+            if(rb.detectCollision(collider.getBox(), contactPoint, contactNormal, contactTime)) {
+                unorderedColliderList.add(new Pair<>(collider, contactTime.getData()));
+                if(collider.isTrigger() && !collider.isCurrentlyCollidingWith(rbCollider)) triggerEntered(collider, rbCollider);
+            }else if (collider.isTrigger() && collider.isCurrentlyCollidingWith(rbCollider)) {
+                triggerExited(collider, rbCollider);
             }
         }
-
-        listRectIndexDist.sort(Comparator.comparing(Pair::getValue));
-        List<Integer> indexList = new ArrayList<>(listRectIndexDist.size());
-        for (Pair<Integer, Float> pair: listRectIndexDist) {
-            indexList.add(pair.getKey());
+        //sort the list of pairs base on the value, which is the contactTime
+        unorderedColliderList.sort(Comparator.comparing(Pair::getValue));
+        List<Collider> orderedColliderList = new ArrayList<>(unorderedColliderList.size());
+        for (Pair<Collider, Float> pair: unorderedColliderList) {
+            orderedColliderList.add(pair.getKey());
         }
-
-        return indexList;
+        return orderedColliderList;
     }
 
     //tells the system that a collider has entered collision with
     public void triggerEntered(Collider trigger, Collider otherCollider){
         trigger.getTriggerSignal().entered(otherCollider);
-
+        trigger.colliderEntered(otherCollider);
+        if(otherCollider.isTrigger()){
+            otherCollider.getTriggerSignal().entered(trigger);
+            otherCollider.colliderEntered(trigger);
+        }
     }
 
     public void triggerExited(Collider trigger, Collider otherCollider){
-        trigger.getTriggerSignal().entered(otherCollider);
+        trigger.getTriggerSignal().exited(otherCollider);
+        trigger.colliderExited(otherCollider);
+        if(otherCollider.isTrigger()) {
+            otherCollider.getTriggerSignal().exited(trigger);
+            otherCollider.colliderExited(trigger);
+        }
     }
 
 

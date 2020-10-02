@@ -23,22 +23,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="69708ced-b8e7-4bbf-9c84-2385ce266519" name="Default Changelist" comment="fixed #1 add some new exceptions to help with debugging">
-      <change afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/signal/collider/ColliderTriggerSignal.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/signal/collider/TriggerEnterListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/signal/collider/TriggerExitListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/signal/entity/EntityRemovedListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/signal/entity/EntitySignal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Engine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Engine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Entity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/RigidBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/RigidBody.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/collider/BoxCollider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/collider/BoxCollider.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/collider/Collider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/collider/Collider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/script/IEntityScript.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/script/IEntityScript.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/signal/Signal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/signal/Signal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/signal/SignalListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/signal/ISignalListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/ColliderSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/ColliderSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/util/math/Vector2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/util/math/Vector2D.java" afterDir="false" />
     </list>
     <list id="4cdec64f-397c-45ec-9480-efe3c31b180c" name="Don't commit" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -214,7 +203,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601631553978</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Added collider onTrigger signaling as to the entity script that tis attached to the obj, also added a onDestroy method that is called when the entity is removed from the engine">
+      <created>1601642423904</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1601642423904</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -241,7 +237,8 @@
     <MESSAGE value="fixed #1 add some new exceptions to help with debugging" />
     <MESSAGE value="#5 collider-trigger&#10;changed colliderList in the system to contain the references of the Collider Components that are going to be checked against for collision" />
     <MESSAGE value="Copyright notice on dicotkey's code" />
-    <option name="LAST_COMMIT_MESSAGE" value="Copyright notice on dicotkey's code" />
+    <MESSAGE value="Added collider onTrigger signaling as to the entity script that tis attached to the obj, also added a onDestroy method that is called when the entity is removed from the engine" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added collider onTrigger signaling as to the entity script that tis attached to the obj, also added a onDestroy method that is called when the entity is removed from the engine" />
   </component>
   <component name="WindowStateProjectService">
     <state x="440" y="94" key="#Project_Structure" timestamp="1601579574246">
@@ -292,22 +289,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="274" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601633473851" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1601641967760">
+    <state width="1877" height="103" key="GridCell.Tab.0.bottom" timestamp="1601670122184">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601641967760" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1601641967760">
+    <state width="1877" height="103" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601670122184" />
+    <state width="1877" height="103" key="GridCell.Tab.0.center" timestamp="1601670122184">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601641967760" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1601641967760">
+    <state width="1877" height="103" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601670122184" />
+    <state width="1877" height="103" key="GridCell.Tab.0.left" timestamp="1601670122183">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601641967760" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1601641967760">
+    <state width="1877" height="103" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601670122183" />
+    <state width="1877" height="103" key="GridCell.Tab.0.right" timestamp="1601670122184">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601641967760" />
+    <state width="1877" height="103" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601670122184" />
     <state x="490" y="174" key="Maven.ArtifactSearchDialog" timestamp="1601573561979">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -324,6 +321,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="790" y="389" key="VCS.EditChangelistDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601589092430" />
+    <state x="92" y="92" width="1736" height="856" key="VCS.FileHistoryDialog" timestamp="1601668995594">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="92" y="92" width="1736" height="856" key="VCS.FileHistoryDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601668995594" />
     <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1601631711508">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -352,9 +353,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="551" y="180" key="new project wizard/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601584498914" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1601641934936">
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1601656565693">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601641934936" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601656565693" />
   </component>
 </project>
