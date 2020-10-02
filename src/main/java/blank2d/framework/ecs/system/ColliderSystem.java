@@ -41,28 +41,6 @@ public class ColliderSystem extends IteratingSystem {
 
     }
 
-    public boolean isColliding(Entity entity){
-        Layer layer = entity.getLayer();
-        ArrayList<Entity> collidedEntities = new ArrayList<>();
-        ArrayList<Entity> entityCollidersOfLayer = new ArrayList<>();
-        for (Entity entity1 :getEntityList()){
-            if (entity1.getLayer() == layer) entityCollidersOfLayer.add(entity1);
-        }
-
-        for (Entity cEntity: entityCollidersOfLayer){
-            if(!entity.equals(cEntity)) {
-                Collider collider = entity.getComponent(Collider.class);
-                collider.setColliding(false);
-                if(collider.isColliding(cEntity.getComponent(Collider.class))) collidedEntities.add(cEntity);
-            }
-        }
-        if(collidedEntities.size() > 0) collidedEntities.add(entity);
-        for (Entity e: collidedEntities) {
-            e.getComponent(Collider.class).setColliding(true);
-        }
-        return (collidedEntities.size() > 0);
-    }
-
     /**
      * Returns a list of indices of the
      * @param rb Rigid body that we want to test the distances from
@@ -76,8 +54,9 @@ public class ColliderSystem extends IteratingSystem {
         Node<Float> contactTime = new Node<>();
 
         for (int i = 0; i < getColliderList().size(); i++) {
-            Rect target = getColliderList().get(i).getBox();
-            if(rb.getCollider().getBox().equals(target)) continue;
+            Collider collider = getColliderList().get(i);
+            if(rb.getCollider().equals(collider)) continue;
+            Rect target = collider.getBox();
             if(rb.detectCollision(target, contactPoint, contactNormal, contactTime)) {
                 listRectIndexDist.add(new Pair<>(i, contactTime.getData()));
             }

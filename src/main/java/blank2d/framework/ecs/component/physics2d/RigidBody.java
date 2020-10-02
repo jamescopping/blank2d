@@ -1,3 +1,4 @@
+
 package blank2d.framework.ecs.component.physics2d;
 
 import blank2d.Game;
@@ -56,7 +57,6 @@ public class RigidBody extends Component {
 
             for (Integer targetIndex : getSystem(ColliderSystem.class).sortRectListDistFromRB(this)) {
                 Rect target = rectList.get(targetIndex).getBox();
-                if(getCollider().getBox().equals(target)) continue;
                 if (detectCollision(target, contactPoint, contactNormal, contactTime)) {
                     Vector2D resolveVector = new Vector2D(Math.abs(linearVelocity.x), Math.abs(linearVelocity.y));
                     resolveVector = Vector2D.multiply(resolveVector, 1.0f - contactTime.getData());

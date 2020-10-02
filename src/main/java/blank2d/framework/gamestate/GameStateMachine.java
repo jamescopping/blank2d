@@ -77,7 +77,7 @@ public class GameStateMachine {
         if(!stateStack.isEmpty()){
             return stateStack.peek();
         }else{
-            System.err.println("The stateStack is empty, oops!"); //TODO replace with an error state screen, just so its shows something
+            System.err.println("The stateStack is empty, oops!");
             return null;
         }
     }
