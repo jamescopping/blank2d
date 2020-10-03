@@ -1,7 +1,5 @@
 package blank2d.framework.graphics;
 
-import blank2d.Game;
-import blank2d.framework.ecs.component.rendering.Camera;
 import blank2d.util.math.Circle;
 import blank2d.util.math.Ray;
 import blank2d.util.math.Rect;
