@@ -199,7 +199,7 @@ public final class Entity {
      *            the component to be added
      */
     public void addComponent(Component component) {
-        if (isActivated() || engine != null) throw new IllegalStateException("cannot add component to activated entity");
+        //if (isActivated() || engine != null) throw new IllegalStateException("cannot add component to activated entity");
         if (component.getEntity() != null) throw new IllegalArgumentException("component already attached an entity");
         componentList.add(component);
         component.setEntity(this);

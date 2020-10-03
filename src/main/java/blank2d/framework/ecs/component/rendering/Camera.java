@@ -1,5 +1,6 @@
 package blank2d.framework.ecs.component.rendering;
 
+import blank2d.Game;
 import blank2d.framework.ecs.Component;
 import blank2d.framework.ecs.component.physics2d.Transform;
 import blank2d.util.math.Rect;
@@ -13,6 +14,10 @@ public class Camera extends Component {
     * if false then no changes will happen, you have to move the entities transform in some other fashion*/
     private boolean movable = true;
 
+    @Override
+    protected void activate() {
+        transform = getComponent(Transform.class);
+    }
 
     public Camera(Vector2D size){
         rect.getSize().setXY(size);
@@ -21,10 +26,12 @@ public class Camera extends Component {
     public Camera(float x, float y){
         rect.getSize().setXY(x, y);
     }
+    public Camera(){
+        rect.getSize().setXY(Game.getWIDTH(), Game.getHEIGHT());
+    }
 
-    @Override
-    protected void activate() {
-        transform = getComponent(Transform.class);
+    public Transform getTransform() {
+        return transform;
     }
 
     public void setPosition(float x, float y){

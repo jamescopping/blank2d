@@ -630,12 +630,12 @@ public final class Engine {
         //the order you add the systems are the order that is executed for the fixed updated and updated loops
         //all of fixed updated is done first, the all of update
 
-        defaultEngine.addSystem(new ColliderSystem(EntityFamily.create(Collider.class)));
-        defaultEngine.addSystem(new ScriptSystem(EntityFamily.create(EntityScript.class)));
-        defaultEngine.addSystem(new PhysicsSystem(EntityFamily.create(RigidBody.class)));
-        defaultEngine.addSystem(new CameraSystem(EntityFamily.create(Camera.class)));
-        defaultEngine.addSystem(new AnimationSystem(EntityFamily.create(AnimationController.class)));
-        defaultEngine.addSystem(new RendererSystem(EntityFamily.create(Transform.class, SpriteRenderer.class)));
+        defaultEngine.addSystem(new ColliderSystem(EntityFamily.colliderEF));
+        defaultEngine.addSystem(new ScriptSystem(EntityFamily.entityScriptEF));
+        defaultEngine.addSystem(new PhysicsSystem(EntityFamily.rigidBodyEF));
+        defaultEngine.addSystem(new CameraSystem(EntityFamily.cameraEF));
+        defaultEngine.addSystem(new AnimationSystem(EntityFamily.animationEF));
+        defaultEngine.addSystem(new RendererSystem(EntityFamily.spriteRendererEF));
 
         return defaultEngine;
     }

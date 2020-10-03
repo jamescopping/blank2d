@@ -1,8 +1,10 @@
 package blank2d.framework.input;
 
 import blank2d.Game;
+import blank2d.framework.graphics.Screen;
 import blank2d.util.Queue;
 import blank2d.util.math.Vector2D;
+import sun.security.krb5.SCDynamicStoreConfig;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -200,7 +202,12 @@ public final class InputManager extends MouseAdapter implements KeyListener {
         return buttonReleased;
     }
 
-    public Vector2D getMousePosition(){
+    public Vector2D getMousePositionScreenSpace(){
         return Vector2D.divide(mousePosition, new Vector2D(Game.getXScale(), Game.getYScale()));
+    }
+
+    public Vector2D getMousePositionGlobalSpace(){
+        Vector2D screenSpacePosition =  getMousePositionScreenSpace();
+        return Vector2D.subtract(Vector2D.add(Screen.getInstance().getCameraPosition(), screenSpacePosition), Vector2D.divide(Screen.getInstance().getCameraRect().getSize(), 2));
     }
 }

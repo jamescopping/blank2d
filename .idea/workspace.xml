@@ -25,9 +25,12 @@
     <list default="true" id="69708ced-b8e7-4bbf-9c84-2385ce266519" name="Default Changelist" comment="pom update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Engine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Engine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Entity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/EntityFamily.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/EntityFamily.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/rendering/Camera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/rendering/Camera.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/CameraSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/CameraSystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/ColliderSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/ColliderSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/Screen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/input/InputManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/input/InputManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -191,7 +194,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601742423529</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="created camera and system base, along with fixed the really dumb way I was storing a list of the possible colliders in ColliderSystem HUR DUR">
+      <created>1601744163791</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1601744163791</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -217,7 +227,8 @@
     <MESSAGE value="default engine method" />
     <MESSAGE value="entity has a transform by default" />
     <MESSAGE value="pushed up the entity transform assess so that, every component that relies on another, can assign the reference to it on the activate override function of the component" />
-    <option name="LAST_COMMIT_MESSAGE" value="pushed up the entity transform assess so that, every component that relies on another, can assign the reference to it on the activate override function of the component" />
+    <MESSAGE value="created camera and system base, along with fixed the really dumb way I was storing a list of the possible colliders in ColliderSystem HUR DUR" />
+    <option name="LAST_COMMIT_MESSAGE" value="created camera and system base, along with fixed the really dumb way I was storing a list of the possible colliders in ColliderSystem HUR DUR" />
   </component>
   <component name="WindowStateProjectService">
     <state x="440" y="94" key="#Project_Structure" timestamp="1601579574246">
@@ -232,10 +243,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="414" y="174" width="1092" height="763" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601585074740" />
-    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1601725866385">
+    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1601747694455">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601725866385" />
+    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601747694455" />
     <state x="711" y="380" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1601583850352">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -260,22 +271,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="274" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601584482803" />
-    <state width="1877" height="180" key="GridCell.Tab.0.bottom" timestamp="1601742412842">
+    <state width="1877" height="180" key="GridCell.Tab.0.bottom" timestamp="1601754926060">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="180" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601742412842" />
-    <state width="1877" height="180" key="GridCell.Tab.0.center" timestamp="1601742412842">
+    <state width="1877" height="180" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601754926060" />
+    <state width="1877" height="180" key="GridCell.Tab.0.center" timestamp="1601754926060">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="180" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601742412842" />
-    <state width="1877" height="180" key="GridCell.Tab.0.left" timestamp="1601742412842">
+    <state width="1877" height="180" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601754926060" />
+    <state width="1877" height="180" key="GridCell.Tab.0.left" timestamp="1601754926060">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="180" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601742412842" />
-    <state width="1877" height="180" key="GridCell.Tab.0.right" timestamp="1601742412842">
+    <state width="1877" height="180" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601754926060" />
+    <state width="1877" height="180" key="GridCell.Tab.0.right" timestamp="1601754926060">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="180" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601742412842" />
+    <state width="1877" height="180" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601754926060" />
     <state x="490" y="174" key="Maven.ArtifactSearchDialog" timestamp="1601573561979">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -288,10 +299,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="164" key="SettingsEditor/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601584746874" />
-    <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1601742353030">
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1601744084965">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="252" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601742353030" />
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601744084965" />
     <state x="777" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1601719967203">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -316,9 +327,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="551" y="180" key="new project wizard/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601584498914" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1601743931234">
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1601754178637">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601743931234" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601754178637" />
   </component>
 </project>
