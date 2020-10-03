@@ -39,9 +39,6 @@ public final class Entity {
     /** Indicates if this entity has been activated. */
     private boolean activated;
 
-    /** Indicates if this entity has been activated. */
-    private boolean toBeDestroyed;
-
     /** A reference to the engine this entity has been added to. */
     private Engine engine;
 

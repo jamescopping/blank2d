@@ -123,7 +123,6 @@ public final class Engine {
             entityListenerList = new CopyOnWriteArrayList<>();
             filteredListeners.put(family, entityListenerList);
         }
-        assert !entityListenerList.contains(listener):"listener already added " + listener;
         entityListenerList.add(listener);
     }
 
@@ -147,7 +146,7 @@ public final class Engine {
      *            the entity listener to be added
      */
     public void addEntityListener(IEntityListener listener){
-        assert !entityListeners.contains(listener): "listener already added " + listener;
+        if(entityListeners.contains(listener)) {System.out.println("listener already added " + listener); return;}
         entityListeners.add(listener);
     }
 
@@ -201,10 +200,11 @@ public final class Engine {
      * @param entity the entity to be removed
      */
     public void removeEntity(Entity entity){
-        entitySignal.destroy(entity);
         if(updating){
+            commandList.add(() -> entitySignal.destroy(entity));
             commandList.add(() -> removeEntityInternal(entity));
         } else {
+            entitySignal.destroy(entity);
             removeEntityInternal(entity);
         }
     }
@@ -216,11 +216,9 @@ public final class Engine {
      *            the entity to be added
      */
     private void addEntityInternal(Entity entity){
-        if(entity.getEngine() != null){
-            throw new IllegalArgumentException("entity already added to engine");
-        }
-        assert !entity.isActivated();
-        assert !entityList.contains(entity);
+        if(entity.getEngine() != null) throw new IllegalArgumentException("entity already added to engine");
+        if(entity.isActivated()) throw new IllegalArgumentException("entity has already been activated");
+        if(entityList.contains(entity)) throw new IllegalArgumentException("entity already attached to engine");
 
         entityList.add(entity);
         entity.setEngine(this);
@@ -257,6 +255,8 @@ public final class Engine {
      */
     private void removeEntityInternal(Entity entity){
         if(entity.getEngine() != this) return;
+
+
         assert entity.isActivated();
         assert entityList.contains(entity);
 
@@ -296,12 +296,11 @@ public final class Engine {
     }
 
     /**
-     * Updates this engine and its attached systems. This method should be
+     * Fixed Updates this engine and its attached systems. This method should be
      * called once each frame
      *
      */
     public void fixedUpdate() {
-        assert !updating;
         updating = true;
         // fixedUpdate systems
         for (EngineSystem s : engineSystems) {
@@ -309,6 +308,13 @@ public final class Engine {
                 s.fixedUpdate();
             }
         }
+
+        // execute pending commands
+        for (Command cmd : commandList) {
+            cmd.execute();
+        }
+        commandList.clear();
+
         updating = false;
     }
 
@@ -318,7 +324,7 @@ public final class Engine {
      *
      */
     public void update() {
-        assert !updating;
+
         updating = true;
 
         // update systems
@@ -562,12 +568,7 @@ public final class Engine {
 
 
         // dispose entities
-        for (Entity entity : entityList) {
-            if (entity.isActivated()) {
-                entity.deactivate();
-                entity.setEngine(null);
-            }
-        }
+        removeAll();
         entityList.clear();
         entitySignal.clear();
         views.clear();
@@ -637,6 +638,7 @@ public final class Engine {
 
             @Override
             public void entityRemoved(Entity e) {
+                System.out.println(e.getId());
                 colliderSystem.getColliderList().remove(e.getComponent(Collider.class));
             }
         }, EntityFamily.create(Collider.class));

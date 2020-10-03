@@ -24,20 +24,22 @@ public class RigidBody extends Component {
     private boolean simulateGravity = true;
     private boolean physicsUpdating = false;
 
-    public RigidBody(Collider collider, float mass, boolean kinematic){
-        this(collider);
+    public RigidBody(float mass, boolean kinematic){
         setMass(mass);
         setKinematic(kinematic);
     }
 
-    public RigidBody(Collider collider, boolean kinematic){
-        this(collider);
+    public RigidBody(boolean kinematic){
         setKinematic(kinematic);
     }
 
-    public RigidBody(Collider collider){
-        this.collider = collider;
+    public RigidBody(){}
+
+    @Override
+    protected void activate() {
+        collider = getComponent(Collider.class);
     }
+
 
     public void fixedUpdate(){
         physicsUpdating = true;
@@ -60,7 +62,8 @@ public class RigidBody extends Component {
             for (Collider collider : colliderSystem.getOrderedListOfColliders(this)) {
                 //check for collision between the target rect and the this collider's rect
                 if (collider.getEntity().hasComponent(RigidBody.class)) {
-                    if (detectCollision(collider.getBox(), contactPoint, contactNormal, contactTime) && contactTime.getData() >= 0.0f) {
+                    Vector2D targetPos = Vector2D.add(collider.getOffset(), collider.getEntity().getComponent(Transform.class).position);
+                    if (detectCollision(collider.getBox(), targetPos, contactPoint, contactNormal, contactTime) && contactTime.getData() >= 0.0f) {
                         //if the target collider rect has a rigidbody instance associated with that entity the resolve the collision
                         //finding the finding the correct velocity vector to add to the current linear velocity
                         //inorder that the this collider is no longer colliding with the target in the space
@@ -71,16 +74,17 @@ public class RigidBody extends Component {
                     }
                 }
             }
-            this.collider.getBox().getTransform().move(linearVelocity);
+            getComponent(Transform.class).move(linearVelocity);
         }
     }
 
 
-    public boolean detectCollision(Rect target, Vector2D contactPoint, Vector2D contactNormal, Node<Float> contactTime){
+    public boolean detectCollision(Rect target, Vector2D targetPos, Vector2D contactPoint, Vector2D contactNormal, Node<Float> contactTime){
         Rect in = getCollider().getBox();
-        Rect expandedTarget = new Rect(target.getPosition(), Vector2D.add(target.getSize(), in.getSize()));
-        Ray ray = new Ray(in.getPosition(), linearVelocity);
-        if(ray.rayCastTargetRect(expandedTarget, contactPoint, contactNormal, contactTime)){
+        Vector2D inPos = Vector2D.add(getCollider().getOffset(), getComponent(Transform.class).position);
+        Rect expandedTarget = new Rect(Vector2D.add(target.getSize(), in.getSize()));
+        Ray ray = new Ray(inPos, linearVelocity);
+        if(ray.rayCastTargetRect(expandedTarget, targetPos, contactPoint, contactNormal, contactTime)){
             return contactTime.getData() < 1.0f;
         }
         return false;

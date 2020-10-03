@@ -90,19 +90,19 @@ public class Screen {
         drawVector(ray.origin, ray.direction, color, debug);
     }
 
-    public void drawRect(Rect rect, Color color){
-        drawRect(rect, color, false);
+    public void drawRect(Rect rect, Vector2D pos, Color color){
+        drawRect(rect, pos, color, false);
     }
-    public void drawDebugRect(Rect rect, Color color){
-        drawRect(rect, color, true);
+    public void drawDebugRect(Rect rect, Vector2D pos, Color color){
+        drawRect(rect, pos, color, true);
     }
 
-    private void drawRect(Rect rect, Color color, boolean debug){
+    private void drawRect(Rect rect, Vector2D pos, Color color, boolean debug){
         int rgb = color.getRGB();
         int rWidth = (int) rect.getSize().getX();
         int rHeight = (int) rect.getSize().getY();
-        int rOffsetX = (int) (rect.getPosition().getX() - rWidth/2);
-        int rOffsetY = (int) (rect.getPosition().getY() - rHeight/2);
+        int rOffsetX = (int) (pos.getX() - rWidth/2);
+        int rOffsetY = (int) (pos.getY() - rHeight/2);
         int yp, xp;
 
         for (int y = 0; y < rHeight; y++) {
@@ -119,19 +119,19 @@ public class Screen {
         }
     }
 
-    public void drawRectFilled(Rect rect, Color color){
-        drawRectFilled(rect, color, false);
+    public void drawRectFilled(Rect rect, Vector2D pos, Color color){
+        drawRectFilled(rect, pos, color, false);
     }
-    public void drawDebugRectFilled(Rect rect, Color color){
-        drawRectFilled(rect, color, true);
+    public void drawDebugRectFilled(Rect rect, Vector2D pos, Color color){
+        drawRectFilled(rect, pos, color, true);
     }
 
-    private void drawRectFilled(Rect rect, Color color, boolean debug){
+    private void drawRectFilled(Rect rect, Vector2D pos, Color color, boolean debug){
         int rgb = color.getRGB();
         int rWidth = (int) rect.getSize().getX();
         int rHeight = (int) rect.getSize().getY();
-        int rOffsetX = (int) (rect.getPosition().getX() - rWidth/2);
-        int rOffsetY = (int) (rect.getPosition().getY() - rHeight/2);
+        int rOffsetX = (int) (pos.getX() - rWidth/2);
+        int rOffsetY = (int) (pos.getY() - rHeight/2);
         int yp, xp;
 
         for (int y = 0; y < rHeight; y++) {

@@ -4,7 +4,10 @@ import blank2d.framework.ecs.Component;
 import blank2d.framework.ecs.signal.collider.ColliderTriggerSignal;
 import blank2d.framework.ecs.signal.collider.TriggerEnterListener;
 import blank2d.framework.ecs.signal.collider.TriggerExitListener;
+import blank2d.framework.ecs.system.ColliderSystem;
 import blank2d.util.math.Rect;
+import blank2d.util.math.Vector2D;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,15 +15,22 @@ import java.util.Objects;
 
 public abstract class Collider extends Component {
 
+    protected Vector2D offset = new Vector2D();
+    protected Rect box = new Rect();
+
     protected boolean trigger = false;
     protected final ColliderTriggerSignal triggerSignal = new ColliderTriggerSignal();
     protected final List<Collider> currentlyColliding = new ArrayList<>();
 
-    protected Rect box;
 
-    protected Collider(){
+    public Collider(){
         triggerSignal.addSignalListener(new TriggerEnterListener(this));
         triggerSignal.addSignalListener(new TriggerExitListener(this));
+    }
+
+    @Override
+    protected void deactivate() {
+        triggerSignal.clear();
     }
 
     public abstract void render();
@@ -34,6 +44,11 @@ public abstract class Collider extends Component {
     public Rect getBox() {
         return box;
     }
+
+    public Vector2D getOffset() {
+        return offset;
+    }
+
 
     public ColliderTriggerSignal getTriggerSignal() {
         return triggerSignal;
@@ -62,24 +77,9 @@ public abstract class Collider extends Component {
     @Override
     public String toString() {
         return "Collider{" +
-                "trigger=" + trigger +
+                "offset=" + offset +
                 ", box=" + box +
+                ", trigger=" + trigger +
                 '}';
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Collider collider = (Collider) o;
-        return isTrigger() == collider.isTrigger() &&
-                Objects.equals(getBox(), collider.getBox()) &&
-                getEntity().equals(collider.getEntity());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(isTrigger(), getBox());
-    }
-
 }

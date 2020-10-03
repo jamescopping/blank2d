@@ -23,9 +23,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="69708ced-b8e7-4bbf-9c84-2385ce266519" name="Default Changelist" comment="pom update">
+      <change afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/rendering/Camera.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/CameraSystem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/asset/AssetPath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/asset/AssetPath.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Component.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Component.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Engine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Engine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Entity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/RigidBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/RigidBody.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/collider/BoxCollider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/collider/BoxCollider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/collider/Collider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/collider/Collider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/rendering/AnimationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/rendering/AnimationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/script/EntityScript.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/script/EntityScript.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/ColliderSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/ColliderSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/Screen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/util/math/Ray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/util/math/Ray.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/util/math/Rect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/util/math/Rect.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,7 +174,21 @@
       <option name="project" value="LOCAL" />
       <updated>1601573067781</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="default engine method">
+      <created>1601723318488</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1601723318488</updated>
+    </task>
+    <task id="LOCAL-00006" summary="entity has a transform by default">
+      <created>1601723822029</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1601723822029</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -184,7 +211,9 @@
     <MESSAGE value="added config files" />
     <MESSAGE value="init commit" />
     <MESSAGE value="pom update" />
-    <option name="LAST_COMMIT_MESSAGE" value="pom update" />
+    <MESSAGE value="default engine method" />
+    <MESSAGE value="entity has a transform by default" />
+    <option name="LAST_COMMIT_MESSAGE" value="entity has a transform by default" />
   </component>
   <component name="WindowStateProjectService">
     <state x="440" y="94" key="#Project_Structure" timestamp="1601579574246">
@@ -199,10 +228,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="414" y="174" width="1092" height="763" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601585074740" />
-    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1601722566470">
+    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1601725866385">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601722566470" />
+    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601725866385" />
     <state x="711" y="380" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1601583850352">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -227,22 +256,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="274" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601584482803" />
-    <state width="1877" height="86" key="GridCell.Tab.0.bottom" timestamp="1601723093816">
+    <state width="1877" height="180" key="GridCell.Tab.0.bottom" timestamp="1601742199911">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="86" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601723093816" />
-    <state width="1877" height="86" key="GridCell.Tab.0.center" timestamp="1601723093816">
+    <state width="1877" height="180" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601742199911" />
+    <state width="1877" height="180" key="GridCell.Tab.0.center" timestamp="1601742199910">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="86" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601723093816" />
-    <state width="1877" height="86" key="GridCell.Tab.0.left" timestamp="1601723093816">
+    <state width="1877" height="180" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601742199910" />
+    <state width="1877" height="180" key="GridCell.Tab.0.left" timestamp="1601742199910">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="86" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601723093816" />
-    <state width="1877" height="86" key="GridCell.Tab.0.right" timestamp="1601723093816">
+    <state width="1877" height="180" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601742199910" />
+    <state width="1877" height="180" key="GridCell.Tab.0.right" timestamp="1601742199910">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="86" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601723093816" />
+    <state width="1877" height="180" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601742199910" />
     <state x="490" y="174" key="Maven.ArtifactSearchDialog" timestamp="1601573561979">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -267,10 +296,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="724" y="188" key="com.intellij.testIntegration.createTest.CreateTestDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601583477164" />
-    <state x="667" y="253" width="585" height="534" key="find.popup" timestamp="1601585647695">
+    <state x="667" y="253" width="585" height="534" key="find.popup" timestamp="1601741937882">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="667" y="253" width="585" height="534" key="find.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601585647695" />
+    <state x="667" y="253" width="585" height="534" key="find.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601741937882" />
     <state x="761" y="426" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1601572316672">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -283,9 +312,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="551" y="180" key="new project wizard/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601584498914" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1601722739661">
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1601742191790">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601722739661" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601742191790" />
   </component>
 </project>

@@ -164,18 +164,4 @@ public abstract class Component {
         deactivate();
         activated = false;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Component component = (Component) o;
-        return isActivated() == component.isActivated() &&
-                Objects.equals(getEntity(), component.getEntity());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getEntity(), isActivated());
-    }
 }
