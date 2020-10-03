@@ -4,14 +4,12 @@ import blank2d.framework.ecs.Component;
 import blank2d.framework.ecs.signal.collider.ColliderTriggerSignal;
 import blank2d.framework.ecs.signal.collider.TriggerEnterListener;
 import blank2d.framework.ecs.signal.collider.TriggerExitListener;
-import blank2d.framework.ecs.system.ColliderSystem;
 import blank2d.util.math.Rect;
 import blank2d.util.math.Vector2D;
 
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public abstract class Collider extends Component {
 

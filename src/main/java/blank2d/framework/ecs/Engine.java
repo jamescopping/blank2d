@@ -638,7 +638,6 @@ public final class Engine {
 
             @Override
             public void entityRemoved(Entity e) {
-                System.out.println(e.getId());
                 colliderSystem.getColliderList().remove(e.getComponent(Collider.class));
             }
         }, EntityFamily.create(Collider.class));
