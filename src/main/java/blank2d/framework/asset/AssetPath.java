@@ -38,7 +38,6 @@ public final class AssetPath {
     }
 
     public static void setSpriteDirectory(String spriteDirectory) {
-        assert !spriteDirectory.equals("");
         AssetPath.spriteDirectory = spriteDirectory;
     }
 

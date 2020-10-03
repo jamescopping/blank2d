@@ -18,8 +18,10 @@ public class AnimationController extends Component {
     private double tpf = 10.0;
     private double accumulator = 0.0;
 
-    public AnimationController(SpriteRenderer spriteRenderer){
-        this.spriteRenderer = spriteRenderer;
+
+    @Override
+    protected void activate() {
+        spriteRenderer = getComponent(SpriteRenderer.class);
     }
 
     public void addAnimation(String  ...resourceIDS){

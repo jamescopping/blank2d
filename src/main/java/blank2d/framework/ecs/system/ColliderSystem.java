@@ -3,11 +3,10 @@ package blank2d.framework.ecs.system;
 import blank2d.framework.ecs.Entity;
 import blank2d.framework.ecs.EntityFamily;
 import blank2d.framework.ecs.IteratingSystem;
-import blank2d.framework.ecs.Layer;
 import blank2d.framework.ecs.component.physics2d.RigidBody;
+import blank2d.framework.ecs.component.physics2d.Transform;
 import blank2d.framework.ecs.component.physics2d.collider.Collider;
 import blank2d.util.Node;
-import blank2d.util.math.Rect;
 import blank2d.util.math.Vector2D;
 import javafx.util.Pair;
 
@@ -17,7 +16,6 @@ import java.util.List;
 
 public class ColliderSystem extends IteratingSystem {
     public boolean colliderDebug = false;
-    private final List<Collider> colliderList = new ArrayList<>();
 
     /**
      * Creates a new instance
@@ -32,6 +30,13 @@ public class ColliderSystem extends IteratingSystem {
     }
 
     @Override
+    public void update() {
+        //super.update();
+
+
+    }
+
+    @Override
     protected void processEntity(Entity entity) {
 
     }
@@ -40,6 +45,7 @@ public class ColliderSystem extends IteratingSystem {
     protected void fixedProcessEntity(Entity entity) {
 
     }
+
 
     /**
      * Returns a list of collider in the order they need to be resolved
@@ -53,15 +59,17 @@ public class ColliderSystem extends IteratingSystem {
         Vector2D contactNormal = new Vector2D();
         Node<Float> contactTime = new Node<>();
 
-        for (int i = 0; i < getColliderList().size(); i++) {
-            Collider collider = colliderList.get(i);
+        for (Entity entity : getEntityList()) {
+            Collider collider = entity.getComponent(Collider.class);
             Collider rbCollider = rb.getCollider();
             //don't check against self
-            if(rbCollider.equals(collider)) continue;
-            if(rb.detectCollision(collider.getBox(), contactPoint, contactNormal, contactTime)) {
+            if (rbCollider.equals(collider)) continue;
+            Vector2D targetPos = Vector2D.add(collider.getOffset(), collider.getEntity().getComponent(Transform.class).position);
+            if (rb.detectCollision(collider.getBox(), targetPos, contactPoint, contactNormal, contactTime)) {
                 unorderedColliderList.add(new Pair<>(collider, contactTime.getData()));
-                if(collider.isTrigger() && !collider.isCurrentlyCollidingWith(rbCollider)) triggerEntered(collider, rbCollider);
-            }else if (collider.isTrigger() && collider.isCurrentlyCollidingWith(rbCollider)) {
+                if (collider.isTrigger() && !collider.isCurrentlyCollidingWith(rbCollider))
+                    triggerEntered(collider, rbCollider);
+            } else if (collider.isTrigger() && collider.isCurrentlyCollidingWith(rbCollider)) {
                 triggerExited(collider, rbCollider);
             }
         }
@@ -101,10 +109,4 @@ public class ColliderSystem extends IteratingSystem {
             }
         }
     }
-
-    public List<Collider> getColliderList() {
-        return colliderList;
-    }
-
-
 }

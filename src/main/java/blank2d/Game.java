@@ -17,7 +17,7 @@ public final class Game extends Canvas implements Runnable {
 
     private static final GameStateMachine GAME_STATE_MACHINE = new GameStateMachine();
 
-    private static double GAME_HERTZ = 30.0;
+    private static double GAME_HERTZ = 100.0;
     private static double TARGET_FPS = 60.0;
     private static double TIME_BETWEEN_FIXED_UPDATES = 1000000000 / GAME_HERTZ;
     private static double TARGET_TIME_BETWEEN_RENDERS = 1000000000 / TARGET_FPS;

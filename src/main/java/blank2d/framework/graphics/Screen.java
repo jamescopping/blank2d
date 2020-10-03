@@ -14,6 +14,9 @@ public class Screen {
     public static Screen getInstance() { return instance; }
     protected Screen() { }
 
+    private Vector2D cameraPosition = new Vector2D();
+    private Rect cameraRect;
+
     private int width = 100;
     private int height = 100;
     public int[] pixels = new int[width * height];
@@ -21,6 +24,7 @@ public class Screen {
     public boolean clearScreen = true;
 
     public void init(int width, int height){
+        cameraRect = new Rect(width, height);
         this.width = width;
         this.height = height;
         this.pixels = new int[width * height];
@@ -54,14 +58,15 @@ public class Screen {
     }
 
     private void drawLine(Vector2D start, Vector2D end, Color color, boolean debug) {
+        Vector2D cameraOffset = getCameraOffset();
         int rgb = color.getRGB();
         float dx = (end.x - start.x);
         float dy = (end.y - start.y);
         float step = Math.max(Math.abs(dx), Math.abs(dy));
         dx = dx / step;
         dy = dy / step;
-        float x =  start.x;
-        float y =  start.y;
+        float x =  start.x - cameraOffset.getX();
+        float y =  start.y - cameraOffset.getY();
         int i = 1;
         step = (float) Math.ceil(step);
         while(i <= step){
@@ -90,26 +95,27 @@ public class Screen {
         drawVector(ray.origin, ray.direction, color, debug);
     }
 
-    public void drawRect(Rect rect, Color color){
-        drawRect(rect, color, false);
+    public void drawRect(Rect rect, Vector2D pos, Color color){
+        drawRect(rect, pos, color, false);
     }
-    public void drawDebugRect(Rect rect, Color color){
-        drawRect(rect, color, true);
+    public void drawDebugRect(Rect rect, Vector2D pos, Color color){
+        drawRect(rect, pos, color, true);
     }
 
-    private void drawRect(Rect rect, Color color, boolean debug){
+    private void drawRect(Rect rect, Vector2D pos, Color color, boolean debug){
+        Vector2D cameraOffset = getCameraOffset();
         int rgb = color.getRGB();
         int rWidth = (int) rect.getSize().getX();
         int rHeight = (int) rect.getSize().getY();
-        int rOffsetX = (int) (rect.getPosition().getX() - rWidth/2);
-        int rOffsetY = (int) (rect.getPosition().getY() - rHeight/2);
+        int rOffsetX = (int) (pos.getX() - rWidth/2);
+        int rOffsetY = (int) (pos.getY() - rHeight/2);
         int yp, xp;
 
         for (int y = 0; y < rHeight; y++) {
-            yp =  y + rOffsetY;
+            yp = (int) (y + rOffsetY - cameraOffset.getY());
             for (int x = 0; x < rWidth; x++) {
                 if(!(x == 0 || x == rWidth-1) && !(y == 0 || y == rHeight-1)) continue;
-                xp = x + rOffsetX;
+                xp = (int) (x + rOffsetX - cameraOffset.getX());
                 if(debug){
                     setPixelDebug(xp, yp, rgb);
                 }else{
@@ -119,25 +125,26 @@ public class Screen {
         }
     }
 
-    public void drawRectFilled(Rect rect, Color color){
-        drawRectFilled(rect, color, false);
+    public void drawRectFilled(Rect rect, Vector2D pos, Color color){
+        drawRectFilled(rect, pos, color, false);
     }
-    public void drawDebugRectFilled(Rect rect, Color color){
-        drawRectFilled(rect, color, true);
+    public void drawDebugRectFilled(Rect rect, Vector2D pos, Color color){
+        drawRectFilled(rect, pos, color, true);
     }
 
-    private void drawRectFilled(Rect rect, Color color, boolean debug){
+    private void drawRectFilled(Rect rect, Vector2D pos, Color color, boolean debug){
+        Vector2D cameraOffset = getCameraOffset();
         int rgb = color.getRGB();
         int rWidth = (int) rect.getSize().getX();
         int rHeight = (int) rect.getSize().getY();
-        int rOffsetX = (int) (rect.getPosition().getX() - rWidth/2);
-        int rOffsetY = (int) (rect.getPosition().getY() - rHeight/2);
+        int rOffsetX = (int) (pos.getX() - rWidth/2);
+        int rOffsetY = (int) (pos.getY() - rHeight/2);
         int yp, xp;
 
         for (int y = 0; y < rHeight; y++) {
-            yp =  y + rOffsetY;
+            yp = (int) (y + rOffsetY - cameraOffset.getY());
             for (int x = 0; x < rWidth; x++) {
-                xp = x + rOffsetX;
+                xp = (int) (x + rOffsetX - cameraOffset.getX());
                 if(debug){
                     setPixelDebug(xp, yp, rgb);
                 }else{
@@ -155,12 +162,13 @@ public class Screen {
     }
 
     private void drawCircle(Circle circle, Color color, boolean debug){
+        Vector2D cameraOffset = getCameraOffset();
         int rgb = color.getRGB();
         int d = (5 - ((int)circle.radius) * 4)/4;
         int x = 0;
         int y = (int) circle.radius;
-        int centerX = (int) circle.position.x;
-        int centerY = (int) circle.position.y;
+        int centerX = (int) (circle.position.x - cameraOffset.getX());
+        int centerY = (int) (circle.position.y - cameraOffset.getY());
         do {
             if(debug) {
                 setPixelDebug(centerX + x, centerY + y, rgb);
@@ -199,14 +207,15 @@ public class Screen {
     }
 
     private void drawCircleFilled(Circle circle, Color color, boolean debug){
+        Vector2D cameraOffset = getCameraOffset();
         int rgb = color.getRGB();
         int x = (int) circle.radius;
         int y = 0;
         int xChange = 1 - ((int) circle.radius << 1);
         int yChange = 0;
         int radiusError = 0;
-        int x0 = (int) circle.position.x;
-        int y0 = (int) circle.position.y;
+        int x0 = (int) (circle.position.x - cameraOffset.getX());
+        int y0 = (int) (circle.position.y - cameraOffset.getY());
         while (x >= y)
         {
             for (int i = x0 - x; i <= x0 + x; i++)
@@ -247,15 +256,16 @@ public class Screen {
     public void drawSprite(Sprite sprite, Vector2D position){ drawSprite(sprite, position, false); }
 
     private void drawSprite(Sprite sprite, Vector2D position, boolean debug) {
+        Vector2D cameraOffset = getCameraOffset();
         int sWidth = sprite.getWidth();
         int sHeight = sprite.getHeight();
         int sHalfWidth = sWidth/2;
         int sHalfHeight = sHeight/2;
         int[] sPixels = sprite.getPixels();
         for (int y = 0; y < sHeight; y++) {
-            int yp = (int) (y + position.getY() - sHalfHeight);
+            int yp = (int) (y + position.getY() - sHalfHeight - cameraOffset.getY());
             for (int x = 0; x < sWidth; x++) {
-                int xp = (int) (x + position.getX() - sHalfWidth);
+                int xp = (int) (x + position.getX() - sHalfWidth - cameraOffset.getX());
                 int color = sPixels[x + y * sWidth];
                 if(color != 0xffff00ff){
                     if(debug) {
@@ -295,4 +305,24 @@ public class Screen {
         this.clearScreen = clear;
     }
 
+
+    public Vector2D getCameraOffset(){
+        return Vector2D.subtract(cameraPosition, Vector2D.divide(cameraRect.getSize(), 2));
+    }
+
+    public void setCameraPosition(Vector2D cameraPosition) {
+        this.cameraPosition = cameraPosition;
+    }
+
+    public Vector2D getCameraPosition() {
+        return cameraPosition;
+    }
+
+    public void setCameraRect(Rect rect) {
+        this.cameraRect = rect;
+    }
+
+    public Rect getCameraRect() {
+        return cameraRect;
+    }
 }

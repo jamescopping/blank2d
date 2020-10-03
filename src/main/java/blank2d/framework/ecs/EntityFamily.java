@@ -12,6 +12,13 @@
  */
 package blank2d.framework.ecs;
 
+import blank2d.framework.ecs.component.physics2d.RigidBody;
+import blank2d.framework.ecs.component.physics2d.collider.Collider;
+import blank2d.framework.ecs.component.rendering.AnimationController;
+import blank2d.framework.ecs.component.rendering.Camera;
+import blank2d.framework.ecs.component.rendering.SpriteRenderer;
+import blank2d.framework.ecs.component.script.EntityScript;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -50,6 +57,15 @@ import java.util.Set;
 public class EntityFamily {
     /** The set of types an entity must contain as component. */
     private final Set<Class<?>> types = new HashSet<>();
+
+
+
+    public static EntityFamily colliderEF = EntityFamily.create(Collider.class);
+    public static EntityFamily entityScriptEF = EntityFamily.create(EntityScript.class);
+    public static EntityFamily rigidBodyEF = EntityFamily.create(RigidBody.class);
+    public static EntityFamily cameraEF = EntityFamily.create(Camera.class);
+    public static EntityFamily animationEF = EntityFamily.create(AnimationController.class);
+    public static EntityFamily spriteRendererEF = EntityFamily.create(SpriteRenderer.class);
 
     /**
      * Creates a new instance of an entity family.

@@ -19,8 +19,8 @@ public class Ray{
         this.direction =  new Vector2D(direction);
     }
 
-    public boolean rayCastTargetRect(Rect target, Vector2D contactPoint, Vector2D contactNormal, Node<Float> tHitNear){
-        Vector2D targetPosition = new Vector2D(target.getPosition());
+    public boolean rayCastTargetRect(Rect target, Vector2D targetPos, Vector2D contactPoint, Vector2D contactNormal, Node<Float> tHitNear){
+        Vector2D targetPosition = new Vector2D(targetPos);
         targetPosition.subtract(Vector2D.divide(target.getSize(), 2));
         Vector2D tNear = Vector2D.divide(Vector2D.subtract(targetPosition, origin), direction);
         Vector2D tFar = Vector2D.divide(Vector2D.subtract(Vector2D.add(targetPosition, target.size), origin), direction);

@@ -12,8 +12,16 @@
  */
 package blank2d.framework.ecs;
 
+import blank2d.framework.ecs.component.physics2d.RigidBody;
+import blank2d.framework.ecs.component.physics2d.Transform;
+import blank2d.framework.ecs.component.physics2d.collider.Collider;
+import blank2d.framework.ecs.component.rendering.AnimationController;
+import blank2d.framework.ecs.component.rendering.Camera;
+import blank2d.framework.ecs.component.rendering.SpriteRenderer;
+import blank2d.framework.ecs.component.script.EntityScript;
 import blank2d.framework.ecs.signal.entity.EntityRemovedListener;
 import blank2d.framework.ecs.signal.entity.EntitySignal;
+import blank2d.framework.ecs.system.*;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -116,7 +124,6 @@ public final class Engine {
             entityListenerList = new CopyOnWriteArrayList<>();
             filteredListeners.put(family, entityListenerList);
         }
-        assert !entityListenerList.contains(listener):"listener already added " + listener;
         entityListenerList.add(listener);
     }
 
@@ -140,7 +147,7 @@ public final class Engine {
      *            the entity listener to be added
      */
     public void addEntityListener(IEntityListener listener){
-        assert !entityListeners.contains(listener): "listener already added " + listener;
+        if(entityListeners.contains(listener)) {System.out.println("listener already added " + listener); return;}
         entityListeners.add(listener);
     }
 
@@ -194,10 +201,11 @@ public final class Engine {
      * @param entity the entity to be removed
      */
     public void removeEntity(Entity entity){
-        entitySignal.destroy(entity);
         if(updating){
+            commandList.add(() -> entitySignal.destroy(entity));
             commandList.add(() -> removeEntityInternal(entity));
         } else {
+            entitySignal.destroy(entity);
             removeEntityInternal(entity);
         }
     }
@@ -209,11 +217,9 @@ public final class Engine {
      *            the entity to be added
      */
     private void addEntityInternal(Entity entity){
-        if(entity.getEngine() != null){
-            throw new IllegalArgumentException("entity already added to engine");
-        }
-        assert !entity.isActivated();
-        assert !entityList.contains(entity);
+        if(entity.getEngine() != null) throw new IllegalArgumentException("entity already added to engine");
+        if(entity.isActivated()) throw new IllegalArgumentException("entity has already been activated");
+        if(entityList.contains(entity)) throw new IllegalArgumentException("entity already attached to engine");
 
         entityList.add(entity);
         entity.setEngine(this);
@@ -250,6 +256,8 @@ public final class Engine {
      */
     private void removeEntityInternal(Entity entity){
         if(entity.getEngine() != this) return;
+
+
         assert entity.isActivated();
         assert entityList.contains(entity);
 
@@ -289,12 +297,11 @@ public final class Engine {
     }
 
     /**
-     * Updates this engine and its attached systems. This method should be
+     * Fixed Updates this engine and its attached systems. This method should be
      * called once each frame
      *
      */
     public void fixedUpdate() {
-        assert !updating;
         updating = true;
         // fixedUpdate systems
         for (EngineSystem s : engineSystems) {
@@ -302,6 +309,13 @@ public final class Engine {
                 s.fixedUpdate();
             }
         }
+
+        // execute pending commands
+        for (Command cmd : commandList) {
+            cmd.execute();
+        }
+        commandList.clear();
+
         updating = false;
     }
 
@@ -311,7 +325,7 @@ public final class Engine {
      *
      */
     public void update() {
-        assert !updating;
+
         updating = true;
 
         // update systems
@@ -555,12 +569,7 @@ public final class Engine {
 
 
         // dispose entities
-        for (Entity entity : entityList) {
-            if (entity.isActivated()) {
-                entity.deactivate();
-                entity.setEngine(null);
-            }
-        }
+        removeAll();
         entityList.clear();
         entitySignal.clear();
         views.clear();
@@ -609,6 +618,29 @@ public final class Engine {
     public int getNumOfEntities() {
         return entityList.size();
     }
+
+
+    /**
+     * Creates a default engine structure with all the base systems in the order of execution needed
+     * @return Engine default engine structure
+     */
+    public static Engine defaultEngine(){
+        Engine defaultEngine = new Engine();
+
+        //the order you add the systems are the order that is executed for the fixed updated and updated loops
+        //all of fixed updated is done first, the all of update
+
+        defaultEngine.addSystem(new ColliderSystem(EntityFamily.colliderEF));
+        defaultEngine.addSystem(new ScriptSystem(EntityFamily.entityScriptEF));
+        defaultEngine.addSystem(new PhysicsSystem(EntityFamily.rigidBodyEF));
+        defaultEngine.addSystem(new CameraSystem(EntityFamily.cameraEF));
+        defaultEngine.addSystem(new AnimationSystem(EntityFamily.animationEF));
+        defaultEngine.addSystem(new RendererSystem(EntityFamily.spriteRendererEF));
+
+        return defaultEngine;
+    }
+
+
 
     @Override
     public String toString() {
