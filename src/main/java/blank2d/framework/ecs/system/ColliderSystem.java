@@ -16,7 +16,6 @@ import java.util.List;
 
 public class ColliderSystem extends IteratingSystem {
     public boolean colliderDebug = false;
-    private final List<Collider> colliderList = new ArrayList<>();
 
     /**
      * Creates a new instance
@@ -60,7 +59,8 @@ public class ColliderSystem extends IteratingSystem {
         Vector2D contactNormal = new Vector2D();
         Node<Float> contactTime = new Node<>();
 
-        for (Collider collider : colliderList) {
+        for (Entity entity : getEntityList()) {
+            Collider collider = entity.getComponent(Collider.class);
             Collider rbCollider = rb.getCollider();
             //don't check against self
             if (rbCollider.equals(collider)) continue;
@@ -109,10 +109,4 @@ public class ColliderSystem extends IteratingSystem {
             }
         }
     }
-
-    public List<Collider> getColliderList() {
-        return colliderList;
-    }
-
-
 }

@@ -16,6 +16,7 @@ import blank2d.framework.ecs.component.physics2d.RigidBody;
 import blank2d.framework.ecs.component.physics2d.Transform;
 import blank2d.framework.ecs.component.physics2d.collider.Collider;
 import blank2d.framework.ecs.component.rendering.AnimationController;
+import blank2d.framework.ecs.component.rendering.Camera;
 import blank2d.framework.ecs.component.rendering.SpriteRenderer;
 import blank2d.framework.ecs.component.script.EntityScript;
 import blank2d.framework.ecs.signal.entity.EntityRemovedListener;
@@ -629,22 +630,10 @@ public final class Engine {
         //the order you add the systems are the order that is executed for the fixed updated and updated loops
         //all of fixed updated is done first, the all of update
 
-        ColliderSystem colliderSystem = new ColliderSystem(EntityFamily.create(Collider.class));
-        defaultEngine.addEntityListener(new IEntityListener() {
-            @Override
-            public void entityAdded(Entity e) {
-                colliderSystem.getColliderList().add(e.getComponent(Collider.class));
-            }
-
-            @Override
-            public void entityRemoved(Entity e) {
-                colliderSystem.getColliderList().remove(e.getComponent(Collider.class));
-            }
-        }, EntityFamily.create(Collider.class));
-
-        defaultEngine.addSystem(colliderSystem);
+        defaultEngine.addSystem(new ColliderSystem(EntityFamily.create(Collider.class)));
         defaultEngine.addSystem(new ScriptSystem(EntityFamily.create(EntityScript.class)));
         defaultEngine.addSystem(new PhysicsSystem(EntityFamily.create(RigidBody.class)));
+        defaultEngine.addSystem(new CameraSystem(EntityFamily.create(Camera.class)));
         defaultEngine.addSystem(new AnimationSystem(EntityFamily.create(AnimationController.class)));
         defaultEngine.addSystem(new RendererSystem(EntityFamily.create(Transform.class, SpriteRenderer.class)));
 

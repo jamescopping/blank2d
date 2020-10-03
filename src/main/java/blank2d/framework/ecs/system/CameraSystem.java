@@ -16,6 +16,11 @@ public class CameraSystem extends IteratingSystem {
     }
 
     @Override
+    public void update() {
+        super.update();
+    }
+
+    @Override
     protected void processEntity(Entity entity) {
 
     }
