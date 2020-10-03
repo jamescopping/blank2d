@@ -4,7 +4,6 @@ import blank2d.Game;
 import blank2d.framework.graphics.Screen;
 import blank2d.util.Queue;
 import blank2d.util.math.Vector2D;
-import sun.security.krb5.SCDynamicStoreConfig;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
