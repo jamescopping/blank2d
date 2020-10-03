@@ -32,6 +32,13 @@ public class ColliderSystem extends IteratingSystem {
     }
 
     @Override
+    public void update() {
+        //super.update();
+
+
+    }
+
+    @Override
     protected void processEntity(Entity entity) {
 
     }
@@ -40,6 +47,7 @@ public class ColliderSystem extends IteratingSystem {
     protected void fixedProcessEntity(Entity entity) {
 
     }
+
 
     /**
      * Returns a list of collider in the order they need to be resolved
