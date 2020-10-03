@@ -12,6 +12,8 @@
  */
 package blank2d.framework.ecs;
 
+import blank2d.framework.ecs.component.physics2d.Transform;
+
 import java.util.*;
 
 /**
@@ -42,6 +44,10 @@ public final class Entity {
 
     /** A reference to the engine this entity has been added to. */
     private Engine engine;
+
+    public Entity(){
+        addComponent(new Transform());
+    }
 
     /**
      * Sets the references to the engine this entity belongs to. This method is
@@ -200,6 +206,8 @@ public final class Entity {
         if (component.getEntity() != null) throw new IllegalArgumentException("component already attached an entity");
         componentList.add(component);
         component.setEntity(this);
+
+        //could change this so that components can be added on the fly
         if (isActivated() && !component.isActivated()) component.activateInternal();
     }
 
