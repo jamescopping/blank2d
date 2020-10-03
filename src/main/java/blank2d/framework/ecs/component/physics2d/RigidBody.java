@@ -11,11 +11,6 @@ import blank2d.util.Time;
 import blank2d.util.math.Ray;
 import blank2d.util.math.Rect;
 import blank2d.util.math.Vector2D;
-import javafx.util.Pair;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 
 public class RigidBody extends Component {
 
