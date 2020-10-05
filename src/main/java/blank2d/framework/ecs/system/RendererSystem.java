@@ -20,19 +20,8 @@ public class RendererSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity) {
-
-    }
-
-    @Override
-    protected void fixedProcessEntity(Entity entity) {
-
-    }
-
-    public void render(float interpolate){
-        for(Entity entity : getEntityList()) {
-            SpriteRenderer spriteRenderer = entity.getComponent(SpriteRenderer.class);
-            Transform transform = entity.getComponent(Transform.class);
-            spriteRenderer.render(transform.position);
-        }
+        SpriteRenderer spriteRenderer = entity.getComponent(SpriteRenderer.class);
+        Transform transform = entity.getComponent(Transform.class);
+        spriteRenderer.render(transform.position);
     }
 }

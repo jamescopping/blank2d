@@ -20,9 +20,4 @@ public class AnimationSystem extends IteratingSystem {
     protected void processEntity(Entity entity) {
         entity.getComponent(AnimationController.class).update();
     }
-
-    @Override
-    protected void fixedProcessEntity(Entity entity) {
-
-    }
 }

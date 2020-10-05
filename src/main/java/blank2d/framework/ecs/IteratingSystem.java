@@ -79,8 +79,8 @@ public abstract class IteratingSystem extends EngineSystem {
      * @param entity
      *            the entity to process
      */
-    protected abstract void processEntity(Entity entity);
+    protected void processEntity(Entity entity) {}
 
-    protected abstract void fixedProcessEntity(Entity entity);
+    protected void fixedProcessEntity(Entity entity) {}
 
 }

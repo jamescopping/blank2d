@@ -31,18 +31,6 @@ public class ColliderSystem extends IteratingSystem {
 
     @Override
     public void update() {
-        //super.update();
-
-
-    }
-
-    @Override
-    protected void processEntity(Entity entity) {
-
-    }
-
-    @Override
-    protected void fixedProcessEntity(Entity entity) {
 
     }
 

@@ -206,7 +206,8 @@ public final class InputManager extends MouseAdapter implements KeyListener {
     }
 
     public Vector2D getMousePositionGlobalSpace(){
-        Vector2D screenSpacePosition =  getMousePositionScreenSpace();
-        return Vector2D.subtract(Vector2D.add(Screen.getInstance().getCameraPosition(), screenSpacePosition), Vector2D.divide(Screen.getInstance().getCameraRect().getSize(), 2));
+        Screen screen = Screen.getInstance();
+        Vector2D screenSpacePosition =  Vector2D.divide(getMousePositionScreenSpace(), screen.getCameraZoomFactor());
+        return Vector2D.subtract(Vector2D.add(screen.getCameraPosition(), screenSpacePosition), Vector2D.divide(screen.getCameraSize(), 2));
     }
 }

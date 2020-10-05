@@ -37,8 +37,8 @@ public final class Game extends Canvas implements Runnable {
     private final JFrame frame;
     private final Screen screen = Screen.getInstance();
 
-    private BufferedImage image;
-    private int[] pixels;
+    private static BufferedImage image;
+    private static int[] pixels;
 
 
     public Game(String name,  int width, int height, int xScale, int yScale, GameState initGameState) {
@@ -51,8 +51,7 @@ public final class Game extends Canvas implements Runnable {
         X_SCALE = xScale;
         Y_SCALE = yScale;
 
-        image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-        pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+        setBufferedImageSize(getWIDTH(), getHEIGHT());
 
         Dimension size = getScreenDimension();
         setPreferredSize(size);
@@ -325,6 +324,11 @@ public final class Game extends Canvas implements Runnable {
     public static void setYScale(int yScale) {
         Y_SCALE = yScale;
         addFLAG(GAME_FLAG.UPDATE_SCREEN_SCALE);
+    }
+
+    public static void setBufferedImageSize(int width, int height){
+        image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
     }
 
     public enum GAME_FLAG{

@@ -1,5 +1,6 @@
 package blank2d.framework.graphics;
 
+import blank2d.Game;
 import blank2d.util.math.Circle;
 import blank2d.util.math.Ray;
 import blank2d.util.math.Rect;
@@ -12,10 +13,13 @@ public class Screen {
 
     private static final Screen instance = new Screen();
     public static Screen getInstance() { return instance; }
-    protected Screen() { }
+    protected Screen() {
 
-    private Vector2D cameraPosition = new Vector2D();
-    private Rect cameraRect;
+    }
+
+    private Vector2D cameraPosition;
+    private Vector2D cameraSize;
+    private float cameraZoomFactor;
 
     private int width = 100;
     private int height = 100;
@@ -24,7 +28,9 @@ public class Screen {
     public boolean clearScreen = true;
 
     public void init(int width, int height){
-        cameraRect = new Rect(width, height);
+        this.cameraSize = new Vector2D(width, height);
+        this.cameraPosition = new Vector2D(0,0);
+        this.cameraZoomFactor = 1.0f;
         this.width = width;
         this.height = height;
         this.pixels = new int[width * height];
@@ -307,22 +313,44 @@ public class Screen {
 
 
     public Vector2D getCameraOffset(){
-        return Vector2D.subtract(cameraPosition, Vector2D.divide(cameraRect.getSize(), 2));
-    }
-
-    public void setCameraPosition(Vector2D cameraPosition) {
-        this.cameraPosition = cameraPosition;
+        return Vector2D.subtract(getCameraPosition(), Vector2D.divide(getCameraSize(), 2));
     }
 
     public Vector2D getCameraPosition() {
         return cameraPosition;
     }
 
-    public void setCameraRect(Rect rect) {
-        this.cameraRect = rect;
+    public void setCameraPosition(Vector2D cameraPosition){
+        this.cameraPosition = cameraPosition;
     }
 
-    public Rect getCameraRect() {
-        return cameraRect;
+    public Vector2D getCameraSize() {
+        return cameraSize;
+    }
+
+    public void setCameraSize(Vector2D cameraSize){
+        this.cameraSize = cameraSize;
+    }
+
+    public void setCameraZoomFactor(float cameraZoomFactor) {
+        this.cameraZoomFactor = cameraZoomFactor;
+    }
+
+    public float getCameraZoomFactor() {
+        return cameraZoomFactor;
+    }
+
+    public void updatePixelResolution(){
+        Vector2D newSize = getCameraSize();
+        this.width = (int) newSize.getX();
+        this.height = (int) newSize.getY();
+        this.pixels = new int[width * height];
+        this.debugLayerPixels = new int[width * height];
+        Game.setBufferedImageSize(width, height);
+        System.gc();
+    }
+
+    public int maxPixelResolution(){
+        return 2073600;
     }
 }
