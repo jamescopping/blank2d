@@ -37,7 +37,7 @@ public class AnimationController extends Component {
     }
 
     public void update(){
-        accumulator += Time.getDeltaTimeSeconds();
+        accumulator += Time.getInstance().getDeltaTimeSeconds();
         while (accumulator >= tpf){
             animation.nextFrame();
             spriteRenderer.setSprite(animation.getCurrentFrameSprite());

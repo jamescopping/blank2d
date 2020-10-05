@@ -49,6 +49,7 @@ public final class InputManager extends MouseAdapter implements KeyListener {
     public static InputManager getInstance() {
         return instance;
     }
+    private Game game;
 
     protected InputManager() {
         for (int i = 0; i < numKeys; i++) {
@@ -64,8 +65,9 @@ public final class InputManager extends MouseAdapter implements KeyListener {
         }
     }
 
-
-
+    public void init(Game game){
+        this.game = game;
+    }
 
     private void scanHardwareChanges(List<ButtonState> keys, List<Boolean> oldStates, List<Boolean> newStates, int keyCount){
 
@@ -202,7 +204,7 @@ public final class InputManager extends MouseAdapter implements KeyListener {
     }
 
     public Vector2D getMousePositionScreenSpace(){
-        return Vector2D.divide(mousePosition, new Vector2D(Game.getXScale(), Game.getYScale()));
+        return Vector2D.divide(mousePosition, new Vector2D(game.getXScale(), game.getYScale()));
     }
 
     public Vector2D getMousePositionGlobalSpace(){

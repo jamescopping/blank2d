@@ -7,8 +7,8 @@ import java.util.Objects;
 public abstract class Resource {
     private static final Map<String, String> resourceMap = new HashMap<>();
 
-    String resourceID;
-    String getResourceID() {
+    private String resourceID;
+    public String getResourceID() {
         return resourceID;
     }
     protected Resource(String resourceID){

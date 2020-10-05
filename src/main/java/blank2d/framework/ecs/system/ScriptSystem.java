@@ -27,7 +27,7 @@ public class ScriptSystem extends IteratingSystem {
         List<EntityScript> scripts = entity.getAllComponents(EntityScript.class);
         scripts.forEach(IEntityScript::update);
         scripts.forEach(IEntityScript::lateUpdate);
-        if(Game.isDebugMode()) scripts.forEach(IEntityScript::debug);
+        if(getEngine().getGame().isDebugMode()) scripts.forEach(IEntityScript::debug);
     }
 
     @Override

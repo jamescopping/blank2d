@@ -13,9 +13,12 @@ public class Screen {
 
     private static final Screen instance = new Screen();
     public static Screen getInstance() { return instance; }
-    protected Screen() {
+    protected Screen() { }
 
-    }
+    /**
+     * pointer to the game instance
+     */
+    private Game game;
 
     private Vector2D cameraPosition;
     private Vector2D cameraSize;
@@ -27,7 +30,8 @@ public class Screen {
     public int[] debugLayerPixels = new int[width * height];
     public boolean clearScreen = true;
 
-    public void init(int width, int height){
+    public void init(Game game, int width, int height){
+        this.game = game;
         this.cameraSize = new Vector2D(width, height);
         this.cameraPosition = new Vector2D(0,0);
         this.cameraZoomFactor = 1.0f;
@@ -37,7 +41,6 @@ public class Screen {
         this.debugLayerPixels = new int[width * height];
         clear(Color.black);
     }
-
 
     public void clear(Color color){
         int rgb = color.getRGB();
@@ -346,7 +349,7 @@ public class Screen {
         this.height = (int) newSize.getY();
         this.pixels = new int[width * height];
         this.debugLayerPixels = new int[width * height];
-        Game.setBufferedImageSize(width, height);
+        game.setBufferedImageSize(width, height);
         System.gc();
     }
 

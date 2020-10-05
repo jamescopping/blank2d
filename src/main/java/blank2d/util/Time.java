@@ -1,18 +1,28 @@
 package blank2d.util;
 
-public class Time {
-    public static double deltaTime = 0.0;
 
-    public static double getDeltaTimeNano() {
+
+public class Time {
+
+    private static final Time instance = new Time();
+    public static Time getInstance() {
+        return instance;
+    }
+
+    public Time() { }
+
+    public double deltaTime = 0.0;
+
+    public double getDeltaTimeNano() {
         return deltaTime;
     }
-    public static double getDeltaTimeMilli() {
+    public double getDeltaTimeMilli() {
         return Time.nanoToMilli(deltaTime);
     }
-    public static double getDeltaTimeMicro() {
+    public double getDeltaTimeMicro() {
         return Time.nanoToMicro(deltaTime);
     }
-    public static double getDeltaTimeSeconds() {
+    public double getDeltaTimeSeconds() {
         return Time.nanoToSeconds(deltaTime);
     }
 

@@ -43,7 +43,7 @@ public class RigidBody extends Component {
 
     public void fixedUpdate(){
         physicsUpdating = true;
-        double dt = Time.nanoToSeconds(Game.getTimeBetweenFixedUpdates());
+        double dt = Time.nanoToSeconds(getEngine().getGame().getTimeBetweenFixedUpdates());
         Vector2D acceleration = new Vector2D();
         if(force.getMagnitude() > 0 && !isKinematic()) { acceleration.setXY(Vector2D.multiply(Vector2D.divide(force, mass), (float) dt)); }
         if(isGravitySimulated()) acceleration.add(Vector2D.multiply(PhysicsSystem.gravity, (float) dt));

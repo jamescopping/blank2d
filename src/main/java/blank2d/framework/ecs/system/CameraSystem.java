@@ -25,7 +25,6 @@ public class CameraSystem extends IteratingSystem {
      */
     public CameraSystem(EntityFamily family) {
         super(family);
-
     }
 
     @Override
@@ -47,7 +46,6 @@ public class CameraSystem extends IteratingSystem {
 
     @Override
     public void fixedUpdate() {
-
         if(zooming) {
             if (step < zoomSteps) {
                 zoomBy(zoomFactorStep);
@@ -56,7 +54,6 @@ public class CameraSystem extends IteratingSystem {
                 zooming = false;
             }
         }
-
     }
 
     /**
@@ -66,7 +63,7 @@ public class CameraSystem extends IteratingSystem {
      * @param timeMilli time in milli sec for the target to be reached
      */
     public void zoomTo(float targetZoomFactor, int timeMilli){
-        double dt = Time.nanoToMilli(Game.getTimeBetweenFixedUpdates());
+        double dt = Time.nanoToMilli(getEngine().getGame().getTimeBetweenFixedUpdates());
         zoomSteps = (int) (timeMilli / dt);
         float deltaZoom = getActiveCamera().getZoomFactor() - targetZoomFactor;
         zoomFactorStep = -deltaZoom/zoomSteps;
@@ -96,7 +93,7 @@ public class CameraSystem extends IteratingSystem {
         Entity defaultCamera = new Entity();
         defaultCamera.setTag(Tag.CAMERA);
         defaultCamera.setId("defaultCamera");
-        defaultCamera.addComponent(new Camera(Game.getWIDTH(), Game.getHEIGHT(), 1.0f));
+        defaultCamera.addComponent(new Camera(getEngine().getGame().getWidth(), getEngine().getGame().getHeight(), 1.0f));
         getEngine().addEntity(defaultCamera);
     }
 

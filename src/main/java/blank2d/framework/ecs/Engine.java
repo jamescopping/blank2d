@@ -12,13 +12,7 @@
  */
 package blank2d.framework.ecs;
 
-import blank2d.framework.ecs.component.physics2d.RigidBody;
-import blank2d.framework.ecs.component.physics2d.Transform;
-import blank2d.framework.ecs.component.physics2d.collider.Collider;
-import blank2d.framework.ecs.component.rendering.AnimationController;
-import blank2d.framework.ecs.component.rendering.Camera;
-import blank2d.framework.ecs.component.rendering.SpriteRenderer;
-import blank2d.framework.ecs.component.script.EntityScript;
+import blank2d.Game;
 import blank2d.framework.ecs.signal.entity.EntityRemovedListener;
 import blank2d.framework.ecs.signal.entity.EntitySignal;
 import blank2d.framework.ecs.system.*;
@@ -102,11 +96,15 @@ public final class Engine {
 
     private final EntitySignal entitySignal = new EntitySignal();
 
+    /** Pointer to the main instance of the game */
+    private final Game game;
+
     /** Indicates if an update cycle is currently in progress. */
     private boolean updating;
 
 
-    public Engine(){
+    public Engine(Game game){
+        this.game = game;
         entitySignal.addSignalListener(new EntityRemovedListener());
     }
 
@@ -624,8 +622,8 @@ public final class Engine {
      * Creates a default engine structure with all the base systems in the order of execution needed
      * @return Engine default engine structure
      */
-    public static Engine defaultEngine(){
-        Engine defaultEngine = new Engine();
+    public static Engine defaultEngine(Game game){
+        Engine defaultEngine = new Engine(game);
 
         //the order you add the systems are the order that is executed for the fixed updated and updated loops
         //all of fixed updated is done first, the all of update
@@ -636,11 +634,15 @@ public final class Engine {
         defaultEngine.addSystem(new CameraSystem(EntityFamily.cameraEF));
         defaultEngine.addSystem(new AnimationSystem(EntityFamily.animationEF));
         defaultEngine.addSystem(new RendererSystem(EntityFamily.spriteRendererEF));
+        defaultEngine.addSystem(new SoundSystem());
 
         return defaultEngine;
     }
 
 
+    public Game getGame() {
+        return game;
+    }
 
     @Override
     public String toString() {

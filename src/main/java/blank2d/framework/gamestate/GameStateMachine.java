@@ -1,24 +1,37 @@
 package blank2d.framework.gamestate;
 
+import blank2d.Game;
 import blank2d.util.Stack;
 
 public class GameStateMachine {
 
+    private static final GameStateMachine instance = new GameStateMachine();
+    public static GameStateMachine getInstance() { return instance; }
+    protected GameStateMachine() { }
+
+    private Game game;
+
+    public void init(Game game){
+        this.game = game;
+    }
+
     private final Stack<GameState> stateStack = new Stack<>();
     private GameState newGameState;
 
-    private char stateTransitionFlag = 0;
     private boolean isRemoving = false;
     private boolean isAdding = false;
     private boolean isReplacing = false;
     private boolean running = false;
+
+    public GameStateMachine(Game game){
+        this.game = game;
+    }
 
     @Override
     public String toString() {
         return "GameStateMachine{" +
                 "stateStack=" + stateStack +
                 ", newGameState=" + newGameState +
-                ", stateTransitionFlag=" + stateTransitionFlag +
                 ", isRemoving=" + isRemoving +
                 ", isAdding=" + isAdding +
                 ", isReplacing=" + isReplacing +
@@ -33,6 +46,7 @@ public class GameStateMachine {
         isAdding = true;
         this.isReplacing = isReplacing;
         this.newGameState = newGameState;
+        this.newGameState.setGameStateMachine(this);
     }
 
     public void popGameState(){
@@ -92,5 +106,9 @@ public class GameStateMachine {
 
     public void start(){
         this.running = true;
+    }
+
+    public Game getGame() {
+        return game;
     }
 }
