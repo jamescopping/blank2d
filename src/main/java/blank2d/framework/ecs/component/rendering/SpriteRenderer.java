@@ -7,7 +7,7 @@ import blank2d.util.math.Vector2D;
 
 public class SpriteRenderer extends Component {
     public Sprite sprite;
-    public SpriteRenderer(String resourceID){ setSprite(AssetManager.getInstance().getSprite(resourceID)); }
+    public SpriteRenderer(String assetID){ setSprite(AssetManager.getInstance().getSprite(assetID)); }
     public void setSprite(Sprite sprite){ this.sprite = sprite; }
     public Sprite getSprite(){ return sprite; }
     public void render(Vector2D pos){

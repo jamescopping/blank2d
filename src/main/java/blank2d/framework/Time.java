@@ -1,6 +1,4 @@
-package blank2d.util;
-
-
+package blank2d.framework;
 
 public class Time {
 

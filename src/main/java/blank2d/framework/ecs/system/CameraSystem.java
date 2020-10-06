@@ -1,10 +1,9 @@
 package blank2d.framework.ecs.system;
 
-import blank2d.Game;
 import blank2d.framework.ecs.*;
 import blank2d.framework.ecs.component.rendering.Camera;
-import blank2d.framework.graphics.Screen;
-import blank2d.util.Time;
+import blank2d.framework.Screen;
+import blank2d.framework.Time;
 import blank2d.util.math.Vector2D;
 
 public class CameraSystem extends IteratingSystem {

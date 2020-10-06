@@ -1,12 +1,10 @@
 package blank2d.framework.asset;
 
-import blank2d.framework.ecs.system.PhysicsSystem;
-
 import java.net.URL;
 
 public final class AssetPath {
 
-    private static String resourceDirectory = "/resources/";
+    private static String assetDirectory = "/assets/";
     private static String spriteDirectory = "sprite";
     private static String audioDirectory = "audio";
 
@@ -16,7 +14,7 @@ public final class AssetPath {
             if(directory.isEmpty()) throw new Exception("directory can't be empty, make sure you change it to the name of the directory with set###Directory()");
             if(fileName.isEmpty()) throw new Exception("fileName given is empty");
             if(!fileName.contains(".")) throw new Exception("fileName should contain a valid file extension e.g (.png or .mp3)");
-            path = getResourceDirectory() + directory + "/" + fileName;
+            path = getAssetDirectory() + directory + "/" + fileName;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -24,13 +22,13 @@ public final class AssetPath {
         return AssetPath.class.getResource(path);
     }
 
-    public static String getResourceDirectory() {
-        return resourceDirectory;
+    public static String getAssetDirectory() {
+        return assetDirectory;
     }
 
-    public static void setResourceDirectory(String resourceDirectory) {
-        if(!resourceDirectory.endsWith("/")) resourceDirectory = resourceDirectory + "/";
-        AssetPath.resourceDirectory = resourceDirectory;
+    public static void setAssetDirectory(String assetDirectory) {
+        if(!assetDirectory.endsWith("/")) assetDirectory = assetDirectory + "/";
+        AssetPath.assetDirectory = assetDirectory;
     }
 
     public static String getSpriteDirectory() {

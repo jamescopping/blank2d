@@ -1,15 +1,16 @@
 package blank2d.framework.graphics;
 
+import blank2d.framework.Screen;
 import blank2d.framework.asset.AssetPath;
 import blank2d.framework.asset.LoadAsset;
-import blank2d.framework.asset.Resource;
+import blank2d.framework.asset.Asset;
 import blank2d.util.math.Vector2D;
 
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Sprite extends Resource {
+public class Sprite extends Asset {
 
     private int[] pixels;
     private int width;
@@ -22,12 +23,12 @@ public class Sprite extends Resource {
         this.pixels = pixels;
     }
 
-    public Sprite(String resourceID, int width, int height){
-        super(resourceID);
+    public Sprite(String assetID, int width, int height){
+        super(assetID);
         this.width = width;
         this.height = height;
         this.pixels = new int[width * height];
-        loadImage(resourceID);
+        loadImage(assetID);
     }
 
 
@@ -50,8 +51,8 @@ public class Sprite extends Resource {
         return new Sprite(newPixels, w, h);
     }
 
-    public void loadImage(String resourceID) {
-        BufferedImage bufferedImage = LoadAsset.loadImage(AssetPath.getSpriteDirectory(), resourceID);
+    public void loadImage(String assetID) {
+        BufferedImage bufferedImage = LoadAsset.loadImage(assetID);
         if (bufferedImage != null) {
             bufferedImage.getRGB(0,0,bufferedImage.getWidth(), bufferedImage.getHeight(), pixels, 0 , bufferedImage.getWidth());
         }

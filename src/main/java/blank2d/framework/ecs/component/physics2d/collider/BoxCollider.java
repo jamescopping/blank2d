@@ -1,7 +1,7 @@
 package blank2d.framework.ecs.component.physics2d.collider;
 
 import blank2d.framework.ecs.component.physics2d.Transform;
-import blank2d.framework.graphics.Screen;
+import blank2d.framework.Screen;
 import blank2d.util.math.Rect;
 import blank2d.util.math.Vector2D;
 

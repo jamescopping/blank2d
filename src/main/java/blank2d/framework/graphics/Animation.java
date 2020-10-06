@@ -1,13 +1,12 @@
 package blank2d.framework.graphics;
 
 import blank2d.framework.asset.AssetManager;
-import blank2d.framework.asset.Resource;
-import blank2d.util.Node;
+import blank2d.framework.asset.Asset;
 import blank2d.util.Queue;
 
 import java.util.Iterator;
 
-public class Animation extends Resource {
+public class Animation extends Asset {
 
     private final Sprite spriteStrip;
     private final Queue<Sprite> frameQueue = new Queue<>();
@@ -15,9 +14,9 @@ public class Animation extends Resource {
     private Sprite currentFrame;
     private float frameRate = 1;
 
-    public Animation(String animationResourceID, String spriteResourceID, int spriteWidth, float frameRate, boolean loop){
-        super(animationResourceID);
-        this.spriteStrip = AssetManager.getInstance().getSprite(spriteResourceID);
+    public Animation(String animationassetID, String spriteassetID, int spriteWidth, float frameRate, boolean loop){
+        super(animationassetID);
+        this.spriteStrip = AssetManager.getInstance().getSprite(spriteassetID);
         generateSpriteQueue(spriteWidth);
         frameQueue.loop(loop);
         frameIterator = frameQueue.iterator();

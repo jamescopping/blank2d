@@ -1,9 +1,7 @@
 package blank2d.framework.ecs.component.rendering;
 
-import blank2d.Game;
 import blank2d.framework.ecs.Component;
 import blank2d.framework.ecs.component.physics2d.Transform;
-import blank2d.framework.graphics.Screen;
 import blank2d.util.math.Rect;
 import blank2d.util.math.Vector2D;
 

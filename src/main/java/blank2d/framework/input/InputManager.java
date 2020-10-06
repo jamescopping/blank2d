@@ -1,7 +1,7 @@
 package blank2d.framework.input;
 
 import blank2d.Game;
-import blank2d.framework.graphics.Screen;
+import blank2d.framework.Screen;
 import blank2d.util.Queue;
 import blank2d.util.math.Vector2D;
 

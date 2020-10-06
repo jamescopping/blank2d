@@ -2,26 +2,26 @@ package blank2d.framework.asset;
 
 import java.util.HashMap;
 
-public class AssetStorage<T extends Resource> extends HashMap<String, T> {
+public class AssetStorage<T extends Asset> extends HashMap<String, T> {
 
-    public T get(String resourceID) {
+    public T get(String assetID) {
         T foundElement = null;
-        if(!isEmpty() && containsKey(resourceID)){
-            foundElement = super.get(resourceID);
+        if(!isEmpty() && containsKey(assetID)){
+            foundElement = super.get(assetID);
         }
         return foundElement;
     }
 
     public void add(T newElement){
-        if(!containsKey(newElement.getResourceID())){
-            super.put(newElement.getResourceID(), newElement);
+        if(!containsKey(newElement.getAssetID())){
+            super.put(newElement.getAssetID(), newElement);
         }else{
-            System.err.println(newElement.getResourceID() + ", id is already in storage!");
+            System.err.println(newElement.getAssetID() + ", id is already in storage!");
         }
     }
 
-    public void remove(String resourceID){
-        super.remove(resourceID, get(resourceID));
+    public void remove(String assetID){
+        super.remove(assetID, get(assetID));
     }
 
     @Override

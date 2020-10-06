@@ -2,10 +2,10 @@ package blank2d;
 
 import blank2d.framework.gamestate.GameState;
 import blank2d.framework.gamestate.GameStateMachine;
-import blank2d.framework.graphics.Screen;
+import blank2d.framework.Screen;
 import blank2d.framework.input.InputManager;
 import blank2d.util.Queue;
-import blank2d.util.Time;
+import blank2d.framework.Time;
 import blank2d.util.math.Vector2D;
 
 import javax.swing.*;

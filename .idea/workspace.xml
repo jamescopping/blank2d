@@ -25,13 +25,26 @@
     <list default="true" id="69708ced-b8e7-4bbf-9c84-2385ce266519" name="Default Changelist" comment="pom update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Engine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Engine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/asset/AssetManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/asset/AssetManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/asset/AssetPath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/asset/AssetPath.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/asset/AssetStorage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/asset/AssetStorage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/asset/LoadAsset.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/asset/LoadAsset.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/asset/Resource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/asset/Asset.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/RigidBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/RigidBody.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/collider/BoxCollider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/collider/BoxCollider.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/rendering/AnimationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/rendering/AnimationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/rendering/Camera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/rendering/Camera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/rendering/SpriteRenderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/rendering/SpriteRenderer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/script/EntityScript.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/script/EntityScript.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/CameraSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/CameraSystem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/SoundSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/SoundSystem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/Animation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/Animation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/SoundEffect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/SoundEffect.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/util/Queue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/util/Queue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/util/Stack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/util/Stack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/Screen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/SoundEffect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/sound/SoundEffect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/Sprite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/Sprite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/input/InputManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/input/InputManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/util/KeyCode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/util/Time.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/Time.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -237,7 +250,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601940653715</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="updated Queue iterator and the SoundSystem">
+      <created>1601979132579</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1601979132579</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -269,7 +289,8 @@
     <MESSAGE value="update for package" />
     <MESSAGE value="Fixed Mouse Global position when zooming&#10;Added camera zoomBy and linear zoomTo over a certain time" />
     <MESSAGE value="big rework, removing a bunch of static variables" />
-    <option name="LAST_COMMIT_MESSAGE" value="big rework, removing a bunch of static variables" />
+    <MESSAGE value="updated Queue iterator and the SoundSystem" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated Queue iterator and the SoundSystem" />
   </component>
   <component name="WindowStateProjectService">
     <state x="440" y="94" key="#Project_Structure" timestamp="1601579574246">
@@ -305,6 +326,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="756" y="401" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601583572615" />
+    <state x="554" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1602021167206">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="554" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602021167206" />
     <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1601583658831">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -314,26 +339,26 @@
     </state>
     <state x="740" y="274" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601823130244" />
     <state x="2660" y="274" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601977551997" />
-    <state width="1877" height="180" key="GridCell.Tab.0.bottom" timestamp="1601978930451">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1877" height="180" key="GridCell.Tab.0.bottom" timestamp="1602021887529">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="180" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601907775087" />
-    <state width="1877" height="180" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601978930451" />
-    <state width="1877" height="180" key="GridCell.Tab.0.center" timestamp="1601978930451">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1877" height="180" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602021887529" />
+    <state width="1877" height="348" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601987952480" />
+    <state width="1877" height="180" key="GridCell.Tab.0.center" timestamp="1602021887529">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="180" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601907775086" />
-    <state width="1877" height="180" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601978930451" />
-    <state width="1877" height="180" key="GridCell.Tab.0.left" timestamp="1601978930451">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1877" height="180" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602021887529" />
+    <state width="1877" height="348" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601987952480" />
+    <state width="1877" height="180" key="GridCell.Tab.0.left" timestamp="1602021887529">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="180" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601907775086" />
-    <state width="1877" height="180" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601978930451" />
-    <state width="1877" height="180" key="GridCell.Tab.0.right" timestamp="1601978930451">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1877" height="180" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602021887529" />
+    <state width="1877" height="348" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601987952480" />
+    <state width="1877" height="180" key="GridCell.Tab.0.right" timestamp="1602021887529">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="180" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601907775087" />
-    <state width="1877" height="180" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601978930451" />
+    <state width="1877" height="180" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602021887529" />
+    <state width="1877" height="348" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601987952480" />
     <state x="490" y="174" key="Maven.ArtifactSearchDialog" timestamp="1601573561979">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -346,11 +371,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="164" key="SettingsEditor/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601584746874" />
-    <state x="2472" y="252" key="Vcs.Push.Dialog.v2" timestamp="1601940661642">
+    <state x="2472" y="252" key="Vcs.Push.Dialog.v2" timestamp="1601979136527">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="252" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601896609421" />
-    <state x="2472" y="252" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601940661642" />
+    <state x="2472" y="252" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601979136527" />
     <state x="777" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1601719967203">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -359,10 +384,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="724" y="188" key="com.intellij.testIntegration.createTest.CreateTestDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601583477164" />
-    <state x="2587" y="253" width="585" height="534" key="find.popup" timestamp="1601977396336">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state x="1168" y="287" width="585" height="592" key="find.popup" timestamp="1602021120193">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="667" y="253" width="585" height="534" key="find.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601810907405" />
+    <state x="1168" y="287" width="585" height="592" key="find.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602021120193" />
     <state x="2587" y="253" width="585" height="534" key="find.popup/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601977396336" />
     <state x="761" y="426" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1601572316672">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -380,10 +405,10 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2675" y="267" key="refactoring.ChangeSignatureDialog/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601938646392" />
-    <state x="2543" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1601978576223">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1602019964076">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601906623995" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602019964076" />
     <state x="2543" y="225" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601978576223" />
   </component>
 </project>

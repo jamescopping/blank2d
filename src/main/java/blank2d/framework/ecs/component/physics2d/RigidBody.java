@@ -1,13 +1,12 @@
 
 package blank2d.framework.ecs.component.physics2d;
 
-import blank2d.Game;
 import blank2d.framework.ecs.Component;
 import blank2d.framework.ecs.component.physics2d.collider.Collider;
 import blank2d.framework.ecs.system.ColliderSystem;
 import blank2d.framework.ecs.system.PhysicsSystem;
 import blank2d.util.Node;
-import blank2d.util.Time;
+import blank2d.framework.Time;
 import blank2d.util.math.Ray;
 import blank2d.util.math.Rect;
 import blank2d.util.math.Vector2D;
