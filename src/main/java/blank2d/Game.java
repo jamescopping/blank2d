@@ -82,7 +82,7 @@ public final class Game extends Canvas implements Runnable {
     }
 
     public synchronized void start(GameState initGameState) {
-        gameThread = new Thread(this, "GameThread: "+title);
+        gameThread = new Thread(this, "MainGameThread");
         gameStateMachine.init(this);
         if(!gameStateMachine.isRunning()) {
             screen.init(this, getWidth(), getHeight());
@@ -196,7 +196,7 @@ public final class Game extends Canvas implements Runnable {
         }
         System.arraycopy(screen.pixels, 0, pixels, 0, pixels.length);
         Graphics g = bs.getDrawGraphics();
-        g.drawImage(image, 0,0, getScreenDimension().width, getScreenDimension().height, null);
+        g.drawImage(image, 0,0, (int) (getWidth() * getXScale()), (int) (getHeight() * getYScale()), null);
         if(screen.clearScreen) screen.clear(Color.black);
         g.dispose();
         bs.show();

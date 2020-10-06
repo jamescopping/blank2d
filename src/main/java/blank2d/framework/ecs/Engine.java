@@ -489,6 +489,10 @@ public final class Engine {
         if (updating) throw new IllegalStateException("cannot add system while updating");
         if (engineSystems.contains(system)) throw new IllegalArgumentException("system already added");
 
+        if(system instanceof Runnable){
+            Thread systemThread = new Thread((Runnable)system, system.getClass().getSimpleName() + " Thread");
+            systemThread.start();
+        }
         system.setEngine(this);
         engineSystems.add(system);
         system.addedToEngine(this);

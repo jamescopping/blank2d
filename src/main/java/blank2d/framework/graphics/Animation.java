@@ -5,18 +5,22 @@ import blank2d.framework.asset.Resource;
 import blank2d.util.Node;
 import blank2d.util.Queue;
 
+import java.util.Iterator;
+
 public class Animation extends Resource {
 
     private final Sprite spriteStrip;
     private final Queue<Sprite> frameQueue = new Queue<>();
-    private Node<Sprite> currentFrame;
+    private final Iterator<Sprite> frameIterator;
+    private Sprite currentFrame;
     private float frameRate = 1;
 
     public Animation(String animationResourceID, String spriteResourceID, int spriteWidth, float frameRate, boolean loop){
         super(animationResourceID);
         this.spriteStrip = AssetManager.getInstance().getSprite(spriteResourceID);
         generateSpriteQueue(spriteWidth);
-        setLoop(loop);
+        frameQueue.loop(loop);
+        frameIterator = frameQueue.iterator();
         currentFrame = frameQueue.peekHead();
         this.frameRate = frameRate;
     }
@@ -33,20 +37,15 @@ public class Animation extends Resource {
     }
 
     public Sprite getCurrentFrameSprite() {
-        return currentFrame.getData();
+        return currentFrame;
     }
 
-    public void nextFrame(){
-        if(currentFrame.hasChild()){
-            currentFrame = currentFrame.getChild();
-        }
-    }
-
-    public void setLoop(boolean loop){
-        if(loop){
-            frameQueue.peekTail().setChild(frameQueue.peekHead());
+    public boolean nextFrame(){
+        if(frameIterator.hasNext()){
+            currentFrame = frameIterator.next();
+            return true;
         }else{
-            frameQueue.peekTail().setChild(null);
+            return false;
         }
     }
 
@@ -74,13 +73,7 @@ public class Animation extends Resource {
     }
 
     public static void scaleAnimation(Animation animation, int newWidth, int newHeight, Sprite.SpriteScaleMethod method){
-        Node<Sprite> spriteNode = animation.getFrameQueue().peekHead();
-        int frameCount = 0;
-        while(spriteNode != null && frameCount < animation.numberOfFrames()) {
-            Sprite.scaleSprite(spriteNode.getData(), newWidth, newHeight, method);
-            spriteNode = spriteNode.getChild();
-            frameCount++;
-        }
+        animation.getFrameQueue().forEach(sprite -> Sprite.scaleSprite(sprite, newWidth, newHeight, method));
     }
 
     @Override

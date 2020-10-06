@@ -23,23 +23,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="69708ced-b8e7-4bbf-9c84-2385ce266519" name="Default Changelist" comment="pom update">
-      <change afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/SoundSystem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/SoundEffect.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/asset/AssetManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/asset/AssetManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/asset/Resource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/asset/Resource.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Engine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/Engine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/RigidBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/RigidBody.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/rendering/AnimationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/rendering/AnimationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/CameraSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/CameraSystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/ScriptSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/ScriptSystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/gamestate/GameState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/gamestate/GameState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/gamestate/GameStateMachine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/gamestate/GameStateMachine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/Screen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/input/InputManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/input/InputManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/util/Time.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/util/Time.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/SoundSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/SoundSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/Animation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/Animation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/SoundEffect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/SoundEffect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/util/Queue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/util/Queue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/util/Stack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/util/Stack.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -238,7 +230,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601896603942</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="big rework, removing a bunch of static variables">
+      <created>1601940653715</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1601940653715</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -269,7 +268,8 @@
     <MESSAGE value="udpate" />
     <MESSAGE value="update for package" />
     <MESSAGE value="Fixed Mouse Global position when zooming&#10;Added camera zoomBy and linear zoomTo over a certain time" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed Mouse Global position when zooming&#10;Added camera zoomBy and linear zoomTo over a certain time" />
+    <MESSAGE value="big rework, removing a bunch of static variables" />
+    <option name="LAST_COMMIT_MESSAGE" value="big rework, removing a bunch of static variables" />
   </component>
   <component name="WindowStateProjectService">
     <state x="440" y="94" key="#Project_Structure" timestamp="1601579574246">
@@ -284,11 +284,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="414" y="174" width="1092" height="763" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601585074740" />
-    <state x="2685" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1601940114057">
+    <state x="2685" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1601976500589">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601906667668" />
-    <state x="2685" y="226" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601940114057" />
+    <state x="2685" y="226" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601976500589" />
     <state x="711" y="380" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1601583850352">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -309,31 +309,31 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601583658831" />
-    <state x="2660" y="274" key="FileChooserDialogImpl" timestamp="1601925697298">
+    <state x="2660" y="274" key="FileChooserDialogImpl" timestamp="1601977551997">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="274" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601823130244" />
-    <state x="2660" y="274" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601925697298" />
-    <state width="1877" height="180" key="GridCell.Tab.0.bottom" timestamp="1601940132473">
+    <state x="2660" y="274" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601977551997" />
+    <state width="1877" height="180" key="GridCell.Tab.0.bottom" timestamp="1601978930451">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="180" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601907775087" />
-    <state width="1877" height="180" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601940132473" />
-    <state width="1877" height="180" key="GridCell.Tab.0.center" timestamp="1601940132472">
+    <state width="1877" height="180" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601978930451" />
+    <state width="1877" height="180" key="GridCell.Tab.0.center" timestamp="1601978930451">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="180" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601907775086" />
-    <state width="1877" height="180" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601940132472" />
-    <state width="1877" height="180" key="GridCell.Tab.0.left" timestamp="1601940132472">
+    <state width="1877" height="180" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601978930451" />
+    <state width="1877" height="180" key="GridCell.Tab.0.left" timestamp="1601978930451">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="180" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601907775086" />
-    <state width="1877" height="180" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601940132472" />
-    <state width="1877" height="180" key="GridCell.Tab.0.right" timestamp="1601940132473">
+    <state width="1877" height="180" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601978930451" />
+    <state width="1877" height="180" key="GridCell.Tab.0.right" timestamp="1601978930451">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="180" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601907775087" />
-    <state width="1877" height="180" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601940132473" />
+    <state width="1877" height="180" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601978930451" />
     <state x="490" y="174" key="Maven.ArtifactSearchDialog" timestamp="1601573561979">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -346,11 +346,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="164" key="SettingsEditor/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601584746874" />
-    <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1601896609421">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2472" y="252" key="Vcs.Push.Dialog.v2" timestamp="1601940661642">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="252" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601896609421" />
-    <state x="2472" y="252" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601757143638" />
+    <state x="2472" y="252" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601940661642" />
     <state x="777" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1601719967203">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -359,10 +359,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="724" y="188" key="com.intellij.testIntegration.createTest.CreateTestDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601583477164" />
-    <state x="667" y="253" width="585" height="534" key="find.popup" timestamp="1601810907405">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2587" y="253" width="585" height="534" key="find.popup" timestamp="1601977396336">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="667" y="253" width="585" height="534" key="find.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601810907405" />
+    <state x="2587" y="253" width="585" height="534" key="find.popup/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601977396336" />
     <state x="761" y="426" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1601572316672">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -379,21 +380,10 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2675" y="267" key="refactoring.ChangeSignatureDialog/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601938646392" />
-    <state x="2543" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1601940259790">
+    <state x="2543" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1601978576223">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601906623995" />
-    <state x="2543" y="225" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601940259790" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/blank2d/Game.java</url>
-          <line>198</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <state x="2543" y="225" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601978576223" />
   </component>
 </project>

@@ -1,6 +1,9 @@
 package blank2d.util;
 
-public class Stack<T> {
+import java.util.Iterator;
+import java.util.function.Consumer;
+
+public class Stack<T> implements Iterable<T> {
 
     private Node<T> top = null;
     private int size = 0;
@@ -54,4 +57,25 @@ public class Stack<T> {
     public T peek(){
         return top.getData();
     }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+
+            private Node<T> top = Stack.this.top;
+
+            @Override
+            public boolean hasNext() {
+                if (top == null) return false;
+                return top.hasChild();
+            }
+
+            @Override
+            public T next() {
+                top = top.getChild();
+                return top.getData();
+            }
+        };
+    }
+
 }

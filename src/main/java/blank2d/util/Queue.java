@@ -2,9 +2,10 @@ package blank2d.util;
 
 import java.util.Iterator;
 
-public class Queue<T> implements Iterable<Node<T>> {
+public class Queue<T> implements Iterable<T> {
 
     private Node<T> head = null;
+    private Node<T> tail = null;
     private int size = 0 ;
 
     @Override
@@ -28,8 +29,10 @@ public class Queue<T> implements Iterable<Node<T>> {
         node.setData(data);
         if(isEmpty()){
             head = node;
+            tail = head;
         }else{
-            peekTail().setChild(node);
+            tail.setChild(node);
+            tail = tail.getChild();
         }
         size++;
     }
@@ -40,6 +43,7 @@ public class Queue<T> implements Iterable<Node<T>> {
             first = head;
             if(!head.hasChild()){
                 head = null;
+                tail = null;
             }else{
                 head = head.getChild();
             }
@@ -50,16 +54,12 @@ public class Queue<T> implements Iterable<Node<T>> {
         }
     }
 
-    public Node<T> peekHead(){
-        return head;
+    public T peekHead(){
+        return head.getData();
     }
 
-    public Node<T> peekTail(){
-        Node<T> tail = head;
-        while(tail.hasChild()){
-            tail = tail.getChild();
-        }
-        return tail;
+    public T peekTail(){
+        return tail.getData();
     }
 
     public void clear() {
@@ -67,10 +67,18 @@ public class Queue<T> implements Iterable<Node<T>> {
         head = null;
     }
 
+    public void loop(boolean setLoop){
+        if(setLoop){
+            tail.setChild(head);
+        }else{
+            tail.setChild(null);
+        }
+    }
+
     public boolean contains(T data){
         boolean contains = false;
-        for(Node<T> tNode: this){
-            if(data.equals(tNode.getData())){
+        for(T tData: this){
+            if(data.equals(tData)){
                 contains = true;
                 break;
             }
@@ -78,9 +86,10 @@ public class Queue<T> implements Iterable<Node<T>> {
         return contains;
     }
 
+
     @Override
-    public Iterator<Node<T>> iterator() {
-        return new Iterator<Node<T>>() {
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
 
             private Node<T> head = Queue.this.head;
 
@@ -91,12 +100,10 @@ public class Queue<T> implements Iterable<Node<T>> {
             }
 
             @Override
-            public Node<T> next() {
+            public T next() {
                 head = head.getChild();
-                return head;
+                return head.getData();
             }
         };
     }
-
-
 }

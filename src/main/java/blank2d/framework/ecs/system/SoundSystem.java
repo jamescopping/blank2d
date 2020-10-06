@@ -7,9 +7,8 @@ public class SoundSystem extends EngineSystem {
 
     private final AssetManager assetManager = AssetManager.getInstance();
 
-    public SoundSystem(){}
-
     public void play(String resourceID){
         assetManager.getSoundEffect(resourceID).play();
     }
+
 }
