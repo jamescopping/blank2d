@@ -3,31 +3,40 @@ package blank2d.framework.asset;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.io.File;
 import java.net.URL;
 
 public final class LoadAsset {
 
     //returns a buffered image give a file Name
     public static BufferedImage loadImage(String assetID) {
+        URL path = null;
         try {
-            URL path = AssetPath.getURL(AssetPath.getSpriteDirectory(), Asset.get(assetID));
-            return ImageIO.read(path);
+            path = AssetPath.getURL(AssetPath.getSpriteDirectory(), Asset.get(assetID));
+            if(path != null) return ImageIO.read(path);
         } catch (Exception e) {
-            System.err.println("[" + Asset.get(assetID) + "] Asset couldn't be found! at path: (" + AssetPath.getAssetDirectory() + AssetPath.getSpriteDirectory() + "/)");
+            logError(assetID, AssetPath.getAudioDirectory(), path);
             return null;
         }
+        return null;
     }
 
     public static AudioInputStream loadAudioInputStream(String assetID){
+        URL path = null;
         try {
-            URL path = AssetPath.getURL(AssetPath.getAudioDirectory(), Asset.get(assetID));
-            return AudioSystem.getAudioInputStream(path);
+            path = AssetPath.getURL(AssetPath.getAudioDirectory(), Asset.get(assetID));
+            if(path != null) return AudioSystem.getAudioInputStream(path);
         } catch (Exception e) {
-            System.err.println("[" + Asset.get(assetID) + "] Asset couldn't be found! at path: (" + AssetPath.getAssetDirectory() + AssetPath.getAudioDirectory() + "/)");
+            logError(assetID, AssetPath.getAudioDirectory(), path);
             return null;
         }
+        return null;
+    }
+
+    private static void logError(String assetID, String directory, URL path){
+        String assetFileName = Asset.get(assetID);
+        System.err.println("ABS URL Path: " + path);
+        System.err.println("[" + assetFileName + "] Asset couldn't be found! at path: (" + directory + "/" + assetFileName + ")");
     }
 }

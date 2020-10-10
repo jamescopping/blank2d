@@ -1,5 +1,6 @@
 package blank2d;
 
+import blank2d.framework.asset.AssetPath;
 import blank2d.framework.file.FileSystem;
 import blank2d.framework.gamestate.GameState;
 import blank2d.framework.gamestate.GameStateMachine;
@@ -87,6 +88,7 @@ public final class Game extends Canvas implements Runnable {
         if(!gameStateMachine.isRunning()) {
             screen.init(this, getWidth(), getHeight());
             inputManager.init(this);
+            AssetPath.setContext(initGameState.getClass());
             FileSystem.setupLocalRelativeDirectory(initGameState.getClass());
             gameStateMachine.pushGameState(initGameState);
             gameStateMachine.start();
