@@ -8,9 +8,6 @@ public final class AssetPath {
     private static String spriteDirectory = "sprite";
     private static String audioDirectory = "audio";
 
-
-
-
     public static URL getURL(String directory, String fileName){
         String path = "";
         try {

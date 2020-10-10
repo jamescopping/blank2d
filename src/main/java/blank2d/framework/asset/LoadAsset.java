@@ -23,8 +23,9 @@ public final class LoadAsset {
 
     public static AudioInputStream loadAudioInputStream(String assetID){
         try {
-            return AudioSystem.getAudioInputStream(AssetPath.getURL(AssetPath.getAudioDirectory(), Asset.get(assetID)));
-        } catch (UnsupportedAudioFileException | IOException e) {
+            URL path = AssetPath.getURL(AssetPath.getAudioDirectory(), Asset.get(assetID));
+            return AudioSystem.getAudioInputStream(path);
+        } catch (Exception e) {
             System.err.println("[" + Asset.get(assetID) + "] Asset couldn't be found! at path: (" + AssetPath.getAssetDirectory() + AssetPath.getAudioDirectory() + "/)");
             return null;
         }

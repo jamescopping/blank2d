@@ -79,7 +79,6 @@ public final class Game extends Canvas implements Runnable {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
     }
 
     public synchronized void start(GameState initGameState) {
