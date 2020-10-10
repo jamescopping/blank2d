@@ -15,6 +15,10 @@ public abstract class FileSystem {
 
     protected FileSystem(){}
 
+    public static String getLocalRelativeDirectory() {
+        return localRelativeDirectory;
+    }
+
     /**
      * pass in the class that is in your local build, this will let you make, read and write to files and directories
      * in the the same parent folder as the build path or in development
