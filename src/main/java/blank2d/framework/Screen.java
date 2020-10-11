@@ -1,11 +1,9 @@
 package blank2d.framework;
 
 import blank2d.Game;
+import blank2d.framework.ecs.component.physics2d.Transform;
 import blank2d.framework.graphics.Sprite;
-import blank2d.util.math.Circle;
-import blank2d.util.math.Ray;
-import blank2d.util.math.Rect;
-import blank2d.util.math.Vector2D;
+import blank2d.util.math.*;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -262,31 +260,71 @@ public class Screen {
     }
 
 
-    public void drawDebugSprite(Sprite sprite, Vector2D position){ drawSprite(sprite, position, true); }
-    public void drawSprite(Sprite sprite, Vector2D position){ drawSprite(sprite, position, false); }
+    public void drawDebugSprite(Sprite sprite, Transform transform){ drawSprite(sprite, transform, true); }
+    public void drawSprite(Sprite sprite, Transform transform){ drawSprite(sprite, transform, false); }
 
-    private void drawSprite(Sprite sprite, Vector2D position, boolean debug) {
-        Vector2D cameraOffset = getCameraOffset();
-        int sWidth = sprite.getWidth();
-        int sHeight = sprite.getHeight();
-        int sHalfWidth = sWidth/2;
-        int sHalfHeight = sHeight/2;
-        int[] sPixels = sprite.getPixels();
-        for (int y = 0; y < sHeight; y++) {
-            int yp = (int) (y + position.getY() - sHalfHeight - cameraOffset.getY());
-            for (int x = 0; x < sWidth; x++) {
-                int xp = (int) (x + position.getX() - sHalfWidth - cameraOffset.getX());
-                int color = sPixels[x + y * sWidth];
-                if(color != 0xffff00ff){
-                    if(debug) {
-                        setPixelDebug(xp, yp, color);
-                    }else{
-                        setPixel(xp, yp, color);
+    private void drawSprite(Sprite sprite, Transform transform, boolean debug) {
+
+        Matrix3x3 matrixFinal = new Matrix3x3();
+        Matrix3x3 matrixFinalInv = new Matrix3x3();
+        Matrix3x3 matrixA = new Matrix3x3();
+        Matrix3x3 matrixB = new Matrix3x3();
+        Matrix3x3 translateMatrix = new Matrix3x3();
+        Matrix3x3 scaleMatrix = new Matrix3x3();
+        Matrix3x3 rotationMatrix = new Matrix3x3();
+
+        Vector2D spriteSize = new Vector2D(sprite.getWidth(), sprite.getHeight());
+
+        Vector2D offset = Vector2D.add(transform.position, Vector2D.negate(getCameraOffset()));
+
+        translateMatrix.translate(Vector2D.negate(Vector2D.divide(Vector2D.multiply(spriteSize, transform.scale), 2.0f)));
+        scaleMatrix.scale(transform.scale);
+        rotationMatrix.rotate(transform.angle);
+
+        Matrix.multiply(matrixA, translateMatrix, scaleMatrix);
+        Matrix.multiply(matrixB, rotationMatrix, matrixA);
+        translateMatrix.translate(offset);
+        Matrix.multiply(matrixFinal, translateMatrix, matrixB);
+
+        //get the inverse of the final matrix
+        Matrix3x3.invert(matrixFinal, matrixFinalInv);
+
+        //find the bounding box of the rotates scaled sprite
+        Vector2D start = new Vector2D();
+        Vector2D end = new Vector2D();
+        Vector2D position = new Vector2D();
+        matrixFinal.forward(new Vector2D(), position);
+        start.setXY(position);
+        end.setXY(position);
+
+        matrixFinal.forward(spriteSize, position);
+        start.setX(Math.min(start.getX(), position.getX())); start.setY(Math.min(start.getY(), position.getY()));
+        end.setX(Math.max(end.getX(), position.getX())); end.setY(Math.max(end.getY(), position.getY()));
+
+        matrixFinal.forward(new Vector2D(0, spriteSize.getY()), position);
+        start.setX(Math.min(start.getX(), position.getX())); start.setY(Math.min(start.getY(), position.getY()));
+        end.setX(Math.max(end.getX(), position.getX())); end.setY(Math.max(end.getY(), position.getY()));
+
+        matrixFinal.forward(new Vector2D(spriteSize.getX(), 0), position);
+        start.setX(Math.min(start.getX(), position.getX())); start.setY(Math.min(start.getY(), position.getY()));
+        end.setX(Math.max(end.getX(), position.getX())); end.setY(Math.max(end.getY(), position.getY()));
+
+        //draw the pixels by passing each sprite pixel x, y through the inverse affine transform
+        for (int y = (int) start.getY(); y < end.getY(); y++) {
+            for (int x = (int) start.getX(); x < end.getX(); x++) {
+                Vector2D newXY = matrixFinalInv.forward(new Vector2D(x, y));
+                int p = sprite.getPixel((int) (newXY.getX() + 0.5f), (int) (newXY.getY() + 0.5f));
+                if(p != 0xffff00ff) {
+                    if (debug) {
+                        setPixelDebug(x, y, p);
+                    } else {
+                        setPixel(x, y, p);
                     }
                 }
             }
         }
     }
+
 
     public int index(int x, int y){
         return x + y * width;
