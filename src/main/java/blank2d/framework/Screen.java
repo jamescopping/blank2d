@@ -313,7 +313,7 @@ public class Screen {
         for (int y = (int) start.getY(); y < end.getY(); y++) {
             for (int x = (int) start.getX(); x < end.getX(); x++) {
                 Vector2D newXY = matrixFinalInv.forward(new Vector2D(x, y));
-                int p = sprite.getPixel((int) (newXY.getX() + 0.5f), (int) (newXY.getY() + 0.5f));
+                int p = sprite.getPixel((int) newXY.getX(), (int)newXY.getY());
                 if(p != 0xffff00ff) {
                     if (debug) {
                         setPixelDebug(x, y, p);
