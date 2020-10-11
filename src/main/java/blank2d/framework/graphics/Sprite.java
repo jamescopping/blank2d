@@ -4,6 +4,7 @@ import blank2d.framework.Screen;
 import blank2d.framework.asset.AssetPath;
 import blank2d.framework.asset.LoadAsset;
 import blank2d.framework.asset.Asset;
+import blank2d.framework.ecs.component.physics2d.Transform;
 import blank2d.util.math.Vector2D;
 
 import java.awt.image.BufferedImage;
@@ -32,8 +33,8 @@ public class Sprite extends Asset {
     }
 
 
-    public void render(Vector2D position){
-        Screen.getInstance().drawSprite(this, position);
+    public void render(Transform transform){
+        Screen.getInstance().drawSprite(this, transform);
     }
 
     public Sprite getSubImage(int xOffset, int yOffset, int w, int h){
@@ -64,6 +65,11 @@ public class Sprite extends Asset {
 
     public int[] getPixels() {
         return pixels;
+    }
+
+    public int getPixel(int x, int y) {
+        if(x < 0 || x >= width || y < 0 || y >= height) return 0xffff00ff;
+        return pixels[x + y * width];
     }
 
     public int getWidth() {

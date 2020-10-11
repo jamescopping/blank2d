@@ -21,7 +21,6 @@ public class RendererSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity) {
         SpriteRenderer spriteRenderer = entity.getComponent(SpriteRenderer.class);
-        Transform transform = entity.getComponent(Transform.class);
-        spriteRenderer.render(transform.position);
+        spriteRenderer.render(entity.getComponent(Transform.class));
     }
 }
