@@ -1,7 +1,8 @@
 package blank2d.framework.ecs.component.physics2d.collider;
 
 import blank2d.framework.ecs.component.physics2d.Transform;
-import blank2d.framework.Screen;
+import blank2d.framework.screen.Screen;
+import blank2d.framework.screen.ScreenLayer;
 import blank2d.util.math.Rect;
 import blank2d.util.math.Vector2D;
 
@@ -21,6 +22,6 @@ public class BoxCollider extends Collider{
 
     @Override
     public void render() {
-        Screen.getInstance().drawDebugRect(box, Vector2D.add(offset, getComponent(Transform.class).position), Color.red);
+        Screen.getInstance().drawRect(box, Vector2D.add(offset, getComponent(Transform.class).position), Color.red, ScreenLayer.Debug);
     }
 }

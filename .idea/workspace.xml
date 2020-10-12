@@ -28,14 +28,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="69708ced-b8e7-4bbf-9c84-2385ce266519" name="Default Changelist" comment="pom update">
+      <change afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/screen/ScreenLayer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/Screen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/RigidBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/RigidBody.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/screen/Screen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/collider/BoxCollider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/physics2d/collider/BoxCollider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/script/EntityScript.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/component/script/EntityScript.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/CameraSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/CameraSystem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/ColliderSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/ColliderSystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/util/math/Matrix.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/util/math/Matrix.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/util/math/Matrix3x3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/util/math/Matrix3x3.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/util/math/Ray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/util/math/Ray.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/util/math/Vector2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/util/math/Vector2D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/RendererSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/ecs/system/RendererSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/Sprite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/graphics/Sprite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blank2d/framework/input/InputManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blank2d/framework/input/InputManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +50,7 @@
       <list>
         <option value="JUnit5 Test Class" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -302,7 +306,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602445779633</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="big optimization to Vector2D class, a lot less object instances being created and destroyed every fixed update with the likes of Ray and Collisions">
+      <created>1602500388952</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1602500388952</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -340,7 +351,8 @@
     <MESSAGE value="assetpath bug fix" />
     <MESSAGE value="maven resources deploy bug fix" />
     <MESSAGE value="sprite affine transformations with matrix multiplication and inversion" />
-    <option name="LAST_COMMIT_MESSAGE" value="sprite affine transformations with matrix multiplication and inversion" />
+    <MESSAGE value="big optimization to Vector2D class, a lot less object instances being created and destroyed every fixed update with the likes of Ray and Collisions" />
+    <option name="LAST_COMMIT_MESSAGE" value="big optimization to Vector2D class, a lot less object instances being created and destroyed every fixed update with the likes of Ray and Collisions" />
   </component>
   <component name="WindowStateProjectService">
     <state x="2360" y="94" key="#Project_Structure" timestamp="1602346057570">
@@ -390,25 +402,25 @@
     </state>
     <state x="740" y="274" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602242778523" />
     <state x="2660" y="274" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1602344579026" />
-    <state width="1877" height="180" key="GridCell.Tab.0.bottom" timestamp="1602446772588">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1877" height="348" key="GridCell.Tab.0.bottom" timestamp="1602515605183">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602444007387" />
+    <state width="1877" height="348" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602515605183" />
     <state width="1877" height="180" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1602446772588" />
-    <state width="1877" height="180" key="GridCell.Tab.0.center" timestamp="1602446772588">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1877" height="348" key="GridCell.Tab.0.center" timestamp="1602515605183">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602444007387" />
+    <state width="1877" height="348" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602515605183" />
     <state width="1877" height="180" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1602446772588" />
-    <state width="1877" height="180" key="GridCell.Tab.0.left" timestamp="1602446772588">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1877" height="348" key="GridCell.Tab.0.left" timestamp="1602515605183">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602444007387" />
+    <state width="1877" height="348" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602515605183" />
     <state width="1877" height="180" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1602446772588" />
-    <state width="1877" height="180" key="GridCell.Tab.0.right" timestamp="1602446772588">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1877" height="348" key="GridCell.Tab.0.right" timestamp="1602515605183">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602444007387" />
+    <state width="1877" height="348" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602515605183" />
     <state width="1877" height="180" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1602446772588" />
     <state x="490" y="174" key="Maven.ArtifactSearchDialog" timestamp="1601573561979">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -422,23 +434,27 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="164" key="SettingsEditor/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601584746874" />
-    <state x="2472" y="252" key="Vcs.Push.Dialog.v2" timestamp="1602445798021">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="552" y="252" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602362870854" />
-    <state x="2472" y="252" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1602445798021" />
-    <state x="777" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1601719967203">
+    <state x="92" y="92" width="1736" height="856" key="VCS.FileHistoryDialog" timestamp="1602513808536">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="777" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601719967203" />
+    <state x="92" y="92" width="1736" height="856" key="VCS.FileHistoryDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602513808536" />
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1602500397510">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602500397510" />
+    <state x="2472" y="252" key="Vcs.Push.Dialog.v2/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1602445798021" />
+    <state x="777" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1602500377995">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="777" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602500377995" />
     <state x="724" y="188" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1601583477164">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="724" y="188" key="com.intellij.testIntegration.createTest.CreateTestDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1601583477164" />
-    <state x="1168" y="287" width="585" height="592" key="find.popup" timestamp="1602499949461">
+    <state x="1168" y="287" width="585" height="592" key="find.popup" timestamp="1602510245287">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="1168" y="287" width="585" height="592" key="find.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602499949461" />
+    <state x="1168" y="287" width="585" height="592" key="find.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602510245287" />
     <state x="2587" y="253" width="585" height="534" key="find.popup/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601977396336" />
     <state x="761" y="426" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1601572316672">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -456,10 +472,10 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2675" y="267" key="refactoring.ChangeSignatureDialog/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1601938646392" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1602498940618">
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1602515556026">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602498940618" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1602515556026" />
     <state x="2543" y="225" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1602349577508" />
   </component>
 </project>

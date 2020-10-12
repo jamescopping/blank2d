@@ -2,7 +2,7 @@ package blank2d.framework.ecs.system;
 
 import blank2d.framework.ecs.*;
 import blank2d.framework.ecs.component.rendering.Camera;
-import blank2d.framework.Screen;
+import blank2d.framework.screen.Screen;
 import blank2d.framework.Time;
 import blank2d.util.math.Vector2D;
 

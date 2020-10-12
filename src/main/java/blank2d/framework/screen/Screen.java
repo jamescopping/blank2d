@@ -1,4 +1,4 @@
-package blank2d.framework;
+package blank2d.framework.screen;
 
 import blank2d.Game;
 import blank2d.framework.ecs.component.physics2d.Transform;
@@ -33,9 +33,12 @@ public class Screen {
 
     private int width = 100;
     private int height = 100;
+
     public int[] pixels = new int[width * height];
-    public int[] debugLayerPixels = new int[width * height];
-    public boolean clearScreen = true;
+    private final int[][] layers = new int[5][width * height];
+    private final boolean[] activeLayers = new boolean[5];
+
+    private final static int transparent = 0xffff00ff;
 
     public void init(Game game, int width, int height){
         this.game = game;
@@ -45,35 +48,77 @@ public class Screen {
         this.width = width;
         this.height = height;
         this.pixels = new int[width * height];
-        this.debugLayerPixels = new int[width * height];
-        clear(Color.black);
+        for (int i = 0; i < layers.length; i++) {
+            this.layers[i] = new int[width * height];
+        }
+        activateLayer(ScreenLayer.Default);
+        activateLayer(ScreenLayer.Background);
+        activateLayer(ScreenLayer.Foreground);
+        activateLayer(ScreenLayer.GUI);
+        clearAllLayers();
     }
 
-    public void clear(Color color){
-        int rgb = color.getRGB();
-        Arrays.fill(pixels, rgb);
-        Arrays.fill(debugLayerPixels, 0xffff00ff);
+
+    public void setLayerState(ScreenLayer screenLayer, boolean state){
+        activeLayers[screenLayer.layerIndex()] = state;
+    }
+    public void activateLayer(ScreenLayer screenLayer){
+        activeLayers[screenLayer.layerIndex()] = true;
+    }
+
+    public void deactivateLayer(ScreenLayer screenLayer){
+        activeLayers[screenLayer.layerIndex()] = false;
+    }
+
+    public boolean isLayerActive(ScreenLayer screenLayer){
+        return activeLayers[screenLayer.layerIndex()];
+    }
+
+    public void reduceLayers(){
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                for (int i = 0; i < layers.length; i++) {
+                    if(activeLayers[i]){
+                        int p = layers[i][x + y * width];
+                        if(p != transparent){
+                            pixels[x + y * width] = p;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * clears all screen layers with transparency
+     */
+    public void clearAllLayers(){
+        Arrays.fill(layers[ScreenLayer.Debug.layerIndex()], transparent);
+        Arrays.fill(layers[ScreenLayer.GUI.layerIndex()], transparent);
+        Arrays.fill(layers[ScreenLayer.Foreground.layerIndex()], transparent);
+        Arrays.fill(layers[ScreenLayer.Default.layerIndex()], transparent);
+        Arrays.fill(layers[ScreenLayer.Background.layerIndex()], transparent);
+    }
+
+    public void clearLayer(ScreenLayer screenLayer){
+        Arrays.fill(layers[screenLayer.layerIndex()], transparent);
+    }
+
+    public void fillLayer(ScreenLayer screenLayer, Color color){
+        Arrays.fill(layers[screenLayer.layerIndex()], color.getRGB());
     }
 
     private boolean outOfBounds(int x, int y){
         return (x < 0 || x >= width || y < 0 || y >= height);
     }
 
-    public void drawDebugLayer() {
-        for (int i = 0; i < debugLayerPixels.length; i++) {
-            int color = debugLayerPixels[i];
-            if(color != 0xffff00ff) pixels[i] = color;
-        }
-    }
 
     public void drawLine(Vector2D start, Vector2D end, Color color){
-        drawLine(start, end, color, false);
-    }
-    public void drawDebugLine(Vector2D start, Vector2D end, Color color){
-        drawLine(start, end, color, true);
+        drawLine(start, end, color, ScreenLayer.Default);
     }
 
-    private void drawLine(Vector2D start, Vector2D end, Color color, boolean debug) {
+    public void drawLine(Vector2D start, Vector2D end, Color color, ScreenLayer screenLayer) {
         Vector2D cameraOffset = getCameraOffset();
         int rgb = color.getRGB();
         float dx = (end.x - start.x);
@@ -86,39 +131,29 @@ public class Screen {
         int i = 1;
         step = (float) Math.ceil(step);
         while(i <= step){
-            if(debug){
-                setPixelDebug((int)x, (int)y, rgb);
-            }else{
-                setPixel((int)x, (int)y, rgb);
-            }
+            setLayerPixel(screenLayer, (int)x, (int)y, rgb);
             i++;
             x+=dx;
             y+=dy;
         }
     }
 
-    public void drawVector(Vector2D origin, Vector2D vector2D, Color color){ drawVector(origin, vector2D, color, false); }
-    public void drawDebugVector(Vector2D origin, Vector2D vector2D, Color color){ drawVector(origin, vector2D, color, true); }
-    private void drawVector(Vector2D origin, Vector2D vector2D, Color color, boolean debug){ drawLine(origin, Vector2D.add(origin, vector2D), color, debug); }
+    public void drawVector(Vector2D origin, Vector2D vector2D, Color color){ drawVector(origin, vector2D, color, ScreenLayer.Default); }
+    private void drawVector(Vector2D origin, Vector2D vector2D, Color color, ScreenLayer screenLayer){ drawLine(origin, Vector2D.add(origin, vector2D), color, screenLayer); }
 
     public void drawRay(Ray ray, Color color){
-        drawRay(ray, color, false);
+        drawRay(ray, color, ScreenLayer.Default);
     }
-    public void drawDebugRay(Ray ray, Color color){
-        drawRay(ray, color, true);
-    }
-    private void drawRay(Ray ray, Color color, boolean debug){
-        drawVector(ray.origin, ray.direction, color, debug);
+
+    public void drawRay(Ray ray, Color color, ScreenLayer screenLayer){
+        drawVector(ray.origin, ray.direction, color, screenLayer);
     }
 
     public void drawRect(Rect rect, Vector2D pos, Color color){
-        drawRect(rect, pos, color, false);
-    }
-    public void drawDebugRect(Rect rect, Vector2D pos, Color color){
-        drawRect(rect, pos, color, true);
+        drawRect(rect, pos, color, ScreenLayer.Default);
     }
 
-    private void drawRect(Rect rect, Vector2D pos, Color color, boolean debug){
+    public void drawRect(Rect rect, Vector2D pos, Color color, ScreenLayer screenLayer){
         Vector2D cameraOffset = getCameraOffset();
         int rgb = color.getRGB();
         int rWidth = (int) rect.getSize().getX();
@@ -132,23 +167,16 @@ public class Screen {
             for (int x = 0; x < rWidth; x++) {
                 if(!(x == 0 || x == rWidth-1) && !(y == 0 || y == rHeight-1)) continue;
                 xp = (int) (x + rOffsetX - cameraOffset.getX());
-                if(debug){
-                    setPixelDebug(xp, yp, rgb);
-                }else{
-                    setPixel(xp, yp, rgb);
-                }
+                setLayerPixel(screenLayer, xp, yp, rgb);
             }
         }
     }
 
     public void drawRectFilled(Rect rect, Vector2D pos, Color color){
-        drawRectFilled(rect, pos, color, false);
-    }
-    public void drawDebugRectFilled(Rect rect, Vector2D pos, Color color){
-        drawRectFilled(rect, pos, color, true);
+        drawRectFilled(rect, pos, color, ScreenLayer.Default);
     }
 
-    private void drawRectFilled(Rect rect, Vector2D pos, Color color, boolean debug){
+    public void drawRectFilled(Rect rect, Vector2D pos, Color color, ScreenLayer screenLayer){
         Vector2D cameraOffset = getCameraOffset();
         int rgb = color.getRGB();
         int rWidth = (int) rect.getSize().getX();
@@ -161,23 +189,16 @@ public class Screen {
             yp = (int) (y + rOffsetY - cameraOffset.getY());
             for (int x = 0; x < rWidth; x++) {
                 xp = (int) (x + rOffsetX - cameraOffset.getX());
-                if(debug){
-                    setPixelDebug(xp, yp, rgb);
-                }else{
-                    setPixel(xp, yp, rgb);
-                }
+                setLayerPixel(screenLayer, xp, yp, rgb);
             }
         }
     }
 
     public void drawCircle(Circle circle, Color color){
-        drawCircle(circle, color, false);
-    }
-    public void drawDebugCircle(Circle circle, Color color){
-        drawCircle(circle, color, true);
+        drawCircle(circle, color, ScreenLayer.Default);
     }
 
-    private void drawCircle(Circle circle, Color color, boolean debug){
+    public void drawCircle(Circle circle, Color color, ScreenLayer screenLayer){
         Vector2D cameraOffset = getCameraOffset();
         int rgb = color.getRGB();
         int d = (5 - ((int)circle.radius) * 4)/4;
@@ -186,25 +207,14 @@ public class Screen {
         int centerX = (int) (circle.position.x - cameraOffset.getX());
         int centerY = (int) (circle.position.y - cameraOffset.getY());
         do {
-            if(debug) {
-                setPixelDebug(centerX + x, centerY + y, rgb);
-                setPixelDebug(centerX + x, centerY - y, rgb);
-                setPixelDebug(centerX - x, centerY + y, rgb);
-                setPixelDebug(centerX - x, centerY - y, rgb);
-                setPixelDebug(centerX + y, centerY + x, rgb);
-                setPixelDebug(centerX + y, centerY - x, rgb);
-                setPixelDebug(centerX - y, centerY + x, rgb);
-                setPixelDebug(centerX - y, centerY - x, rgb);
-            } else{
-                setPixel(centerX + x, centerY + y, rgb);
-                setPixel(centerX + x, centerY - y, rgb);
-                setPixel(centerX - x, centerY + y, rgb);
-                setPixel(centerX - x, centerY - y, rgb);
-                setPixel(centerX + y, centerY + x, rgb);
-                setPixel(centerX + y, centerY - x, rgb);
-                setPixel(centerX - y, centerY + x, rgb);
-                setPixel(centerX - y, centerY - x, rgb);
-            }
+            setLayerPixel(screenLayer, centerX + x, centerY + y, rgb);
+            setLayerPixel(screenLayer, centerX + x, centerY - y, rgb);
+            setLayerPixel(screenLayer, centerX - x, centerY + y, rgb);
+            setLayerPixel(screenLayer, centerX - x, centerY - y, rgb);
+            setLayerPixel(screenLayer, centerX + y, centerY + x, rgb);
+            setLayerPixel(screenLayer, centerX + y, centerY - x, rgb);
+            setLayerPixel(screenLayer, centerX - y, centerY + x, rgb);
+            setLayerPixel(screenLayer, centerX - y, centerY - x, rgb);
             if (d < 0) {
                 d += 2 * x + 1;
             } else {
@@ -216,13 +226,10 @@ public class Screen {
     }
 
     public void drawCircleFilled(Circle circle, Color color){
-        drawCircleFilled(circle, color, false);
-    }
-    public void drawDebugCircleFilled(Circle circle, Color color){
-        drawCircleFilled(circle, color, true);
+        drawCircleFilled(circle, color, ScreenLayer.Default);
     }
 
-    private void drawCircleFilled(Circle circle, Color color, boolean debug){
+    public void drawCircleFilled(Circle circle, Color color, ScreenLayer screenLayer){
         Vector2D cameraOffset = getCameraOffset();
         int rgb = color.getRGB();
         int x = (int) circle.radius;
@@ -232,34 +239,20 @@ public class Screen {
         int radiusError = 0;
         int x0 = (int) (circle.position.x - cameraOffset.getX());
         int y0 = (int) (circle.position.y - cameraOffset.getY());
-        while (x >= y)
-        {
-            for (int i = x0 - x; i <= x0 + x; i++)
-            {
-                if(debug) {
-                    setPixelDebug(i, y0 + y, rgb);
-                    setPixelDebug(i, y0 - y, rgb);
-                }else {
-                    setPixel(i, y0 + y, rgb);
-                    setPixel(i, y0 - y, rgb);
-                }
+        while (x >= y) {
+            for (int i = x0 - x; i <= x0 + x; i++){
+                setLayerPixel(screenLayer, i, y0 + y, rgb);
+                setLayerPixel(screenLayer, i, y0 - y, rgb);
             }
-            for (int i = x0 - y; i <= x0 + y; i++)
-            {
-                if(debug) {
-                    setPixelDebug(i, y0 + x, rgb);
-                    setPixelDebug(i, y0 - x, rgb);
-                }else {
-                    setPixel(i, y0 + x, rgb);
-                    setPixel(i, y0 - x, rgb);
-                }
-            }
+            for (int i = x0 - y; i <= x0 + y; i++){
+                setLayerPixel(screenLayer, i, y0 + x, rgb);
+                setLayerPixel(screenLayer, i, y0 - x, rgb);
 
+            }
             y++;
             radiusError += yChange;
             yChange += 2;
-            if (((radiusError << 1) + xChange) > 0)
-            {
+            if (((radiusError << 1) + xChange) > 0){
                 x--;
                 radiusError += xChange;
                 xChange += 2;
@@ -267,11 +260,9 @@ public class Screen {
         }
     }
 
+    public void drawSprite(Sprite sprite, Transform transform){ drawSprite(sprite, transform, ScreenLayer.Default); }
 
-    public void drawDebugSprite(Sprite sprite, Transform transform){ drawSprite(sprite, transform, true); }
-    public void drawSprite(Sprite sprite, Transform transform){ drawSprite(sprite, transform, false); }
-
-    private void drawSprite(Sprite sprite, Transform transform, boolean debug) {
+    public void drawSprite(Sprite sprite, Transform transform, ScreenLayer screenLayer) {
 
         Vector2D spriteSize = new Vector2D(sprite.getWidth(), sprite.getHeight());
 
@@ -314,13 +305,7 @@ public class Screen {
             for (int x = (int) start.getX(); x < end.getX(); x++) {
                 Vector2D newXY = matrixFinalInv.forward(new Vector2D(x, y));
                 int p = sprite.getPixel((int) newXY.getX(), (int)newXY.getY());
-                if(p != 0xffff00ff) {
-                    if (debug) {
-                        setPixelDebug(x, y, p);
-                    } else {
-                        setPixel(x, y, p);
-                    }
-                }
+                setLayerPixel(screenLayer, x, y, p);
             }
         }
     }
@@ -330,14 +315,12 @@ public class Screen {
         return x + y * width;
     }
 
-    public void setPixel(int x, int y, int rgb){
+    public void setLayerPixel(ScreenLayer screenLayer, int x, int y, int rgb){
+        if(rgb == transparent) return;
         if(outOfBounds(x, y)) return;
-        pixels[index(x, y)] = rgb;
+        layers[screenLayer.layerIndex()][index(x, y)] = rgb;
     }
-    public void setPixelDebug(int x, int y, int rgb){
-        if(outOfBounds(x, y)) return;
-        debugLayerPixels[index(x, y)] = rgb;
-    }
+
 
     public int getWidth() {
         return width;
@@ -345,14 +328,6 @@ public class Screen {
     public int getHeight() {
         return height;
     }
-    public int[] getPixels() {
-        return pixels;
-    }
-
-    public void setClearScreen(boolean clear){
-        this.clearScreen = clear;
-    }
-
 
     public Vector2D getCameraOffset(){
         return Vector2D.subtract(getCameraPosition(), Vector2D.divide(getCameraSize(), 2));
@@ -387,9 +362,10 @@ public class Screen {
         this.width = (int) newSize.getX();
         this.height = (int) newSize.getY();
         this.pixels = new int[width * height];
-        this.debugLayerPixels = new int[width * height];
+        for (int i = 0; i < layers.length; i++) {
+            this.layers[i] = new int[width * height];
+        }
         game.setBufferedImageSize(width, height);
-        System.gc();
     }
 
     public int maxPixelResolution(){

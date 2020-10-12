@@ -30,10 +30,11 @@ public class ColliderSystem extends IteratingSystem {
     }
 
     @Override
-    public void update() {
-
+    protected void processEntity(Entity entity) {
+        if(colliderDebug) {
+            entity.getComponent(Collider.class).render();
+        }
     }
-
 
     /**
      * Returns a list of collider in the order they need to be resolved
@@ -90,12 +91,4 @@ public class ColliderSystem extends IteratingSystem {
         }
     }
 
-
-    public void render(){
-        if(colliderDebug) {
-            for (Entity e : getEntityList()) {
-                e.getComponent(Collider.class).render();
-            }
-        }
-    }
 }
