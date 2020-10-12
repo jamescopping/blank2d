@@ -15,8 +15,13 @@ public class RigidBody extends Component {
 
     private Collider collider;
 
+
+
     private final Vector2D linearVelocity = new Vector2D(); //x and y m/s
     private final Vector2D force = new Vector2D();
+    private final Vector2D acceleration = new Vector2D();
+
+    private final Ray collisionRay = new Ray();
 
     private float mass = 1.0f;
     private boolean kinematic = false;
@@ -29,10 +34,12 @@ public class RigidBody extends Component {
     }
 
     public RigidBody(boolean kinematic){
-        setKinematic(kinematic);
+        this(1.0f, kinematic);
     }
 
-    public RigidBody(){}
+    public RigidBody(){
+        this(1.0f, false);
+    }
 
     @Override
     protected void activate() {
@@ -43,17 +50,20 @@ public class RigidBody extends Component {
     public void fixedUpdate(){
         physicsUpdating = true;
         double dt = Time.nanoToSeconds(getEngine().getGame().getTimeBetweenFixedUpdates());
-        Vector2D acceleration = new Vector2D();
-        if(force.getMagnitude() > 0 && !isKinematic()) { acceleration.setXY(Vector2D.multiply(Vector2D.divide(force, mass), (float) dt)); }
+        acceleration.setXY(0,0);
+        if(force.getMagnitude() > 0 && !isKinematic()) { Vector2D.multiply(acceleration, Vector2D.divide(force, mass), (float) dt); }
         if(isGravitySimulated()) acceleration.add(Vector2D.multiply(PhysicsSystem.gravity, (float) dt));
         linearVelocity.add(acceleration);
 
         if (linearVelocity.getMagnitude() > 0.0f) {
             //reference variables used as callbacks on the detectCollision function
             //used to resolve the collision between another rigidbody
+            Vector2D targetPos =  new Vector2D();
             Vector2D contactPoint = new Vector2D();
             Vector2D contactNormal = new Vector2D();
             Node<Float> contactTime = new Node<>();
+
+            Vector2D resolveVector = new Vector2D();
 
             ColliderSystem colliderSystem = getSystem(ColliderSystem.class);
 
@@ -61,14 +71,14 @@ public class RigidBody extends Component {
             for (Collider collider : colliderSystem.getOrderedListOfColliders(this)) {
                 //check for collision between the target rect and the this collider's rect
                 if (collider.getEntity().hasComponent(RigidBody.class)) {
-                    Vector2D targetPos = Vector2D.add(collider.getOffset(), collider.getEntity().getComponent(Transform.class).position);
+                    Vector2D.add(targetPos, collider.getOffset(), collider.getEntity().getComponent(Transform.class).position);
                     if (detectCollision(collider.getBox(), targetPos, contactPoint, contactNormal, contactTime) && contactTime.getData() >= 0.0f) {
                         //if the target collider rect has a rigidbody instance associated with that entity the resolve the collision
                         //finding the finding the correct velocity vector to add to the current linear velocity
                         //inorder that the this collider is no longer colliding with the target in the space
-                        Vector2D resolveVector = new Vector2D(Math.abs(linearVelocity.x), Math.abs(linearVelocity.y));
-                        resolveVector = Vector2D.multiply(resolveVector, 1.0f - contactTime.getData());
-                        resolveVector = Vector2D.multiply(resolveVector, contactNormal);
+                        resolveVector.setXY(Math.abs(linearVelocity.x), Math.abs(linearVelocity.y));
+                        resolveVector.multiply( 1.0f - contactTime.getData());
+                        resolveVector.multiply(contactNormal);
                         linearVelocity.add(resolveVector);
                     }
                 }
@@ -79,11 +89,10 @@ public class RigidBody extends Component {
 
 
     public boolean detectCollision(Rect target, Vector2D targetPos, Vector2D contactPoint, Vector2D contactNormal, Node<Float> contactTime){
-        Rect in = getCollider().getBox();
-        Vector2D inPos = Vector2D.add(getCollider().getOffset(), getComponent(Transform.class).position);
-        Rect expandedTarget = new Rect(Vector2D.add(target.getSize(), in.getSize()));
-        Ray ray = new Ray(inPos, linearVelocity);
-        if(ray.rayCastTargetRect(expandedTarget, targetPos, contactPoint, contactNormal, contactTime)){
+        Rect expandedTarget = new Rect(Vector2D.add(target.getSize(), collider.getBox().getSize()));
+        Vector2D.add(collisionRay.getOrigin(), collider.getOffset(), getComponent(Transform.class).position);
+        collisionRay.getDirection().setXY(linearVelocity);
+        if(collisionRay.rayCastTargetRect(expandedTarget, targetPos, contactPoint, contactNormal, contactTime)){
             return contactTime.getData() < 1.0f;
         }
         return false;

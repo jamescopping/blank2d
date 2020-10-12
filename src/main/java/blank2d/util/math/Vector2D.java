@@ -99,31 +99,71 @@ public class Vector2D {
     }
 
     public static Vector2D add(Vector2D vectorA, Vector2D vectorB ){
-        return new Vector2D(vectorA.x + vectorB.x, vectorA.y + vectorB.y);
+        return add(null, vectorA, vectorB);
+    }
+
+    public static Vector2D add(Vector2D result, Vector2D vectorA, Vector2D vectorB ){
+        if(result == null) result = new Vector2D();
+        result.setXY(vectorA.x + vectorB.x, vectorA.y + vectorB.y);
+        return result;
     }
 
     public static Vector2D subtract(Vector2D vectorA, Vector2D vectorB ){
-        return new Vector2D(vectorA.x - vectorB.x, vectorA.y - vectorB.y);
+        return subtract(null, vectorA, vectorB);
+    }
+
+    public static Vector2D subtract( Vector2D result, Vector2D vectorA, Vector2D vectorB ){
+        if(result == null) result = new Vector2D();
+        result.setXY(vectorA.x - vectorB.x, vectorA.y - vectorB.y);
+        return result;
     }
 
     public static Vector2D multiply(Vector2D vectorA, float scalar){
-        return new Vector2D(vectorA.x * scalar, vectorA.y * scalar);
+        return multiply(null, vectorA, scalar);
+    }
+
+    public static Vector2D multiply(Vector2D result, Vector2D vectorA, float scalar){
+        if(result == null) result = new Vector2D();
+        result.setXY(vectorA.x * scalar, vectorA.y * scalar);
+        return result;
     }
 
     public static Vector2D multiply(Vector2D vectorA, Vector2D vectorB){
-        return new Vector2D(vectorA.x * vectorB.x, vectorA.y * vectorB.y);
+        return multiply(null, vectorA, vectorB);
+    }
+
+    public static Vector2D multiply(Vector2D result, Vector2D vectorA, Vector2D vectorB){
+        if(result == null) result = new Vector2D();
+        result.setXY(vectorA.x * vectorB.x, vectorA.y * vectorB.y);
+        return result;
     }
 
     public static Vector2D divide(Vector2D vectorA, float scalar){
-        return new Vector2D(vectorA.x / scalar, vectorA.y / scalar);
+        return divide(null, vectorA, scalar);
+    }
+
+    public static Vector2D divide(Vector2D result, Vector2D vectorA, float scalar){
+        if(result == null) result = new Vector2D();
+        result.setXY(vectorA.x / scalar, vectorA.y / scalar);
+        return result;
     }
 
     public static Vector2D divide(Vector2D vectorA, Vector2D vectorB){
-        return new Vector2D(vectorA.x / vectorB.x, vectorA.y / vectorB.y);
+        return divide(null, vectorA, vectorB);
+    }
+
+    public static Vector2D divide(Vector2D result, Vector2D vectorA, Vector2D vectorB){
+        if(result == null) result = new Vector2D();
+        result.setXY(vectorA.x / vectorB.x, vectorA.y / vectorB.y);
+        return result;
     }
 
     public static Vector2D negate(Vector2D vector){
         return Vector2D.multiply(vector, -1.0f);
+    }
+
+    public static Vector2D negate(Vector2D result, Vector2D vector){
+        return Vector2D.multiply(result , vector, -1.0f);
     }
 
     public static float angle(Vector2D vector){
@@ -131,9 +171,14 @@ public class Vector2D {
     }
 
     public static Vector2D direction(float angleRad){
-        Vector2D dirVector = new Vector2D((float)Math.cos(angleRad), (float)Math.sin(angleRad));
-        dirVector.setY(dirVector.getY()*-1);
-        return dirVector;
+        return direction(null, angleRad);
+    }
+
+    public static Vector2D direction(Vector2D result, float angleRad){
+        if(result == null) result = new Vector2D();
+        result.setXY((float)Math.cos(angleRad), (float)Math.sin(angleRad));
+        result.setY(result.getY()*-1);
+        return result;
     }
 
     /**

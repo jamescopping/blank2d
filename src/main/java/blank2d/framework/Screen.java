@@ -23,6 +23,14 @@ public class Screen {
     private Vector2D cameraSize;
     private float cameraZoomFactor;
 
+    private final Matrix3x3 matrixFinal = new Matrix3x3();
+    private final Matrix3x3 matrixFinalInv = new Matrix3x3();
+    private final Matrix3x3 matrixA = new Matrix3x3();
+    private final Matrix3x3 matrixB = new Matrix3x3();
+    private final Matrix3x3 translateMatrix = new Matrix3x3();
+    private final Matrix3x3 scaleMatrix = new Matrix3x3();
+    private final Matrix3x3 rotationMatrix = new Matrix3x3();
+
     private int width = 100;
     private int height = 100;
     public int[] pixels = new int[width * height];
@@ -264,14 +272,6 @@ public class Screen {
     public void drawSprite(Sprite sprite, Transform transform){ drawSprite(sprite, transform, false); }
 
     private void drawSprite(Sprite sprite, Transform transform, boolean debug) {
-
-        Matrix3x3 matrixFinal = new Matrix3x3();
-        Matrix3x3 matrixFinalInv = new Matrix3x3();
-        Matrix3x3 matrixA = new Matrix3x3();
-        Matrix3x3 matrixB = new Matrix3x3();
-        Matrix3x3 translateMatrix = new Matrix3x3();
-        Matrix3x3 scaleMatrix = new Matrix3x3();
-        Matrix3x3 rotationMatrix = new Matrix3x3();
 
         Vector2D spriteSize = new Vector2D(sprite.getWidth(), sprite.getHeight());
 

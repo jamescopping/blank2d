@@ -41,21 +41,20 @@ public class Matrix3x3 extends Matrix {
 
     public static Matrix3x3 invert(Matrix3x3 matrixIn, Matrix3x3 matrixOut){
         if(matrixOut == null) matrixOut = new Matrix3x3();
-        float det = matrixIn.get(0,0) * (matrixIn.get(1,1) * matrixIn.get(2, 2)  - matrixIn.get(1, 2) * matrixIn.get(2, 1)) -
-                    matrixIn.get(1,0) * (matrixIn.get(0,1) * matrixIn.get(2, 2)  - matrixIn.get(2, 1) * matrixIn.get(0, 2)) +
-                    matrixIn.get(2,0) * (matrixIn.get(0,1) * matrixIn.get(1, 2)  - matrixIn.get(1, 1) * matrixIn.get(0, 2));
+        float det = matrixIn.matrix[0][0] * (matrixIn.matrix[1][1] * matrixIn.matrix[2][2] - matrixIn.matrix[1][2] * matrixIn.matrix[2][1]) -
+                    matrixIn.matrix[1][0] * (matrixIn.matrix[0][1] * matrixIn.matrix[2][2] - matrixIn.matrix[2][1] * matrixIn.matrix[0][2]) +
+                    matrixIn.matrix[2][0] * (matrixIn.matrix[0][1] * matrixIn.matrix[1][2] - matrixIn.matrix[1][1] * matrixIn.matrix[0][2]);
 
         float idet = 1.0f/det;
-        matrixOut.set( (matrixIn.get(1, 1) * matrixIn.get(2, 2) - matrixIn.get(1, 2) * matrixIn.get(2, 1)) * idet, 0,0 );
-        matrixOut.set( (matrixIn.get(2, 0) * matrixIn.get(1, 2) - matrixIn.get(1, 0) * matrixIn.get(2, 2)) * idet, 1,0 );
-        matrixOut.set( (matrixIn.get(1, 0) * matrixIn.get(2, 1) - matrixIn.get(2, 0) * matrixIn.get(1, 1)) * idet, 2,0 );
-        matrixOut.set( (matrixIn.get(2, 1) * matrixIn.get(0, 2) - matrixIn.get(0, 1) * matrixIn.get(2, 2)) * idet, 0,1 );
-        matrixOut.set( (matrixIn.get(0, 0) * matrixIn.get(2, 2) - matrixIn.get(2, 0) * matrixIn.get(0, 2)) * idet, 1,1 );
-        matrixOut.set( (matrixIn.get(0, 1) * matrixIn.get(2, 0) - matrixIn.get(0, 0) * matrixIn.get(2, 1)) * idet, 2,1 );
-        matrixOut.set( (matrixIn.get(0, 1) * matrixIn.get(1, 2) - matrixIn.get(0, 2) * matrixIn.get(1, 1)) * idet, 0,2 );
-        matrixOut.set( (matrixIn.get(0, 2) * matrixIn.get(1, 0) - matrixIn.get(0, 0) * matrixIn.get(1, 2)) * idet, 1,2 );
-        matrixOut.set( (matrixIn.get(0, 0) * matrixIn.get(1, 1) - matrixIn.get(0, 1) * matrixIn.get(1, 0)) * idet, 2,2 );
-
+        matrixOut.matrix[0][0] = (matrixIn.matrix[1][1] * matrixIn.matrix[2][2] - matrixIn.matrix[1][2] * matrixIn.matrix[2][1]) * idet;
+        matrixOut.matrix[1][0] = (matrixIn.matrix[2][0] * matrixIn.matrix[1][2] - matrixIn.matrix[1][0] * matrixIn.matrix[2][2]) * idet;
+        matrixOut.matrix[2][0] = (matrixIn.matrix[1][0] * matrixIn.matrix[2][1] - matrixIn.matrix[2][0] * matrixIn.matrix[1][1]) * idet;
+        matrixOut.matrix[0][1] = (matrixIn.matrix[2][1] * matrixIn.matrix[0][2] - matrixIn.matrix[0][1] * matrixIn.matrix[2][2]) * idet;
+        matrixOut.matrix[1][1] = (matrixIn.matrix[0][0] * matrixIn.matrix[2][2] - matrixIn.matrix[2][0] * matrixIn.matrix[0][2]) * idet;
+        matrixOut.matrix[2][1] = (matrixIn.matrix[0][1] * matrixIn.matrix[2][0] - matrixIn.matrix[0][0] * matrixIn.matrix[2][1]) * idet;
+        matrixOut.matrix[0][2] = (matrixIn.matrix[0][1] * matrixIn.matrix[1][2] - matrixIn.matrix[0][2] * matrixIn.matrix[1][1]) * idet;
+        matrixOut.matrix[1][2] = (matrixIn.matrix[0][2] * matrixIn.matrix[1][0] - matrixIn.matrix[0][0] * matrixIn.matrix[1][2]) * idet;
+        matrixOut.matrix[2][2] = (matrixIn.matrix[0][0] * matrixIn.matrix[1][1] - matrixIn.matrix[0][1] * matrixIn.matrix[1][0]) * idet;
         return matrixOut;
     }
 }

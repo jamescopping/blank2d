@@ -43,6 +43,7 @@ public class ColliderSystem extends IteratingSystem {
     public List<Collider> getOrderedListOfColliders(RigidBody rb){
         List<Pair<Collider, Float>> unorderedColliderList = new ArrayList<>();
 
+        Vector2D targetPos = new Vector2D();
         Vector2D contactPoint = new Vector2D();
         Vector2D contactNormal = new Vector2D();
         Node<Float> contactTime = new Node<>();
@@ -52,7 +53,7 @@ public class ColliderSystem extends IteratingSystem {
             Collider rbCollider = rb.getCollider();
             //don't check against self
             if (rbCollider.equals(collider)) continue;
-            Vector2D targetPos = Vector2D.add(collider.getOffset(), collider.getEntity().getComponent(Transform.class).position);
+            Vector2D.add(targetPos, collider.getOffset(), collider.getEntity().getComponent(Transform.class).position);
             if (rb.detectCollision(collider.getBox(), targetPos, contactPoint, contactNormal, contactTime)) {
                 unorderedColliderList.add(new Pair<>(collider, contactTime.getData()));
                 if (collider.isTrigger() && !collider.isCurrentlyCollidingWith(rbCollider))

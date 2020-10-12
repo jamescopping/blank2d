@@ -2,9 +2,9 @@ package blank2d.util.math;
 
 public class Matrix {
 
-    Float[][] matrix;
-    final int columns;
-    final int rows;
+    protected Float[][] matrix;
+    protected final int columns;
+    protected final int rows;
 
     public Matrix(int columns, int rows){
         this.columns = columns;

@@ -6,24 +6,30 @@ import java.util.Objects;
 
 public class Ray{
 
-    public final Vector2D origin;
-    public final Vector2D direction;
+    public Vector2D origin = new Vector2D();
+    public Vector2D direction = new Vector2D();
+
+    Vector2D targetPosition = new Vector2D();
+    Vector2D tNear = new Vector2D();
+    Vector2D tFar = new Vector2D();
 
     public Ray(Vector2D origin, float angleRad){
-        this.origin = new Vector2D(origin);
-        this.direction = Vector2D.direction(angleRad);
+        this.origin.setXY(origin);
+        Vector2D.direction(direction, angleRad);
     }
 
     public Ray(Vector2D origin, Vector2D direction){
-        this.origin = new Vector2D(origin);
-        this.direction =  new Vector2D(direction);
+        this.origin.setXY(origin);
+        this.direction.setXY(direction);
     }
 
-    public boolean rayCastTargetRect(Rect target, Vector2D targetPos, Vector2D contactPoint, Vector2D contactNormal, Node<Float> tHitNear){
-        Vector2D targetPosition = new Vector2D(targetPos);
-        targetPosition.subtract(Vector2D.divide(target.getSize(), 2));
-        Vector2D tNear = Vector2D.divide(Vector2D.subtract(targetPosition, origin), direction);
-        Vector2D tFar = Vector2D.divide(Vector2D.subtract(Vector2D.add(targetPosition, target.size), origin), direction);
+    public Ray(){ }
+
+    public boolean rayCastTargetRect(Rect target, Vector2D targetPosIn, Vector2D contactPoint, Vector2D contactNormal, Node<Float> tHitNear){
+        targetPosition.setXY(targetPosIn);
+        targetPosition.subtract(Vector2D.divide(target.size, 2));
+        Vector2D.divide(tNear, Vector2D.subtract(targetPosition, origin), direction);
+        Vector2D.divide(tFar, Vector2D.subtract(Vector2D.add(targetPosition, target.size), origin), direction);
 
         if (Float.isNaN(tFar.y) || Float.isNaN(tFar.x)) return false;
         if (Float.isNaN(tNear.y) || Float.isNaN(tNear.x)) return false;
@@ -49,7 +55,7 @@ public class Ray{
 
         if(tHitNear.getChild().getData() < 0) return false;
 
-        contactPoint.setXY(Vector2D.add(origin,Vector2D.multiply(direction, tHitNear.getData())));
+        Vector2D.add(contactPoint, origin, Vector2D.multiply(direction, tHitNear.getData()));
 
         if(tNear.x > tNear.y){
             if(direction.x < 0){
