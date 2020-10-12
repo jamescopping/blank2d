@@ -40,6 +40,8 @@ public class Screen {
 
     private final static int transparent = 0xffff00ff;
 
+    private Color defaultBackgroundFill = Color.BLACK;
+
     public void init(Game game, int width, int height){
         this.game = game;
         this.cameraSize = new Vector2D(width, height);
@@ -357,14 +359,20 @@ public class Screen {
         return cameraZoomFactor;
     }
 
+    public void setDefaultBackgroundFill(Color defaultBackgroundFill) {
+        this.defaultBackgroundFill = defaultBackgroundFill;
+    }
+
     public void updatePixelResolution(){
-        Vector2D newSize = getCameraSize();
-        this.width = (int) newSize.getX();
-        this.height = (int) newSize.getY();
+        this.width = (int) getCameraSize().getX();
+        this.height = (int) getCameraSize().getY();
         this.pixels = new int[width * height];
         for (int i = 0; i < layers.length; i++) {
             this.layers[i] = new int[width * height];
         }
+
+        clearAllLayers();
+        fillLayer(ScreenLayer.Background, defaultBackgroundFill);
         game.setBufferedImageSize(width, height);
     }
 

@@ -635,9 +635,9 @@ public final class Engine {
         defaultEngine.addSystem(new ColliderSystem(EntityFamily.colliderEF));
         defaultEngine.addSystem(new ScriptSystem(EntityFamily.entityScriptEF));
         defaultEngine.addSystem(new PhysicsSystem(EntityFamily.rigidBodyEF));
-        defaultEngine.addSystem(new CameraSystem(EntityFamily.cameraEF));
         defaultEngine.addSystem(new AnimationSystem(EntityFamily.animationEF));
         defaultEngine.addSystem(new RendererSystem(EntityFamily.spriteRendererEF));
+        defaultEngine.addSystem(new CameraSystem(EntityFamily.cameraEF));
         defaultEngine.addSystem(new SoundSystem());
 
         return defaultEngine;
