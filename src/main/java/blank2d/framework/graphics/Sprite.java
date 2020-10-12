@@ -1,11 +1,10 @@
 package blank2d.framework.graphics;
 
-import blank2d.framework.Screen;
-import blank2d.framework.asset.AssetPath;
+import blank2d.framework.screen.Screen;
 import blank2d.framework.asset.LoadAsset;
 import blank2d.framework.asset.Asset;
 import blank2d.framework.ecs.component.physics2d.Transform;
-import blank2d.util.math.Vector2D;
+import blank2d.framework.screen.ScreenLayer;
 
 import java.awt.image.BufferedImage;
 import java.util.Arrays;

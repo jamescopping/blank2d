@@ -4,6 +4,7 @@ import blank2d.framework.ecs.Entity;
 import blank2d.framework.ecs.EntityFamily;
 import blank2d.framework.ecs.IteratingSystem;
 import blank2d.framework.ecs.component.physics2d.Transform;
+import blank2d.framework.ecs.component.physics2d.collider.Collider;
 import blank2d.framework.ecs.component.rendering.SpriteRenderer;
 
 public class RendererSystem extends IteratingSystem {
@@ -20,7 +21,6 @@ public class RendererSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity) {
-        SpriteRenderer spriteRenderer = entity.getComponent(SpriteRenderer.class);
-        spriteRenderer.render(entity.getComponent(Transform.class));
+        entity.getComponent(SpriteRenderer.class).render(entity.getComponent(Transform.class));
     }
 }

@@ -4,8 +4,9 @@ import blank2d.framework.asset.AssetPath;
 import blank2d.framework.file.FileSystem;
 import blank2d.framework.gamestate.GameState;
 import blank2d.framework.gamestate.GameStateMachine;
-import blank2d.framework.Screen;
+import blank2d.framework.screen.Screen;
 import blank2d.framework.input.InputManager;
+import blank2d.framework.screen.ScreenLayer;
 import blank2d.util.Queue;
 import blank2d.framework.Time;
 import blank2d.util.math.Vector2D;
@@ -194,13 +195,11 @@ public final class Game extends Canvas implements Runnable {
         }
 
         gameStateMachine.getActiveGameState().render(interpolate);
-        if(isDebugMode()){
-            screen.drawDebugLayer();
-        }
+        screen.reduceLayers();
         System.arraycopy(screen.pixels, 0, pixels, 0, pixels.length);
+        if(debugMode) screen.clearLayer(ScreenLayer.Debug);
         Graphics g = bs.getDrawGraphics();
         g.drawImage(image, 0,0, (int) (getWidth() * getXScale()), (int) (getHeight() * getYScale()), null);
-        if(screen.clearScreen) screen.clear(Color.black);
         g.dispose();
         bs.show();
     }
@@ -291,6 +290,7 @@ public final class Game extends Canvas implements Runnable {
 
     public void setDebugMode(boolean debugMode) {
         this.debugMode = debugMode;
+        screen.setLayerState(ScreenLayer.Debug, debugMode);
     }
 
     private Dimension getScreenDimension() {
