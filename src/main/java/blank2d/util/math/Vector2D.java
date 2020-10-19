@@ -1,5 +1,6 @@
 package blank2d.util.math;
 
+import java.lang.invoke.VolatileCallSite;
 import java.util.Objects;
 
 public class Vector2D {
@@ -68,6 +69,12 @@ public class Vector2D {
         float mag = getMagnitude();
         unitVector.setXY(this.x / mag, this.y / mag);
         return unitVector;
+    }
+
+    public Vector2D getReciprocalVector(){
+        Vector2D reciprocalVector = new Vector2D();
+        reciprocalVector.setXY(1.0f/this.x , 1.0f/this.y);
+        return reciprocalVector;
     }
 
     public void setAngle(float angleRad){

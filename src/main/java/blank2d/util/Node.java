@@ -6,6 +6,11 @@ public class Node<T> {
     private Node<T> child = null;
     private Node<T> parent = null;
 
+    public Node(){}
+    public Node(T data){
+        setData(data);
+    }
+
     public Node<T> getChild() {
         return child;
     }

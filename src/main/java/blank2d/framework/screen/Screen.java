@@ -30,42 +30,92 @@ public class Screen {
     private final Matrix3x3 translateMatrix = new Matrix3x3();
     private final Matrix3x3 scaleMatrix = new Matrix3x3();
     private final Matrix3x3 rotationMatrix = new Matrix3x3();
+    private final Vector2D xyForward = new Vector2D();
 
     private int width = 100;
     private int height = 100;
 
+    private int cameraWidth = 100;
+    private int cameraHeight = 100;
+
     public int[] pixels = new int[width * height];
-    private final int[][] layers = new int[5][width * height];
+    private final int[][] layerArray = new int[5][cameraWidth * cameraHeight];
+    private int[] preScaledPixels = new int[cameraWidth * cameraHeight];
     private final boolean[] activeLayers = new boolean[5];
 
-    private final static int transparent = 0xffff00ff;
+    private final static int fakeTransparent = 0xffff00ff;
+    private final static int transparent = 0x00000000;
 
     private Color defaultBackgroundFill = Color.BLACK;
 
     public void init(Game game, int width, int height){
         this.game = game;
-        this.cameraSize = new Vector2D(width, height);
-        this.cameraPosition = new Vector2D(0,0);
-        this.cameraZoomFactor = 1.0f;
+        setCameraSize(new Vector2D(width, height));
+        setCameraPosition(new Vector2D(0,0));
+        setCameraZoomFactor(1.0f);
         this.width = width;
         this.height = height;
         this.pixels = new int[width * height];
-        for (int i = 0; i < layers.length; i++) {
-            this.layers[i] = new int[width * height];
-        }
+        this.layerArray[0] = new int[width * height];
+        updatePixelResolution();
         activateLayer(ScreenLayer.Default);
         activateLayer(ScreenLayer.Background);
         activateLayer(ScreenLayer.Foreground);
-        activateLayer(ScreenLayer.GUI);
+        activateLayer(ScreenLayer.UI);
         clearAllLayers();
+    }
+
+
+    public void prepareFrame(){
+        reduceLayers();
+        applyCameraScale();
+    }
+
+
+    /**
+     * collapses all the layers in to the final view which is drawn the the graphics object in the render loop of Game
+     * this does not include the UI layer as this is detached from the camera so to speak, therefore is not effected by
+     * camera zoom or offset
+     */
+    private void reduceLayers(){
+        for (int y = 0; y < cameraHeight; y++) {
+            for (int x = 0; x < cameraWidth; x++) {
+                for (int i = 1; i < layerArray.length; i++) {
+                    if(activeLayers[i]){
+                        int p = layerArray[i][x + y * cameraWidth];
+                        if(p != fakeTransparent){
+                            preScaledPixels[x + y * cameraWidth] = p;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void applyCameraScale(){
+        scaleMatrix.scale((float)this.width / (float)this.cameraWidth, (float)this.height / (float)this.cameraHeight);
+        Matrix3x3.invert(scaleMatrix, matrixFinalInv);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                matrixFinalInv.forward(x, y, xyForward);
+                int newX = (int) xyForward.x;
+                int newY = (int) xyForward.y;
+                if(newX >= 0 && newX < cameraWidth && newY >= 0 && newY < cameraHeight) {
+                    pixels[x + y * width] = preScaledPixels[newX + newY * cameraWidth];
+                }
+            }
+        }
     }
 
 
     public void setLayerState(ScreenLayer screenLayer, boolean state){
         activeLayers[screenLayer.layerIndex()] = state;
     }
-    public void activateLayer(ScreenLayer screenLayer){
-        activeLayers[screenLayer.layerIndex()] = true;
+    public void activateLayer(ScreenLayer ...screenLayers){
+        for(ScreenLayer layer: screenLayers){
+            activeLayers[layer.layerIndex()] = true;
+        }
     }
 
     public void deactivateLayer(ScreenLayer screenLayer){
@@ -76,45 +126,61 @@ public class Screen {
         return activeLayers[screenLayer.layerIndex()];
     }
 
-    public void reduceLayers(){
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                for (int i = 0; i < layers.length; i++) {
-                    if(activeLayers[i]){
-                        int p = layers[i][x + y * width];
-                        if(p != transparent){
-                            pixels[x + y * width] = p;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+    public int[] getLayerPixels(ScreenLayer screenLayer){
+        return layerArray[screenLayer.layerIndex()];
     }
+
+    public void setLayerPixel(ScreenLayer screenLayer, int x, int y, int rgb){
+        if(rgb == fakeTransparent) return;
+        if(outOfBounds(screenLayer, x, y)) return;
+        layerArray[screenLayer.layerIndex()][index(screenLayer, x, y)] = rgb;
+    }
+
 
     /**
      * clears all screen layers with transparency
      */
     public void clearAllLayers(){
-        Arrays.fill(layers[ScreenLayer.Debug.layerIndex()], transparent);
-        Arrays.fill(layers[ScreenLayer.GUI.layerIndex()], transparent);
-        Arrays.fill(layers[ScreenLayer.Foreground.layerIndex()], transparent);
-        Arrays.fill(layers[ScreenLayer.Default.layerIndex()], transparent);
-        Arrays.fill(layers[ScreenLayer.Background.layerIndex()], transparent);
+        Arrays.fill(layerArray[ScreenLayer.UI.layerIndex()], transparent);
+        Arrays.fill(layerArray[ScreenLayer.Debug.layerIndex()], fakeTransparent);
+        Arrays.fill(layerArray[ScreenLayer.Foreground.layerIndex()], fakeTransparent);
+        Arrays.fill(layerArray[ScreenLayer.Default.layerIndex()], fakeTransparent);
+        Arrays.fill(layerArray[ScreenLayer.Background.layerIndex()], fakeTransparent);
     }
 
     public void clearLayer(ScreenLayer screenLayer){
-        Arrays.fill(layers[screenLayer.layerIndex()], transparent);
+
+        Arrays.fill(layerArray[screenLayer.layerIndex()], (screenLayer == ScreenLayer.UI)? transparent : fakeTransparent);
     }
 
     public void fillLayer(ScreenLayer screenLayer, Color color){
-        Arrays.fill(layers[screenLayer.layerIndex()], color.getRGB());
+        Arrays.fill(layerArray[screenLayer.layerIndex()], color.getRGB());
     }
 
-    private boolean outOfBounds(int x, int y){
-        return (x < 0 || x >= width || y < 0 || y >= height);
+    private boolean outOfBounds(ScreenLayer screenLayer, int x, int y){
+        if(screenLayer.layerIndex() > 0){
+            return (x < 0 || x >= cameraWidth || y < 0 || y >= cameraHeight);
+        }else{
+            return (x < 0 || x >= width || y < 0 || y >= height);
+        }
+
     }
 
+    public int getWidth() {
+        return width;
+    }
+    public int getHeight() {
+        return height;
+    }
+
+    public int index(ScreenLayer screenLayer, int x, int y){
+        if(screenLayer.layerIndex() > 0){
+            return x + y * cameraWidth;
+        }else{
+            return x + y * width;
+        }
+
+    }
 
     public void drawLine(Vector2D start, Vector2D end, Color color){
         drawLine(start, end, color, ScreenLayer.Default);
@@ -267,16 +333,16 @@ public class Screen {
     public void drawSprite(Sprite sprite, Transform transform, ScreenLayer screenLayer) {
 
         Vector2D spriteSize = new Vector2D(sprite.getWidth(), sprite.getHeight());
-
         Vector2D offset = Vector2D.add(transform.position, Vector2D.negate(getCameraOffset()));
+        Vector2D cameraOffset = Vector2D.negate(Vector2D.divide(Vector2D.multiply(spriteSize, transform.scale), 2.0f));
 
-        translateMatrix.translate(Vector2D.negate(Vector2D.divide(Vector2D.multiply(spriteSize, transform.scale), 2.0f)));
-        scaleMatrix.scale(transform.scale);
+        translateMatrix.translate(cameraOffset.x, cameraOffset.y);
+        scaleMatrix.scale(transform.scale.x, transform.scale.y);
         rotationMatrix.rotate(transform.angle);
 
         Matrix.multiply(matrixA, translateMatrix, scaleMatrix);
         Matrix.multiply(matrixB, rotationMatrix, matrixA);
-        translateMatrix.translate(offset);
+        translateMatrix.translate(offset.x, offset.y);
         Matrix.multiply(matrixFinal, translateMatrix, matrixB);
 
         //get the inverse of the final matrix
@@ -285,51 +351,41 @@ public class Screen {
         //find the bounding box of the rotates scaled sprite
         Vector2D start = new Vector2D();
         Vector2D end = new Vector2D();
-        Vector2D position = new Vector2D();
-        matrixFinal.forward(new Vector2D(), position);
-        start.setXY(position);
-        end.setXY(position);
-
-        matrixFinal.forward(spriteSize, position);
-        start.setX(Math.min(start.getX(), position.getX())); start.setY(Math.min(start.getY(), position.getY()));
-        end.setX(Math.max(end.getX(), position.getX())); end.setY(Math.max(end.getY(), position.getY()));
-
-        matrixFinal.forward(new Vector2D(0, spriteSize.getY()), position);
-        start.setX(Math.min(start.getX(), position.getX())); start.setY(Math.min(start.getY(), position.getY()));
-        end.setX(Math.max(end.getX(), position.getX())); end.setY(Math.max(end.getY(), position.getY()));
-
-        matrixFinal.forward(new Vector2D(spriteSize.getX(), 0), position);
-        start.setX(Math.min(start.getX(), position.getX())); start.setY(Math.min(start.getY(), position.getY()));
-        end.setX(Math.max(end.getX(), position.getX())); end.setY(Math.max(end.getY(), position.getY()));
+        Matrix3x3.findBoundingBox(matrixFinal, spriteSize, start, end);
 
         //draw the pixels by passing each sprite pixel x, y through the inverse affine transform
         for (int y = (int) start.getY(); y < end.getY(); y++) {
             for (int x = (int) start.getX(); x < end.getX(); x++) {
-                Vector2D newXY = matrixFinalInv.forward(new Vector2D(x, y));
-                int p = sprite.getPixel((int) newXY.getX(), (int)newXY.getY());
+                matrixFinalInv.forward(x, y, xyForward);
+                int p = sprite.getPixel((int) xyForward.getX(), (int)xyForward.getY());
                 setLayerPixel(screenLayer, x, y, p);
             }
         }
     }
 
+    public void drawSprite(Sprite sprite, Vector2D position, ScreenLayer screenLayer) {
 
-    public int index(int x, int y){
-        return x + y * width;
+        Vector2D cameraOffset = getCameraOffset();
+        int sWidth = sprite.getWidth();
+        int sHeight = sprite.getHeight();
+        int sHalfWidth = sWidth/2;
+        int sHalfHeight = sHeight/2;
+        int[] sPixels = sprite.getPixels();
+        for (int y = 0; y < sHeight; y++) {
+            int yp = (int) (y + position.getY() - sHalfHeight - cameraOffset.getY());
+            for (int x = 0; x < sWidth; x++) {
+                int xp = (int) (x + position.getX() - sHalfWidth - cameraOffset.getX());
+                setLayerPixel(screenLayer, xp, yp, sPixels[x + y * sWidth]);
+            }
+        }
     }
 
-    public void setLayerPixel(ScreenLayer screenLayer, int x, int y, int rgb){
-        if(rgb == transparent) return;
-        if(outOfBounds(x, y)) return;
-        layers[screenLayer.layerIndex()][index(x, y)] = rgb;
+
+    public void drawText(String text, Transform transform){
+
     }
 
 
-    public int getWidth() {
-        return width;
-    }
-    public int getHeight() {
-        return height;
-    }
 
     public Vector2D getCameraOffset(){
         return Vector2D.subtract(getCameraPosition(), Vector2D.divide(getCameraSize(), 2));
@@ -349,6 +405,8 @@ public class Screen {
 
     public void setCameraSize(Vector2D cameraSize){
         this.cameraSize = cameraSize;
+        this.cameraHeight = (int) cameraSize.getY();
+        this.cameraWidth = (int) cameraSize.getX();
     }
 
     public void setCameraZoomFactor(float cameraZoomFactor) {
@@ -364,16 +422,15 @@ public class Screen {
     }
 
     public void updatePixelResolution(){
-        this.width = (int) getCameraSize().getX();
-        this.height = (int) getCameraSize().getY();
-        this.pixels = new int[width * height];
-        for (int i = 0; i < layers.length; i++) {
-            this.layers[i] = new int[width * height];
+        this.preScaledPixels = new int[cameraWidth * cameraHeight];
+        for (int i = 1; i < layerArray.length; i++) {
+            this.layerArray[i] = new int[cameraWidth * cameraHeight];
         }
 
-        clearAllLayers();
+        clearLayer(ScreenLayer.Default);
+        clearLayer(ScreenLayer.Foreground);
+        clearLayer(ScreenLayer.Debug);
         fillLayer(ScreenLayer.Background, defaultBackgroundFill);
-        game.setBufferedImageSize(width, height);
     }
 
     public int maxPixelResolution(){

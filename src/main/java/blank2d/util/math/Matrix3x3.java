@@ -6,9 +6,9 @@ public class Matrix3x3 extends Matrix {
     }
 
 
-    public void translate(Vector2D offset){
-        matrix[0][0] = 1.0f; matrix[1][0] = 0.0f; matrix[2][0] = offset.getX();
-        matrix[0][1] = 0.0f; matrix[1][1] = 1.0f; matrix[2][1] = offset.getY();
+    public void translate(float x, float y){
+        matrix[0][0] = 1.0f; matrix[1][0] = 0.0f; matrix[2][0] = x;
+        matrix[0][1] = 0.0f; matrix[1][1] = 1.0f; matrix[2][1] = y;
         matrix[0][2] = 0.0f; matrix[1][2] = 0.0f; matrix[2][2] = 1.0f;
     }
 
@@ -18,21 +18,21 @@ public class Matrix3x3 extends Matrix {
         matrix[0][2] = 0.0f;                      matrix[1][2] = 0.0f;                      matrix[2][2] = 1.0f;
     }
 
-    public void scale(Vector2D scale){
-        matrix[0][0] = scale.getX(); matrix[1][0] = 0.0f;         matrix[2][0] = 0.0f;
-        matrix[0][1] = 0.0f;         matrix[1][1] = scale.getY(); matrix[2][1] = 0.0f;
-        matrix[0][2] = 0.0f;         matrix[1][2] = 0.0f;         matrix[2][2] = 1.0f;
+    public void scale(float x, float y){
+        matrix[0][0] = x;    matrix[1][0] = 0.0f; matrix[2][0] = 0.0f;
+        matrix[0][1] = 0.0f; matrix[1][1] = y;    matrix[2][1] = 0.0f;
+        matrix[0][2] = 0.0f; matrix[1][2] = 0.0f; matrix[2][2] = 1.0f;
     }
 
 
-    public Vector2D forward(Vector2D inVector2D){
-        return forward(inVector2D, null);
+    public Vector2D forward(float x, float y){
+        return forward(x, y, null);
     }
 
-    public Vector2D forward(Vector2D inVector2D, Vector2D outVector2D){
+    public Vector2D forward(float x, float y, Vector2D outVector2D){
         if(outVector2D == null) outVector2D = new Vector2D();
-        outVector2D.setX(inVector2D.getX() * matrix[0][0] + inVector2D.getY() * matrix[1][0] + matrix[2][0]);
-        outVector2D.setY(inVector2D.getX() * matrix[0][1] + inVector2D.getY() * matrix[1] [1] + matrix[2][1]);
+        outVector2D.setX(x * matrix[0][0] + y * matrix[1][0] + matrix[2][0]);
+        outVector2D.setY(x * matrix[0][1] + y * matrix[1] [1] + matrix[2][1]);
         return outVector2D;
     }
     public static Matrix3x3 invert(Matrix3x3 matrixIn){
@@ -57,4 +57,34 @@ public class Matrix3x3 extends Matrix {
         matrixOut.matrix[2][2] = (matrixIn.matrix[0][0] * matrixIn.matrix[1][1] - matrixIn.matrix[0][1] * matrixIn.matrix[1][0]) * idet;
         return matrixOut;
     }
+
+    public static void findBoundingBox(Matrix3x3 matrix3x3, Vector2D size, Vector2D startPoint, Vector2D endPoint){
+        Vector2D position = new Vector2D();
+        matrix3x3.forward(0,0, position);
+        startPoint.setXY(position);
+        endPoint.setXY(position);
+
+        matrix3x3.forward(size.getX(), size.getY(), position);
+        startPoint.setX(Math.min(startPoint.getX(), position.getX())); startPoint.setY(Math.min(startPoint.getY(), position.getY()));
+        endPoint.setX(Math.max(endPoint.getX(), position.getX())); endPoint.setY(Math.max(endPoint.getY(), position.getY()));
+
+        matrix3x3.forward(0, size.getY(), position);
+        startPoint.setX(Math.min(startPoint.getX(), position.getX())); startPoint.setY(Math.min(startPoint.getY(), position.getY()));
+        endPoint.setX(Math.max(endPoint.getX(), position.getX())); endPoint.setY(Math.max(endPoint.getY(), position.getY()));
+
+        matrix3x3.forward(size.getX(), 0, position);
+        startPoint.setX(Math.min(startPoint.getX(), position.getX())); startPoint.setY(Math.min(startPoint.getY(), position.getY()));
+        endPoint.setX(Math.max(endPoint.getX(), position.getX())); endPoint.setY(Math.max(endPoint.getY(), position.getY()));
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
 }

@@ -1,6 +1,5 @@
 package blank2d.framework.graphics;
 
-import blank2d.framework.asset.AssetManager;
 import blank2d.framework.asset.Asset;
 import blank2d.util.Queue;
 
@@ -8,16 +7,14 @@ import java.util.Iterator;
 
 public class Animation extends Asset {
 
-    private final Sprite spriteStrip;
     private final Queue<Sprite> frameQueue = new Queue<>();
     private final Iterator<Sprite> frameIterator;
     private Sprite currentFrame;
     private float frameRate = 1;
 
-    public Animation(String animationassetID, String spriteassetID, int spriteWidth, float frameRate, boolean loop){
-        super(animationassetID);
-        this.spriteStrip = AssetManager.getInstance().getSprite(spriteassetID);
-        generateSpriteQueue(spriteWidth);
+    public Animation(String animationAssetID, String spriteAssetID, int spriteWidth, float frameRate, boolean loop){
+        super(animationAssetID);
+        generateSpriteQueue(spriteAssetID,  spriteWidth);
         frameQueue.loop(loop);
         frameIterator = frameQueue.iterator();
         currentFrame = frameQueue.peekHead();
@@ -25,12 +22,13 @@ public class Animation extends Asset {
     }
 
     //create function that queues the numFrames to the spriteQueue
-    private void generateSpriteQueue(int spriteWidth){
+    private void generateSpriteQueue(String spriteStripAssetID, int spriteWidth){
+        Sprite spriteStrip = Sprite.spriteFromImage(spriteStripAssetID);
         int numFrames = spriteStrip.getWidth() / spriteWidth;
         int spriteHeight = spriteStrip.getHeight();
         frameQueue.clear();
         for(int i = 0; i < numFrames; i++){
-            frameQueue.enqueue(spriteStrip.getSubImage(spriteWidth * i, 0, spriteWidth, spriteHeight));
+            frameQueue.enqueue(Sprite.subSprite(spriteStrip, spriteWidth * i, 0, spriteWidth, spriteHeight));
         }
         currentFrame = frameQueue.peekHead();
     }
@@ -78,7 +76,6 @@ public class Animation extends Asset {
     @Override
     public String toString() {
         return "Animation{" +
-                "spriteStrip=" + spriteStrip +
                 ", frameQueue=" + frameQueue +
                 ", currentFrame=" + currentFrame +
                 ", frameRate=" + frameRate +

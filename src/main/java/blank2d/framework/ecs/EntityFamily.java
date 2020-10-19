@@ -12,6 +12,7 @@
  */
 package blank2d.framework.ecs;
 
+import blank2d.framework.ecs.component.ui.UIElement;
 import blank2d.framework.ecs.component.physics2d.RigidBody;
 import blank2d.framework.ecs.component.physics2d.collider.Collider;
 import blank2d.framework.ecs.component.rendering.AnimationController;
@@ -66,6 +67,7 @@ public class EntityFamily {
     public static EntityFamily cameraEF = EntityFamily.create(Camera.class);
     public static EntityFamily animationEF = EntityFamily.create(AnimationController.class);
     public static EntityFamily spriteRendererEF = EntityFamily.create(SpriteRenderer.class);
+    public static EntityFamily UIElementEF = EntityFamily.create(UIElement.class);
 
     /**
      * Creates a new instance of an entity family.

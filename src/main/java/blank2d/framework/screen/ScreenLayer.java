@@ -1,8 +1,8 @@
 package blank2d.framework.screen;
 
 public enum ScreenLayer {
-    Debug(0),
-    GUI(1),
+    UI(0),
+    Debug(1),
     Foreground(2),
     Default(3),
     Background(4);

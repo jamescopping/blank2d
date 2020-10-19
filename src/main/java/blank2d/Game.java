@@ -30,8 +30,9 @@ public final class Game extends Canvas implements Runnable {
     private final String version = "0.5a";
     private String title = "Blank2D Game Engine";
 
-    private final Vector2D size = new Vector2D(400, 400.0f / 16 * 9);
-    private final Vector2D scale = new Vector2D(2, 2);
+    private final Vector2D size = new Vector2D();
+    private final Vector2D scale = new Vector2D();
+    private int realWidth, realHeight;
 
     private final Queue<GAME_FLAG> gameFlagQueue = new Queue<>();
 
@@ -44,8 +45,8 @@ public final class Game extends Canvas implements Runnable {
     private final InputManager inputManager = InputManager.getInstance();
     private final Time time = Time.getInstance();
 
-    private BufferedImage image;
-    private int[] pixels;
+    private BufferedImage image, uiImage;
+    private int[] pixels, uiPixels;
 
     public Game(String name,  int width, int height, float xScale, float yScale) {
         title += " " + name;
@@ -55,7 +56,14 @@ public final class Game extends Canvas implements Runnable {
         setXScale(xScale);
         setYScale(yScale);
 
-        setBufferedImageSize(getWidth(), getHeight());
+        setRealWidth(width * xScale);
+        setRealHeight(height * yScale);
+
+        image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+
+        uiImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        uiPixels = ((DataBufferInt)uiImage.getRaster().getDataBuffer()).getData();
 
         Dimension size = getScreenDimension();
         setPreferredSize(size);
@@ -193,13 +201,20 @@ public final class Game extends Canvas implements Runnable {
             createBufferStrategy(3);
             return;
         }
+        Graphics g = bs.getDrawGraphics();
 
         gameStateMachine.getActiveGameState().render(interpolate);
-        screen.reduceLayers();
+        screen.prepareFrame();
         System.arraycopy(screen.pixels, 0, pixels, 0, pixels.length);
         if(debugMode) screen.clearLayer(ScreenLayer.Debug);
-        Graphics g = bs.getDrawGraphics();
-        g.drawImage(image, 0,0, (int) (getWidth() * getXScale()), (int) (getHeight() * getYScale()), null);
+
+        g.drawImage(image, 0,0, getRealWidth(), getRealHeight(), null);
+
+        if(screen.isLayerActive(ScreenLayer.UI)) {
+            int[] uip = screen.getLayerPixels(ScreenLayer.UI);
+            System.arraycopy(uip, 0, uiPixels, 0, uip.length);
+            g.drawImage(uiImage, 0,0, getRealWidth(), getRealHeight(), null);
+        }
         g.dispose();
         bs.show();
     }
@@ -294,7 +309,23 @@ public final class Game extends Canvas implements Runnable {
     }
 
     private Dimension getScreenDimension() {
-        return new Dimension((int) (getWidth() * getXScale()), (int)(getHeight() * getYScale()));
+        return new Dimension(getRealWidth(), getRealHeight());
+    }
+
+    private void setRealHeight(float height) {
+        this.realHeight = (int)height;
+    }
+
+    private void setRealWidth(float width) {
+        this.realWidth = (int)width;
+    }
+
+    public int getRealWidth(){
+        return realWidth;
+    }
+
+    public int getRealHeight(){
+        return realHeight;
     }
 
     public int getWidth() {
@@ -307,7 +338,6 @@ public final class Game extends Canvas implements Runnable {
         addFlagToQueue(GAME_FLAG.UPDATE_SCREEN_SIZE);
     }
 
-    @Override
     public int getHeight() {
         return (int) size.getY();
     }
@@ -333,11 +363,6 @@ public final class Game extends Canvas implements Runnable {
     public void setYScale(float yScale) {
         scale.setY(yScale);
         addFlagToQueue(GAME_FLAG.UPDATE_SCREEN_SCALE);
-    }
-
-    public void setBufferedImageSize(int width, int height){
-        image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
     }
 
     public enum GAME_FLAG{

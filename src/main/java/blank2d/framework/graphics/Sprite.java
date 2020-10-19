@@ -4,7 +4,7 @@ import blank2d.framework.screen.Screen;
 import blank2d.framework.asset.LoadAsset;
 import blank2d.framework.asset.Asset;
 import blank2d.framework.ecs.component.physics2d.Transform;
-import blank2d.framework.screen.ScreenLayer;
+import blank2d.util.Node;
 
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
@@ -27,36 +27,13 @@ public class Sprite extends Asset {
         super(assetID);
         this.width = width;
         this.height = height;
-        this.pixels = new int[width * height];
-        loadImage(assetID);
+        this.pixels  = getPixelArrayFromImage(assetID, new Node<>(width), new Node<>(height));
     }
-
 
     public void render(Transform transform){
         Screen.getInstance().drawSprite(this, transform);
     }
 
-    public Sprite getSubImage(int xOffset, int yOffset, int w, int h){
-        int[] newPixels = new int[w*h];
-        int yp, xp;
-        for (int y = 0; y < w; y++) {
-            yp = y + yOffset;
-            if(yp < 0 || yp >= height) continue;
-            for (int x = 0; x < h; x++) {
-                xp = x + xOffset;
-                if(xp < 0 || xp >= width) continue;
-                newPixels[x + y * w] = this.pixels[xp + yp * width];
-            }
-        }
-        return new Sprite(newPixels, w, h);
-    }
-
-    public void loadImage(String assetID) {
-        BufferedImage bufferedImage = LoadAsset.loadImage(assetID);
-        if (bufferedImage != null) {
-            bufferedImage.getRGB(0,0,bufferedImage.getWidth(), bufferedImage.getHeight(), pixels, 0 , bufferedImage.getWidth());
-        }
-    }
 
     public void setPixels(int[] pixels) {
         this.pixels = pixels;
@@ -133,6 +110,60 @@ public class Sprite extends Asset {
             default:
                 sprite.nearestNeighborScale(newWidth, newHeight);
         }
+    }
+
+    public static Sprite spriteFromImage(String assetID){
+        Node<Integer> width = new Node<>();
+        Node<Integer> height = new Node<>();
+        width.setData(-1);
+        height.setData(-1);
+        int[] newPixels = getPixelArrayFromImage(assetID, width, height);
+        return new Sprite(newPixels, width.getData(), height.getData());
+    }
+
+    public static Sprite[] splitSpriteSheet(Sprite spriteSheet, int spriteWidth, int spriteHeight){
+        int rows = spriteSheet.getHeight() / spriteHeight;
+        int columns = spriteSheet.getWidth() / spriteWidth;
+        int numberOfSprites = columns * rows;
+        Sprite[] spriteArray = new Sprite[numberOfSprites];
+        for (int r = 0; r < rows; r++) {
+            for(int c = 0; c < columns; c++) {
+                spriteArray[c + r * columns] = Sprite.subSprite(spriteSheet, spriteWidth * c, spriteHeight * r, spriteWidth, spriteHeight);
+            }
+        }
+        return spriteArray;
+    }
+
+
+    public static Sprite subSprite(Sprite originalSprite, int xOffset, int yOffset, int width, int height){
+        int[] newPixels = new int[width*height];
+        int yp, xp;
+        for (int y = 0; y < width; y++) {
+            yp = y + yOffset;
+            if(yp < 0 || yp >= originalSprite.height) continue;
+            for (int x = 0; x < height; x++) {
+                xp = x + xOffset;
+                if(xp < 0 || xp >= originalSprite.width) continue;
+                newPixels[x + y * width] = originalSprite.pixels[xp + yp * originalSprite.width];
+            }
+        }
+        return new Sprite(newPixels, width, height);
+    }
+
+    /**
+     * returns an array of pixels from the image, that is in the asset map that has the assetID passed in
+     * @param assetID String the id of the asset given to the asset
+     * @param width pass in -1 to make the width the width of the image
+     * @param height pass in -1 to make the height the height of the image
+     */
+    public static int[] getPixelArrayFromImage(String assetID, Node<Integer> width, Node<Integer> height) {
+        BufferedImage bufferedImage = LoadAsset.loadImage(assetID);
+        if (bufferedImage != null) {
+            if(width.getData() <= -1) width.setData(bufferedImage.getWidth());
+            if(height.getData() <= -1) height.setData(bufferedImage.getHeight());
+            return bufferedImage.getRGB(0,0, width.getData(), height.getData(), null, 0 , width.getData());
+        }
+        return null;
     }
 
     @Override

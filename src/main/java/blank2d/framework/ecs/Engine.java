@@ -638,6 +638,7 @@ public final class Engine {
         defaultEngine.addSystem(new AnimationSystem(EntityFamily.animationEF));
         defaultEngine.addSystem(new RendererSystem(EntityFamily.spriteRendererEF));
         defaultEngine.addSystem(new CameraSystem(EntityFamily.cameraEF));
+        defaultEngine.addSystem(new UISystem(EntityFamily.UIElementEF));
         defaultEngine.addSystem(new SoundSystem());
 
         return defaultEngine;

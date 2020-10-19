@@ -28,7 +28,6 @@ public class Camera extends Component {
         transform = getComponent(Transform.class);
     }
 
-
     public float getZoomFactor() {
         return zoomFactor;
     }

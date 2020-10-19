@@ -19,6 +19,11 @@ public abstract class GameState {
         gameEngine = new Engine(game);
     }
 
+    public void init(Engine engine){
+        game = gameStateMachine.getGame();
+        gameEngine = engine;
+    }
+
     public abstract void cleanup();
 
     public abstract void pause();
