@@ -1,9 +1,13 @@
 package blank2d.framework.screen;
 
 import blank2d.Game;
+import blank2d.framework.asset.AssetManager;
 import blank2d.framework.ecs.component.physics2d.Transform;
+import blank2d.framework.ecs.component.ui.UIElement;
+import blank2d.framework.graphics.Font;
 import blank2d.framework.graphics.Sprite;
 import blank2d.util.math.*;
+import com.sun.xml.internal.ws.server.provider.SyncProviderInvokerTube;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -363,8 +367,7 @@ public class Screen {
         }
     }
 
-    public void drawSprite(Sprite sprite, Vector2D position, ScreenLayer screenLayer) {
-
+    public void drawSpriteUI(Sprite sprite, Vector2D screenPosition) {
         Vector2D cameraOffset = getCameraOffset();
         int sWidth = sprite.getWidth();
         int sHeight = sprite.getHeight();
@@ -372,19 +375,42 @@ public class Screen {
         int sHalfHeight = sHeight/2;
         int[] sPixels = sprite.getPixels();
         for (int y = 0; y < sHeight; y++) {
-            int yp = (int) (y + position.getY() - sHalfHeight - cameraOffset.getY());
+            int yp = (int) (y + screenPosition.getY() - sHalfHeight - cameraOffset.getY());
             for (int x = 0; x < sWidth; x++) {
-                int xp = (int) (x + position.getX() - sHalfWidth - cameraOffset.getX());
-                setLayerPixel(screenLayer, xp, yp, sPixels[x + y * sWidth]);
+                int xp = (int) (x + screenPosition.getX() - sHalfWidth - cameraOffset.getX());
+                setLayerPixel(ScreenLayer.UI, xp, yp, sPixels[x + y * sWidth]);
             }
         }
     }
 
 
-    public void drawText(String text, Transform transform){
-
+    public void drawUIElement(UIElement element){
+        //drawRect of the Element
+        //then draw the text on the rect
     }
 
+
+    public void drawText(String text, Transform transform){
+        drawText(text, transform, null);
+    }
+
+    public void drawText(String text, Transform transform, String fontAssetID){
+        Font font = AssetManager.getInstance().getFont(fontAssetID);
+        if(font == null) try {
+            throw new Exception(fontAssetID + " Font not found int AssetManager");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+        Transform transformCopy = new Transform(transform);
+
+        Sprite[] sprites = new Sprite[text.length()];
+        for (int i = 0; i < text.length(); i++) {
+            sprites[i] = font.getCharacter(text.charAt(i));
+        }
+        Sprite finalTextSprite = Sprite.stitchSprites(sprites, 2);
+        drawSprite(finalTextSprite, transform, ScreenLayer.UI);
+    }
 
 
     public Vector2D getCameraOffset(){

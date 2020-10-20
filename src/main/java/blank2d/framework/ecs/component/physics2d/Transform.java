@@ -25,6 +25,12 @@ public class Transform extends Component {
         this.angle = angle;
     }
 
+    public Transform(Transform transform){
+        this.position = new Vector2D(position);
+        this.scale = new Vector2D(scale);
+        this.angle = transform.getAngle();
+    }
+
     public Transform(Vector2D position){
         this.position = position;
     }

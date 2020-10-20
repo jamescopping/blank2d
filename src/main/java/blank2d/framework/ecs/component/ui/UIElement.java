@@ -5,11 +5,10 @@ import blank2d.util.math.Rect;
 
 public class UIElement extends Component {
 
-    UIContent content;
+    UIContent uiContent;
     Rect rect = new Rect();
 
     UIElement(){
-        content = new UIContent<String>();
+        uiContent = new UIContent<String>();
     }
-
 }

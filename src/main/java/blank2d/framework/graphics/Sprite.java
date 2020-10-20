@@ -5,6 +5,7 @@ import blank2d.framework.asset.LoadAsset;
 import blank2d.framework.asset.Asset;
 import blank2d.framework.ecs.component.physics2d.Transform;
 import blank2d.util.Node;
+import blank2d.util.math.Matrix;
 
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
@@ -37,6 +38,11 @@ public class Sprite extends Asset {
 
     public void setPixels(int[] pixels) {
         this.pixels = pixels;
+    }
+
+    public void setPixel(int index, int rgb){
+        if(index >= this.pixels.length || index < 0) return;
+        this.pixels[index] = rgb;
     }
 
     public int[] getPixels() {
@@ -121,17 +127,16 @@ public class Sprite extends Asset {
         return new Sprite(newPixels, width.getData(), height.getData());
     }
 
-    public static Sprite[] splitSpriteSheet(Sprite spriteSheet, int spriteWidth, int spriteHeight){
+    public static Sprite[][] splitSpriteSheet(Sprite spriteSheet, int spriteWidth, int spriteHeight){
         int rows = spriteSheet.getHeight() / spriteHeight;
         int columns = spriteSheet.getWidth() / spriteWidth;
-        int numberOfSprites = columns * rows;
-        Sprite[] spriteArray = new Sprite[numberOfSprites];
+        Sprite[][] spriteGrid = new Sprite[columns][rows];
         for (int r = 0; r < rows; r++) {
             for(int c = 0; c < columns; c++) {
-                spriteArray[c + r * columns] = Sprite.subSprite(spriteSheet, spriteWidth * c, spriteHeight * r, spriteWidth, spriteHeight);
+                spriteGrid[c][r] = Sprite.subSprite(spriteSheet, spriteWidth * c, spriteHeight * r, spriteWidth, spriteHeight);
             }
         }
-        return spriteArray;
+        return spriteGrid;
     }
 
 
@@ -148,6 +153,108 @@ public class Sprite extends Asset {
             }
         }
         return new Sprite(newPixels, width, height);
+    }
+
+    public static Sprite stitchSprites(Sprite[] sprites, int stitchDirection){
+        return stitchSprites( null, sprites, stitchDirection);
+    }
+
+    public static Sprite stitchSprites(Sprite[] sprites){
+        return stitchSprites( null, sprites, 2);
+    }
+
+    public static Sprite stitchSprites(Sprite result, Sprite[] sprites, int stitchDirection){
+        if(sprites == null || sprites.length <= 1) return null;
+        int newWidth = 0, newHeight = 0;
+        if (stitchDirection == 1 || stitchDirection == 3) {
+            for (Sprite sprite: sprites){
+                newHeight += sprite.height;
+                if(newWidth < sprite.width) newWidth = sprite.width;
+            }
+        } else {
+            for (Sprite sprite: sprites){
+                newWidth += sprite.width;
+                if(newHeight < sprite.height) newHeight = sprite.height;
+            }
+        }
+
+        if(result == null) {
+            result = new Sprite(new int[newWidth * newHeight], newWidth, newHeight);
+        }else{
+            result.setPixels(new int[newWidth * newHeight]);
+            result.setWidth(newWidth);
+            result.setHeight(newHeight);
+        }
+
+        int tempWidth = 0, tempHeight = 0;
+        int centerLine;
+        int halfSpriteWidth, halfSpriteHeight;
+        int xOffset, yOffset;
+
+        switch (stitchDirection) {
+            case 1:
+                tempHeight = newHeight - sprites[0].height;
+                centerLine = newWidth / 2;
+                for (int i = 0; i < sprites.length; i++) {
+                    Sprite sprite = sprites[i];
+                    halfSpriteWidth = sprite.width/2;
+                    xOffset = centerLine - halfSpriteWidth;
+                    if(xOffset < 0) xOffset = 0;
+                    for (int y = sprite.height-1; y >= 0; y--) {
+                        for (int x = 0; x < sprite.width; x++) {
+                            result.setPixel(x + xOffset + (y + tempHeight) * sprite.width, sprite.getPixel(x, y));
+                        }
+                    }
+                    if(i < sprites.length-1) tempHeight -= sprites[i+1].height;
+                }
+                break;
+
+            case 2:
+                centerLine = newHeight / 2;
+                for (Sprite sprite: sprites){
+                    halfSpriteHeight = sprite.height/2;
+                    yOffset = centerLine - halfSpriteHeight;
+                    if(yOffset < 0) yOffset = 0;
+                    for (int y = 0; y < sprite.height; y++) {
+                        for (int x = 0; x < sprite.width; x++) {
+                            result.setPixel(x + tempWidth + (y - yOffset) * newWidth, sprite.getPixel(x, y));
+                        }
+                    }
+                    tempWidth += sprite.width;
+                }
+                break;
+            case 3:
+                centerLine = newWidth / 2;
+                for (Sprite sprite: sprites){
+                    halfSpriteWidth = sprite.width/2;
+                    xOffset = centerLine - halfSpriteWidth;
+                    if(xOffset < 0) xOffset = 0;
+                    for (int y = 0; y < sprite.height; y++) {
+                        for (int x = 0; x < sprite.width; x++) {
+                            result.setPixel(x + xOffset + (y + tempHeight) * sprite.width, sprite.getPixel(x, y));
+                        }
+                    }
+                    tempHeight += sprite.height;
+                }
+                break;
+            case 4:
+                tempWidth = newWidth - sprites[0].width;
+                centerLine = newHeight / 2;
+                for (int i = 0; i < sprites.length; i++) {
+                    Sprite sprite = sprites[i];
+                    halfSpriteHeight = sprite.height/2;
+                    yOffset = centerLine - halfSpriteHeight;
+                    if(yOffset < 0) yOffset = 0;
+                    for (int y = 0; y < sprite.height; y++) {
+                        for (int x = 0; x < sprite.width; x++) {
+                            result.setPixel(x + tempWidth + (y - yOffset) * newWidth, sprite.getPixel(x, y));
+                        }
+                    }
+                    if(i < sprites.length-1) tempWidth -= sprites[i+1].width;
+                }
+                break;
+        }
+        return result;
     }
 
     /**
